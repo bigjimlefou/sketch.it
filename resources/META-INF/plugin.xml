@@ -1,0 +1,37 @@
+<idea-plugin>
+  <id>org.pmesmeur.sketch</id>
+  <name>Plugin display name here</name>
+  <version>1.0</version>
+  <vendor email="philippe.mesmeur@gmail.com" url="https://bitbucket.org/pmesmeur/sketch">Sketch</vendor>
+
+  <description><![CDATA[
+      Generate UML diagram from source code<br>
+    ]]></description>
+
+  <change-notes><![CDATA[
+      Add change notes here.<br>
+      <em>most HTML tags may be used</em>
+    ]]>
+  </change-notes>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+  <idea-version since-build="173.0"/>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+       on how to target different products -->
+  <!-- uncomment to enable plugin in all products
+  <depends>com.intellij.modules.lang</depends>
+  -->
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add your extensions here -->
+  </extensions>
+
+  <actions>
+    <group id="MyPlugin.SampleMenu" text="_Sketch" description="Generate Diagrams">
+      <add-to-group group-id="MainMenu" anchor="last" />
+      <action id="Myplugin.Textboxes" class="org.pmesmeur.sketch.Sketch" text="_Component Diagrams" description="Generate component diagrams" />
+    </group>
+  </actions>
+
+</idea-plugin>
