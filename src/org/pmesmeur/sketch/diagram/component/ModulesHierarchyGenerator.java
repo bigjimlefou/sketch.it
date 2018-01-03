@@ -59,7 +59,7 @@ public class ModulesHierarchyGenerator {
         if (!modulePathsDone.contains(modulePath)) {
             modulePathsDone.add(modulePath);
             if (modulePath.subModules.size() > 0) {
-                write(outputStream, "package \"" + modulePath.module.getName() + "\" {");
+                write(outputStream, "component \"" + modulePath.module.getName() + "\" {");
 
                 for (ModulePath subModulePath : modulePath.subModules) {
                     write(outputStream, "    [" + subModulePath.module.getName() + "]");
