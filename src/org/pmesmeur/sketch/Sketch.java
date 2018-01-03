@@ -15,10 +15,14 @@ public class Sketch extends AnAction {
         // super("Text _Boxes","Item description",IconLoader.getIcon("/Mypackage/icon.png"));
     }
 
+
+
+    @Override
     public void actionPerformed(AnActionEvent event) {
         UmlDiagramsGenerator umlDiagramsGenerator = new UmlDiagramsGenerator(event.getProject());
-
-        umlDiagramsGenerator.run();
+        umlDiagramsGenerator.generateComponentDiagram();
+        System.out.print("\n\n\n");
+        umlDiagramsGenerator.generateClassDiagrams();
     }
 
 }

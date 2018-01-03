@@ -6,6 +6,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.pmesmeur.sketch.diagram.clazz.ClassDiagramGenerator;
 import org.pmesmeur.sketch.diagram.component.ComponentDiagramGenerator;
 
 
@@ -19,24 +20,25 @@ public class UmlDiagramsGenerator {
 
 
 
-    public void run() {
+    public void generateComponentDiagram() {
         ComponentDiagramGenerator componentDiagramGenerator =
                 ComponentDiagramGenerator.newBuilder(project)
                                          .exclude("test")
                                          .exclude("feature")
                                          .build();
         componentDiagramGenerator.generate();
-
+/*
         VirtualFile[] vFiles = ProjectRootManager.getInstance(project).getContentSourceRoots();
         for (VirtualFile vf : vFiles) {
             System.out.println("file: " + vf.getPath());
         }
 
         printModulesDependencies();
+*/
     }
 
 
-
+/*
     private void printModulesDependencies() {
         ModuleManager moduleManager = ModuleManager.getInstance(project);
         for (Module module : moduleManager.getModules()) {
@@ -55,6 +57,13 @@ public class UmlDiagramsGenerator {
         for (String dependentModulesName : dependentModulesNames) {
             System.out.println("  - " + dependentModulesName);
         }
+    }
+*/
+
+
+    public void generateClassDiagrams() {
+        ClassDiagramGenerator classDiagramGenerator = new ClassDiagramGenerator(project);
+        classDiagramGenerator.generate();
     }
 
 }
