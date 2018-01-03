@@ -3,10 +3,13 @@ package org.pmesmeur.sketch.diagram.component;
 import com.intellij.openapi.module.Module;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.*;
 
 public class ModulesHierarchyGenerator {
     private final List<ModulePath> modulePaths = new ArrayList<ModulePath>();
+    Set<ModulePath> modulePathsDone = new HashSet<ModulePath>();
 
 
     public ModulesHierarchyGenerator(Set<Module> managedModules) {
@@ -40,34 +43,46 @@ public class ModulesHierarchyGenerator {
         }
     }
 
-    Set<ModulePath> modulePathsDone = new HashSet<ModulePath>();
 
-    public void generate() {
+
+    public void generate(OutputStream outputStream) {
         for (int i = modulePaths.size() - 1 ; i >= 0 ; --i) {
             ModulePath modulePath = modulePaths.get(i);
 
-            generate(modulePath);
+            generate(outputStream, modulePath);
         }
     }
 
 
 
-    private void generate(ModulePath modulePath) {
+    private void generate(OutputStream outputStream, ModulePath modulePath) {
         if (!modulePathsDone.contains(modulePath)) {
             modulePathsDone.add(modulePath);
             if (modulePath.subModules.size() > 0) {
-                System.out.println("package \"" + modulePath.module.getName() + "\" {");
+                write(outputStream, "package \"" + modulePath.module.getName() + "\" {");
 
                 for (ModulePath subModulePath : modulePath.subModules) {
-                    System.out.println("    [" + subModulePath.module.getName() + "]");
+                    write(outputStream, "    [" + subModulePath.module.getName() + "]");
                 }
 
                 for (ModulePath subModulePath : modulePath.subModules) {
-                    generate(subModulePath);
+                    generate(outputStream, subModulePath);
                 }
 
-                System.out.println("}\n\n");
+                write(outputStream, "}\n\n");
             }
+        }
+    }
+
+
+
+    private void write(OutputStream outputStream, String s) {
+        String dataToWrite = s + "\n";
+        try {
+            outputStream.write(dataToWrite.getBytes());
+            outputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
