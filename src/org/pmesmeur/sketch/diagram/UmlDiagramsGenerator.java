@@ -2,6 +2,7 @@ package org.pmesmeur.sketch.diagram;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.jetbrains.annotations.NotNull;
 import org.pmesmeur.sketch.diagram.component.ComponentDiagramGenerator;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.io.OutputStream;
 
 public class UmlDiagramsGenerator {
 
+    public static final String OUTPUT_FILE_NAME = "components.plantuml";
     private final Project project;
 
     public UmlDiagramsGenerator(Project project) {
@@ -20,8 +22,7 @@ public class UmlDiagramsGenerator {
 
     public void run() {
         try {
-            VirtualFile childData = project.getBaseDir().createChildData(this, "components.plantuml");
-            OutputStream outputStream = childData.getOutputStream(this);
+            OutputStream outputStream = getOutputStream();
 
             ComponentDiagramGenerator componentDiagramGenerator =
                     ComponentDiagramGenerator.newBuilder(outputStream, project)
@@ -31,11 +32,18 @@ public class UmlDiagramsGenerator {
             componentDiagramGenerator.generate();
 
             outputStream.close();
-
         } catch (IOException e) {
             System.out.println("ERROR");
             e.printStackTrace();
         }
+    }
+
+
+
+    @NotNull
+    private OutputStream getOutputStream()  throws IOException {
+        VirtualFile childData = project.getBaseDir().findOrCreateChildData(this, OUTPUT_FILE_NAME);
+        return childData.getOutputStream(this);
     }
 
 }
