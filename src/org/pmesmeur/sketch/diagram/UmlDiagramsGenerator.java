@@ -1,5 +1,7 @@
 package org.pmesmeur.sketch.diagram;
 
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +14,8 @@ import java.io.OutputStream;
 
 public class UmlDiagramsGenerator {
 
-    public static final String OUTPUT_FILE_NAME = "components.plantuml";
+    public static final String COMPONENT_DIAGRAM_FILE_NAME = "components.plantuml";
+    public static final String CLASS_DIAGRAM_FILE_NAME = "classes.plantuml";
     private final Project project;
 
     public UmlDiagramsGenerator(Project project) {
@@ -23,7 +26,7 @@ public class UmlDiagramsGenerator {
 
     public void generateComponentDiagram() {
         try {
-            OutputStream outputStream = getOutputStream();
+            OutputStream outputStream = getComponentDiagramOutputStream();
 
             ComponentDiagramGenerator componentDiagramGenerator =
                     ComponentDiagramGenerator.newBuilder(outputStream, project)
@@ -42,16 +45,43 @@ public class UmlDiagramsGenerator {
 
 
     @NotNull
-    private OutputStream getOutputStream()  throws IOException {
-        VirtualFile childData = project.getBaseDir().findOrCreateChildData(this, OUTPUT_FILE_NAME);
+    private OutputStream getComponentDiagramOutputStream()  throws IOException {
+        VirtualFile childData = project.getBaseDir().findOrCreateChildData(this, COMPONENT_DIAGRAM_FILE_NAME);
         return childData.getOutputStream(this);
     }
-*/
+
 
 
     public void generateClassDiagrams() {
-        ClassDiagramGenerator classDiagramGenerator = new ClassDiagramGenerator(project);
-        classDiagramGenerator.generate();
+        ModuleManager moduleManager = ModuleManager.getInstance(project);
+        for (Module module : moduleManager.getModules()) {
+            generateModuleClassDiagram(module);
+        }
+   }
+
+
+
+    private void generateModuleClassDiagram(Module module) {
+        try {
+            OutputStream outputStream = getClassDiagramOutputStream(module);
+            ClassDiagramGenerator classDiagramGenerator = new ClassDiagramGenerator(outputStream, project, module);
+            classDiagramGenerator.generate();
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
+    @NotNull
+    private OutputStream getClassDiagramOutputStream(Module module) throws IOException {
+        VirtualFile moduleFile = module.getModuleFile();
+        VirtualFile moduleDirectory = moduleFile.getParent();
+
+        VirtualFile childData = moduleDirectory.findOrCreateChildData(this, CLASS_DIAGRAM_FILE_NAME);
+        return childData.getOutputStream(this);
     }
 
 }

@@ -1,75 +1,69 @@
 package org.pmesmeur.sketch.diagram.clazz;
 
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
+import com.intellij.openapi.roots.ProjectFileIndex;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ClassDiagramGenerator {
+    private final OutputStream outputStream;
     private final Project project;
+    private final Module module;
 
 
-    public ClassDiagramGenerator(Project project) {
-
+    public ClassDiagramGenerator(OutputStream outputStream, Project project, Module module) {
+        this.outputStream = outputStream;
         this.project = project;
+        this.module = module;
     }
 
 
 
-    public void generate() {
-        System.out.println("Class Diagram Generator");
-        ModuleManager moduleManager = ModuleManager.getInstance(project);
-        for (Module module : moduleManager.getModules()) {
-            process(module);
+    public void generate()
+    {
+        write("@startuml");
+        write("");
+
+        String msg = "Module '" + module.getModuleFilePath() + '\'';
+
+        List<PsiFile> pfiles = findFiles();
+        handleFiles(msg, pfiles);
+
+        write("");
+        write("@enduml");
+    }
+
+
+
+    private void write(String s) {
+        String dataToWrite = s + "\n";
+        try {
+            outputStream.write(dataToWrite.getBytes());
+            outputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
 
-    private void process(Module module)
-    {
+
+    @NotNull
+    private List<PsiFile> findFiles() {
         List<PsiFile> pfiles = new ArrayList<PsiFile>();
         findFiles(module, pfiles);
-        String msg = "Module '" + module.getModuleFilePath() + '\'';
-        handleFiles(msg, pfiles);
+        return pfiles;
     }
 
 
-
-    private void handleFiles(String msg, List<PsiFile> pfiles) {
-        for (PsiFile file : pfiles) {
-            if (file instanceof PsiClassOwner) {
-                handlePsiClassOwner(msg, (PsiClassOwner) file);
-            }
-        }
-    }
-
-
-
-    private void handlePsiClassOwner(String msg, PsiClassOwner file) {
-        System.out.println(msg + ": " + file.getName() + " (" + file.getFileType().getName() + ")");
-        PsiClass psiClasses [] = file.getClasses();
-
-        for (PsiClass psiClass : psiClasses) {
-            System.out.println("=> " + psiClass.getName());
-        }
-    }
-
-
-
-    private void findFiles(Project project, List<PsiFile> files)
-    {
-        Module[] modules = ModuleManager.getInstance(project).getModules();
-        for (Module module : modules)
-        {
-            findFiles(module, files);
-        }
-
-    }
 
     private void findFiles(Module module, List<PsiFile> files)
     {
@@ -85,12 +79,15 @@ public class ClassDiagramGenerator {
     }
 
 
-    private static void findFiles(List<PsiFile> files, PsiDirectory directory, boolean subdirs)
+
+    private void findFiles(List<PsiFile> files, PsiDirectory directory, boolean subdirs)
     {
         PsiFile[] locals = directory.getFiles();
         for (PsiFile local : locals)
         {
-            files.add(local);
+            if (psiFileBelongsToCurrentModule(local)) {
+                files.add(local);
+            }
         }
 
         if (subdirs)
@@ -103,4 +100,44 @@ public class ClassDiagramGenerator {
 
         }
     }
+
+
+
+    private boolean psiFileBelongsToCurrentModule(PsiFile file) {
+        ProjectRootManager projectRootManager = ProjectRootManager.getInstance(project);
+        ProjectFileIndex projectFileIndex = projectRootManager.getFileIndex();
+        Module fileModule = projectFileIndex.getModuleForFile(file.getVirtualFile());
+
+        return module.equals(fileModule);
+    }
+
+
+
+    private void handleFiles(String msg, List<PsiFile> pfiles) {
+        for (PsiFile file : pfiles) {
+            if (file instanceof PsiClassOwner) {
+                handlePsiClassOwner(msg, (PsiClassOwner) file);
+            }
+        }
+    }
+
+
+
+    private void handlePsiClassOwner(String msg, PsiClassOwner file) {
+        //System.out.println(msg + ": " + file.getName() + " (" + file.getFileType().getName() + ")");
+        PsiClass psiClasses [] = file.getClasses();
+
+        for (PsiClass psiClass : psiClasses) {
+            if (psiClass.isInterface()) {
+                write("interface " + psiClass.getName());
+            } else if (psiClass.isEnum()) {
+                write("enum " + psiClass.getName());
+            } else if (psiClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
+                write("class " + psiClass.getName());
+            } else {
+                write("abstract class " + psiClass.getName());
+            }
+        }
+    }
+
 }
