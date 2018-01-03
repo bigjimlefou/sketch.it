@@ -5,6 +5,8 @@ import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -13,23 +15,26 @@ import java.util.Set;
 
 public class ComponentDiagramGenerator {
 
+    private final OutputStream outputStream;
     private final Project project;
     private final List<String> patternsToExclude;
     private final Set<Module> managedModules;
 
 
-    public static Builder newBuilder(Project project) {
-        return new Builder(project);
+    public static Builder newBuilder(OutputStream outputStream, Project project) {
+        return new Builder(outputStream, project);
     }
 
 
 
     public static class Builder {
+        private final OutputStream outputStream;
         private final Project project;
         private final List<String> patternsToExclude;
 
 
-        public Builder(Project project) {
+        public Builder(OutputStream outputStream, Project project) {
+            this.outputStream = outputStream;
             this.project = project;
             this.patternsToExclude = new ArrayList<String>();
         }
@@ -50,6 +55,7 @@ public class ComponentDiagramGenerator {
 
 
     protected ComponentDiagramGenerator(Builder builder) {
+        this.outputStream = builder.outputStream;
         this.project = builder.project;
         this.patternsToExclude = builder.patternsToExclude;
         this.managedModules = computeManagedModuleList();
@@ -90,18 +96,30 @@ public class ComponentDiagramGenerator {
 
 
     public void generate() {
-        System.out.println("@startuml");
-        System.out.println("");
+        write("@startuml");
+        write("");
 
         ModulesHierarchyGenerator modulesHierarchyGenerator = new ModulesHierarchyGenerator(managedModules);
-        modulesHierarchyGenerator.generate();
+        modulesHierarchyGenerator.generate(outputStream);
 
         for (Module module : managedModules) {
             printModuleDependencies(module);
         }
 
-        System.out.println("");
-        System.out.println("@enduml");
+        write("");
+        write("@enduml");
+    }
+
+
+
+    private void write(String s) {
+        String dataToWrite = s + "\n";
+        try {
+            outputStream.write(dataToWrite.getBytes());
+            outputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -122,7 +140,7 @@ public class ComponentDiagramGenerator {
 
 
     private void printModuleDependency(String moduleName, String dependentModulesName) {
-        System.out.println(componentName(moduleName) + " --> " + componentName(dependentModulesName));
+        write(componentName(moduleName) + " --> " + componentName(dependentModulesName));
     }
 
 

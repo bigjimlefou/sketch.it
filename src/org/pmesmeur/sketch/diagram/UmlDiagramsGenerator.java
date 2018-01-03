@@ -1,16 +1,17 @@
 package org.pmesmeur.sketch.diagram;
 
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.jetbrains.annotations.NotNull;
 import org.pmesmeur.sketch.diagram.component.ComponentDiagramGenerator;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 
 public class UmlDiagramsGenerator {
 
+    public static final String OUTPUT_FILE_NAME = "components.plantuml";
     private final Project project;
 
     public UmlDiagramsGenerator(Project project) {
@@ -20,41 +21,29 @@ public class UmlDiagramsGenerator {
 
 
     public void run() {
-        ComponentDiagramGenerator componentDiagramGenerator =
-                ComponentDiagramGenerator.newBuilder(project)
-                                         .exclude("test")
-                                         .exclude("feature")
-                                         .build();
-        componentDiagramGenerator.generate();
+        try {
+            OutputStream outputStream = getOutputStream();
 
-        VirtualFile[] vFiles = ProjectRootManager.getInstance(project).getContentSourceRoots();
-        for (VirtualFile vf : vFiles) {
-            System.out.println("file: " + vf.getPath());
-        }
+            ComponentDiagramGenerator componentDiagramGenerator =
+                    ComponentDiagramGenerator.newBuilder(outputStream, project)
+                            .exclude("test")
+                            .exclude("feature")
+                            .build();
+            componentDiagramGenerator.generate();
 
-        printModulesDependencies();
-    }
-
-
-
-    private void printModulesDependencies() {
-        ModuleManager moduleManager = ModuleManager.getInstance(project);
-        for (Module module : moduleManager.getModules()) {
-            printModuleDependencies(module);
+            outputStream.close();
+        } catch (IOException e) {
+            System.out.println("ERROR");
+            e.printStackTrace();
         }
     }
 
 
 
-    private void printModuleDependencies(Module module) {
-        System.out.println("* Module: " + module.getName());
-
-        ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
-        String[] dependentModulesNames = moduleRootManager.getDependencyModuleNames();
-
-        for (String dependentModulesName : dependentModulesNames) {
-            System.out.println("  - " + dependentModulesName);
-        }
+    @NotNull
+    private OutputStream getOutputStream()  throws IOException {
+        VirtualFile childData = project.getBaseDir().findOrCreateChildData(this, OUTPUT_FILE_NAME);
+        return childData.getOutputStream(this);
     }
 
 }
