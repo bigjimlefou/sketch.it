@@ -7,6 +7,7 @@ import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
+import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.util.VisibilityUtil;
 import org.jetbrains.annotations.NotNull;
 
@@ -174,24 +175,33 @@ public class ClassDiagramGenerator {
 
 
     private void declareClassAttributes(PsiClass clazz) {
-
-    }
-
-
-
-    private void declareClassMethods(PsiClass clazz) {
-        for (PsiMethod method : clazz.getAllMethods()) {
-            if (method.getContainingClass().equals(clazz)) {
-                declareClassMethod(method);
+        for (PsiField field : clazz.getAllFields()) {
+            if (!typeBelongsToCurrentProject(field.getType()) &&
+                    field.getContainingClass().equals(clazz)) {
+                declareClassField(field);
             }
         }
     }
 
 
 
-    private void declareClassMethod(PsiMethod method) {
-        String visibility = getVisibility(method.getModifierList());
-        write("  " + visibility + " " + method.getName() + "()");
+    private boolean typeBelongsToCurrentProject(PsiType type) {
+        PsiClass typeClass = PsiTypesUtil.getPsiClass(type);
+        return typeClass != null && typeClass.getProject().equals(project);
+    }
+
+
+
+    private void declareClassField(PsiField field) {
+        String visibility = getVisibility(field.getModifierList());
+        String fieldType = field.getType().getInternalCanonicalText();
+        String fieldDeclaration = visibility + " " + field.getName() + " : " + fieldType;
+
+        if (field.hasModifierProperty(PsiModifier.STATIC)) {
+            fieldDeclaration = "{static} " + fieldDeclaration;
+        }
+
+        write("  " + fieldDeclaration);
     }
 
 
@@ -211,6 +221,23 @@ public class ClassDiagramGenerator {
         }
 
         return visibility;
+    }
+
+
+
+    private void declareClassMethods(PsiClass clazz) {
+        for (PsiMethod method : clazz.getAllMethods()) {
+            if (method.getContainingClass().equals(clazz)) {
+                declareClassMethod(method);
+            }
+        }
+    }
+
+
+
+    private void declareClassMethod(PsiMethod method) {
+        String visibility = getVisibility(method.getModifierList());
+        write("  " + visibility + " " + method.getName() + "()");
     }
 
 
