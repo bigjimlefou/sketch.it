@@ -23,12 +23,51 @@ public class ClassDiagramGenerator {
     private final Project project;
     private final Module module;
     private final Set<PsiClass> managedPsiClasses;
+    private final List<String> patternsToExclude;
 
 
-    public ClassDiagramGenerator(OutputStream outputStream, Project project, Module module) {
-        this.outputStream = outputStream;
-        this.project = project;
-        this.module = module;
+    public static ClassDiagramGenerator.Builder newBuilder(OutputStream outputStream,
+                                                           Project project,
+                                                           Module module) {
+        return new ClassDiagramGenerator.Builder(outputStream, project, module);
+    }
+
+
+
+    public static class Builder {
+        private final OutputStream outputStream;
+        private final Project project;
+        private final Module module;
+        private final List<String> patternsToExclude;
+
+
+        public Builder(OutputStream outputStream, Project project, Module module) {
+            this.outputStream = outputStream;
+            this.project = project;
+            this.module = module;
+            this.patternsToExclude = new ArrayList<String>();
+        }
+
+
+        public Builder exclude(String patternToExclude) {
+            patternsToExclude.add(patternToExclude);
+            return this;
+        }
+
+
+        public ClassDiagramGenerator build() {
+            return new ClassDiagramGenerator(this);
+        }
+
+    }
+
+
+
+    protected ClassDiagramGenerator(Builder builder) {
+        this.outputStream = builder.outputStream;
+        this.project = builder.project;
+        this.module = builder.module;
+        this.patternsToExclude = builder.patternsToExclude;
         this.managedPsiClasses = computeManagedPsiClasses();
     }
 
@@ -123,7 +162,19 @@ public class ClassDiagramGenerator {
 
         String dir = fileDirectory.replace(moduleDirectory, "");
 
-        return dir.contains("test");
+        return excluded(dir);
+    }
+
+
+
+    private boolean excluded(String dirName) {
+        for (String patternToExclude : this.patternsToExclude) {
+            if (dirName.contains(patternToExclude)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 

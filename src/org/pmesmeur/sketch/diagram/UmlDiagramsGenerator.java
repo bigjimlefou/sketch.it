@@ -64,7 +64,10 @@ public class UmlDiagramsGenerator {
     private void generateModuleClassDiagram(Module module) {
         try {
             OutputStream outputStream = getClassDiagramOutputStream(module);
-            ClassDiagramGenerator classDiagramGenerator = new ClassDiagramGenerator(outputStream, project, module);
+            ClassDiagramGenerator classDiagramGenerator =
+                    ClassDiagramGenerator.newBuilder(outputStream, project, module)
+                                         .exclude("test")
+                                         .build();
             classDiagramGenerator.generate();
             outputStream.close();
         } catch (IOException e) {
