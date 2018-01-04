@@ -259,11 +259,11 @@ public class ClassDiagramGenerator {
 
 
     private void declareClassAssociations(PsiClass clazz) {
-        PsiField[] allFields = clazz.getAllFields();
-        for (PsiField field : allFields) {
-            if (!field.hasModifierProperty(PsiModifier.STATIC) && field instanceof PsiClass) {
-                PsiClass psiClass = (PsiClass) field;
-                write(psiClass.getName() + " o-- " + psiClass.getName());
+        for (PsiField field : clazz.getAllFields()) {
+            if (typeBelongsToCurrentProject(field.getType()) &&
+                    field.getContainingClass().equals(clazz) &&
+                    !field.hasModifierProperty(PsiModifier.STATIC)) {
+                write(clazz.getName() + " o-- " + field.getType().getPresentableText());
             }
         }
     }
