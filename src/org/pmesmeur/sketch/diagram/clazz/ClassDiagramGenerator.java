@@ -102,15 +102,28 @@ public class ClassDiagramGenerator {
         Set<PsiClass> managedPsiClasses = new HashSet<PsiClass>();
 
         for (PsiFile file : pfiles) {
-            if (file instanceof PsiClassOwner) {
+            if (file instanceof PsiClassOwner && !isTestFile(file)) {
                 PsiClass[] classes = ((PsiClassOwner) file).getClasses();
                 for (PsiClass clazz : classes) {
-                    managedPsiClasses.add(clazz);
+                    if (!((PsiJavaFile) clazz.getContainingFile()).getPackageName().contains("test")) {
+                        managedPsiClasses.add(clazz);
+                    }
                 }
             }
         }
 
         return managedPsiClasses;
+    }
+
+
+
+    private boolean isTestFile(PsiFile file) {
+        String fileDirectory = file.getParent().toString();
+        String moduleDirectory = module.getModuleFile().getParent().toString();
+
+        String dir = fileDirectory.replace(moduleDirectory, "");
+
+        return dir.contains("test");
     }
 
 
