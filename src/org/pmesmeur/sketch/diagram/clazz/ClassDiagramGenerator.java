@@ -144,9 +144,7 @@ public class ClassDiagramGenerator {
             if (file instanceof PsiClassOwner && !isTestFile(file)) {
                 PsiClass[] classes = ((PsiClassOwner) file).getClasses();
                 for (PsiClass clazz : classes) {
-                    if (!((PsiJavaFile) clazz.getContainingFile()).getPackageName().contains("test")) {
-                        managedPsiClasses.add(clazz);
-                    }
+                    managedPsiClasses.add(clazz);
                 }
             }
         }
