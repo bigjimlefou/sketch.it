@@ -2,10 +2,6 @@ package org.pmesmeur.sketch.diagram.clazz;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.roots.ModuleRootManager;
-import com.intellij.openapi.roots.ProjectFileIndex;
-import com.intellij.openapi.roots.ProjectRootManager;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.util.VisibilityUtil;
@@ -13,10 +9,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
 
 public class ClassDiagramGenerator {
     private final OutputStream outputStream;
@@ -24,6 +18,7 @@ public class ClassDiagramGenerator {
     private final Module module;
     private final Set<PsiClass> managedPsiClasses;
     private final List<String> patternsToExclude;
+    private final List<String> packages;
 
 
     public static ClassDiagramGenerator.Builder newBuilder(OutputStream outputStream,
@@ -68,111 +63,24 @@ public class ClassDiagramGenerator {
         this.project = builder.project;
         this.module = builder.module;
         this.patternsToExclude = builder.patternsToExclude;
+        this.packages = new ArrayList<String>();
         this.managedPsiClasses = computeManagedPsiClasses();
     }
 
 
 
     private Set<PsiClass> computeManagedPsiClasses() {
-        List<PsiFile> pfiles = findFiles();
-        return computeManagedPsiClassesFromFiles(pfiles);
-    }
+        Finder finder = new Finder(project, module, patternsToExclude);
 
+        Set<PsiClass> pfiles = finder.getClasses();
 
+        Set<String> packageSet = finder.getPackages();
+        for (String packag : packageSet) {
+            packages.add(packag);
+        }
+        Collections.sort(packages, new StringLengthComparator());
 
-    @NotNull
-    private List<PsiFile> findFiles() {
-        List<PsiFile> pfiles = new ArrayList<PsiFile>();
-        findFiles(module, pfiles);
         return pfiles;
-    }
-
-
-
-    private void findFiles(Module module, List<PsiFile> files)
-    {
-        VirtualFile[] roots = ModuleRootManager.getInstance(module).getContentRoots();
-        for (VirtualFile file : roots)
-        {
-            PsiDirectory dir = PsiManager.getInstance(project).findDirectory(file);
-            if (dir != null)
-            {
-                findFiles(files, dir, true);
-            }
-        }
-    }
-
-
-
-    private void findFiles(List<PsiFile> files, PsiDirectory directory, boolean subdirs)
-    {
-        PsiFile[] locals = directory.getFiles();
-        for (PsiFile local : locals)
-        {
-            if (psiFileBelongsToCurrentModule(local)) {
-                files.add(local);
-            }
-        }
-
-        if (subdirs)
-        {
-            PsiDirectory[] dirs = directory.getSubdirectories();
-            for (PsiDirectory dir : dirs)
-            {
-                findFiles(files, dir, subdirs);
-            }
-
-        }
-    }
-
-
-
-    private boolean psiFileBelongsToCurrentModule(PsiFile file) {
-        ProjectRootManager projectRootManager = ProjectRootManager.getInstance(project);
-        ProjectFileIndex projectFileIndex = projectRootManager.getFileIndex();
-        Module fileModule = projectFileIndex.getModuleForFile(file.getVirtualFile());
-
-        return module.equals(fileModule);
-    }
-
-
-
-    private Set<PsiClass> computeManagedPsiClassesFromFiles(List<PsiFile> pfiles) {
-        Set<PsiClass> managedPsiClasses = new HashSet<PsiClass>();
-
-        for (PsiFile file : pfiles) {
-            if (file instanceof PsiClassOwner && !isTestFile(file)) {
-                PsiClass[] classes = ((PsiClassOwner) file).getClasses();
-                for (PsiClass clazz : classes) {
-                    managedPsiClasses.add(clazz);
-                }
-            }
-        }
-
-        return managedPsiClasses;
-    }
-
-
-
-    private boolean isTestFile(PsiFile file) {
-        String fileDirectory = file.getParent().toString();
-        String moduleDirectory = module.getModuleFile().getParent().toString();
-
-        String dir = fileDirectory.replace(moduleDirectory, "");
-
-        return excluded(dir);
-    }
-
-
-
-    private boolean excluded(String dirName) {
-        for (String patternToExclude : this.patternsToExclude) {
-            if (dirName.contains(patternToExclude)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
 
@@ -212,6 +120,15 @@ public class ClassDiagramGenerator {
 
 
     private void declareClass(PsiClass clazz) {
+        int nbPackage = 0;
+        String packageName = ((PsiJavaFile) clazz.getContainingFile()).getPackageName();
+        for (String packag : packages) {
+            if (packageName.startsWith(packag)) {
+                write("package " + packag + " {");
+                nbPackage++;
+            }
+        }
+
         if (clazz.isEnum()) {
             write("enum " + clazz.getName());
         } else {
@@ -225,6 +142,11 @@ public class ClassDiagramGenerator {
             declareClassMembers(clazz);
             write("}");
         }
+
+        while (nbPackage-- > 0) {
+            write("}");
+        }
+
     }
 
 
@@ -328,6 +250,17 @@ public class ClassDiagramGenerator {
                 write(clazz.getName() + " o-- " + field.getType().getPresentableText());
             }
         }
+    }
+
+
+
+    private class StringLengthComparator implements Comparator<String> {
+
+        @Override
+        public int compare(String o1, String o2) {
+            return o1.length() - o2.length();
+        }
+
     }
 
 }
