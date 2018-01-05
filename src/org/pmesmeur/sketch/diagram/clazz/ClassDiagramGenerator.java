@@ -257,7 +257,7 @@ public class ClassDiagramGenerator {
             if (typeBelongsToCurrentProject(field.getType()) &&
                     field.getContainingClass().equals(clazz) &&
                     !field.hasModifierProperty(PsiModifier.STATIC)) {
-                write(clazz.getName() + " o-- " + field.getType().getPresentableText());
+                write(clazz.getName() + " o-- " + field.getType().getPresentableText() + " : " + field.getName());
             }
         }
     }
