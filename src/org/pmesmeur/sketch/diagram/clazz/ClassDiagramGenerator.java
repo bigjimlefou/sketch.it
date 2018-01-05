@@ -221,7 +221,17 @@ public class ClassDiagramGenerator {
 
     private void declareClassMethod(PsiMethod method) {
         String visibility = getVisibility(method.getModifierList());
-        write("  " + visibility + " " + method.getName() + "()");
+        String methodDeclaration = "  " + visibility + " " + method.getName() + "()";
+
+        if (method.hasModifierProperty(PsiModifier.ABSTRACT)) {
+            methodDeclaration = "{abstract} " + methodDeclaration;
+        }
+
+        if (method.hasModifierProperty(PsiModifier.STATIC)) {
+            methodDeclaration = "{static} " + methodDeclaration;
+        }
+
+        write(methodDeclaration);
     }
 
 
