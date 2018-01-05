@@ -246,7 +246,7 @@ public class ClassDiagramGenerator {
     private void declareClassInheritence(PsiClass clazz) {
         PsiClass superClass = clazz.getSuperClass();
         if (superClass != null) {
-            write(clazz.getName() + " --|> " + superClass.getName());
+            write(clazz.getName() + " -up--|> " + superClass.getName());
         }
     }
 
