@@ -2,6 +2,7 @@ package org.pmesmeur.sketch.diagram.clazz;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.util.VisibilityUtil;
@@ -19,6 +20,7 @@ public class ClassDiagramGenerator {
     private final Set<PsiClass> managedPsiClasses;
     private final List<String> patternsToExclude;
     private final List<String> packages;
+    private final VirtualFile sourceDirectory;
 
 
     public static ClassDiagramGenerator.Builder newBuilder(OutputStream outputStream,
@@ -34,6 +36,7 @@ public class ClassDiagramGenerator {
         private final Project project;
         private final Module module;
         private final List<String> patternsToExclude;
+        private VirtualFile sourceDirectory;
 
 
         public Builder(OutputStream outputStream, Project project, Module module) {
@@ -54,6 +57,10 @@ public class ClassDiagramGenerator {
             return new ClassDiagramGenerator(this);
         }
 
+        public Builder sourceDirectory(VirtualFile sourceDirectory) {
+            this.sourceDirectory = sourceDirectory;
+            return this;
+        }
     }
 
 
@@ -63,6 +70,7 @@ public class ClassDiagramGenerator {
         this.project = builder.project;
         this.module = builder.module;
         this.patternsToExclude = builder.patternsToExclude;
+        this.sourceDirectory = builder.sourceDirectory;
         this.packages = new ArrayList<String>();
         this.managedPsiClasses = computeManagedPsiClasses();
     }
@@ -72,7 +80,7 @@ public class ClassDiagramGenerator {
     private Set<PsiClass> computeManagedPsiClasses() {
         Finder finder = new Finder(project, module, patternsToExclude);
 
-        Set<PsiClass> pfiles = finder.getClasses();
+        Set<PsiClass> classes = finder.getClasses();
 
         Set<String> packageSet = finder.getPackages();
         for (String packag : packageSet) {
@@ -80,7 +88,25 @@ public class ClassDiagramGenerator {
         }
         Collections.sort(packages, new StringLengthComparator());
 
-        return pfiles;
+        return filterClasses(classes);
+    }
+
+
+
+    private Set<PsiClass> filterClasses(Set<PsiClass> classes) {
+        Set<PsiClass> newSet = new HashSet<PsiClass>();
+
+        for (PsiClass clazz : classes) {
+            PsiElement parentElement = clazz.getParent();
+            PsiElement owningDirectory = parentElement.getParent();
+            if (sourceDirectory == null ||
+                    (owningDirectory instanceof PsiDirectory &&
+                     ((PsiDirectory) owningDirectory).getVirtualFile().equals(sourceDirectory))) {
+                newSet.add(clazz);
+            }
+        }
+
+        return newSet;
     }
 
 

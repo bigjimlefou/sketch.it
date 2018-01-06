@@ -10,6 +10,7 @@ import org.pmesmeur.sketch.diagram.component.ComponentDiagramGenerator;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Set;
 
 
 public class UmlDiagramsGenerator {
@@ -56,6 +57,7 @@ public class UmlDiagramsGenerator {
         ModuleManager moduleManager = ModuleManager.getInstance(project);
         for (Module module : moduleManager.getModules()) {
             generateModuleClassDiagram(module);
+            generateModuleClassDiagramForEachSourceDirectory(module);
         }
    }
 
@@ -83,8 +85,42 @@ public class UmlDiagramsGenerator {
         VirtualFile moduleFile = module.getModuleFile();
         VirtualFile moduleDirectory = moduleFile.getParent();
 
+        return getClassDiagramOutputStream(moduleDirectory);
+    }
+
+
+
+    private OutputStream getClassDiagramOutputStream(VirtualFile moduleDirectory) throws IOException {
         VirtualFile childData = moduleDirectory.findOrCreateChildData(this, CLASS_DIAGRAM_FILE_NAME);
         return childData.getOutputStream(this);
+    }
+
+
+
+    private void generateModuleClassDiagramForEachSourceDirectory(Module module) {
+        JavaFileFinder javaFileFinder = new JavaFileFinder(project, module);
+
+        Set<VirtualFile> directories = javaFileFinder.getFoundDirectories();
+        for (VirtualFile directory : directories) {
+            generateModuleClassDiagramForSourceDirectory(module, directory);
+        }
+    }
+
+
+
+    private void generateModuleClassDiagramForSourceDirectory(Module module, VirtualFile directory) {
+        try {
+            OutputStream outputStream = getClassDiagramOutputStream(directory);
+            ClassDiagramGenerator classDiagramGenerator =
+                    ClassDiagramGenerator.newBuilder(outputStream, project, module)
+                            .sourceDirectory(directory)
+                            .build();
+            classDiagramGenerator.generate();
+            outputStream.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
