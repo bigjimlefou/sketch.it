@@ -19,6 +19,7 @@ public class ComponentDiagramGenerator {
     private final Project project;
     private final List<String> patternsToExclude;
     private final Set<Module> managedModules;
+    private final String title;
 
 
     public static Builder newBuilder(OutputStream outputStream, Project project) {
@@ -31,6 +32,7 @@ public class ComponentDiagramGenerator {
         private final OutputStream outputStream;
         private final Project project;
         private final List<String> patternsToExclude;
+        private String title;
 
 
         public Builder(OutputStream outputStream, Project project) {
@@ -50,6 +52,10 @@ public class ComponentDiagramGenerator {
             return new ComponentDiagramGenerator(this);
         }
 
+        public Builder title(String title) {
+            this.title = title;
+            return this;
+        }
     }
 
 
@@ -58,6 +64,7 @@ public class ComponentDiagramGenerator {
         this.outputStream = builder.outputStream;
         this.project = builder.project;
         this.patternsToExclude = builder.patternsToExclude;
+        this.title = builder.title;
         this.managedModules = computeManagedModuleList();
     }
 
@@ -98,6 +105,13 @@ public class ComponentDiagramGenerator {
     public void generate() {
         write("@startuml");
         write("");
+
+
+        if (title != null) {
+            String underlignedTitle = "__" + title + "__";
+            write("title " + underlignedTitle + "\\n");
+            write("");
+        }
 
         ModulesHierarchyGenerator modulesHierarchyGenerator = new ModulesHierarchyGenerator(managedModules);
         modulesHierarchyGenerator.generate(outputStream);

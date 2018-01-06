@@ -31,6 +31,7 @@ public class UmlDiagramsGenerator {
 
             ComponentDiagramGenerator componentDiagramGenerator =
                     ComponentDiagramGenerator.newBuilder(outputStream, project)
+                            .title(project.getName().toUpperCase() + "'s Component Diagram")
                             .exclude("test")
                             .exclude("feature")
                             .build();
@@ -80,6 +81,7 @@ public class UmlDiagramsGenerator {
 
             ClassDiagramGenerator classDiagramGenerator =
                     ClassDiagramGenerator.newBuilder(outputStream, project, module)
+                                         .title(module.getName().toUpperCase() + "'s Class Diagram")
                                          .exclude("test")
                                          .build();
 
@@ -138,6 +140,7 @@ public class UmlDiagramsGenerator {
 
             ClassDiagramGenerator classDiagramGenerator =
                     ClassDiagramGenerator.newBuilder(outputStream, project, module)
+                            .title(directory.getName().toUpperCase() + "'s Class Diagram")
                             .sourceDirectory(directory)
                             .build();
 
