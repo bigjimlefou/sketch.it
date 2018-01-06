@@ -1,9 +1,9 @@
-package org.pmesmeur.sketch.diagram.clazz;
+package org.pmesmeur.sketchit.diagram.clazz;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import org.pmesmeur.sketch.diagram.JavaFileFinder;
+import org.pmesmeur.sketchit.diagram.JavaFileFinder;
 
 import java.util.HashSet;
 import java.util.List;

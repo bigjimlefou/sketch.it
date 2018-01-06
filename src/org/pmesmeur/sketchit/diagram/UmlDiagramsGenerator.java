@@ -1,12 +1,12 @@
-package org.pmesmeur.sketch.diagram;
+package org.pmesmeur.sketchit.diagram;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
-import org.pmesmeur.sketch.diagram.clazz.ClassDiagramGenerator;
-import org.pmesmeur.sketch.diagram.component.ComponentDiagramGenerator;
+import org.pmesmeur.sketchit.diagram.clazz.ClassDiagramGenerator;
+import org.pmesmeur.sketchit.diagram.component.ComponentDiagramGenerator;
 
 import java.io.IOException;
 import java.io.OutputStream;

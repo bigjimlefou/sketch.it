@@ -1,15 +1,15 @@
-package org.pmesmeur.sketch;
+package org.pmesmeur.sketchit;
 
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
-import org.pmesmeur.sketch.diagram.UmlDiagramsGenerator;
+import org.pmesmeur.sketchit.diagram.UmlDiagramsGenerator;
 
 
-public class Sketch extends AnAction {
+public class SketchIt extends AnAction {
     // If you register the action from Java code, this constructor is used to set the menu item name
     // (optionally, you can specify the menu description and an icon to display next to the menu item).
     // You can omit this constructor when registering the action in the plugin.xml file.
-    public Sketch() {
+    public SketchIt() {
         // Set the menu item name.
         super("Text _Boxes");
         // Set the menu item name, description and icon.

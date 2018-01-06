@@ -1,8 +1,8 @@
 <idea-plugin>
-  <id>org.pmesmeur.sketch</id>
+  <id>org.pmesmeur.sketchit</id>
   <name>Plugin display name here</name>
   <version>1.0</version>
-  <vendor email="philippe.mesmeur@gmail.com" url="https://bitbucket.org/pmesmeur/sketch">Sketch</vendor>
+  <vendor email="philippe.mesmeur@gmail.com" url="https://bitbucket.org/pmesmeur/sketch.it">Sketch.It!</vendor>
 
   <description><![CDATA[
       Generate UML diagram from source code<br>
@@ -28,10 +28,9 @@
   </extensions>
 
   <actions>
-    <group id="MyPlugin.SampleMenu" text="_Sketch" description="Generate Diagrams">
-      <add-to-group group-id="MainMenu" anchor="last" />
-      <action id="Myplugin.Textboxes" class="org.pmesmeur.sketch.Sketch" text="_Component Diagrams" description="Generate component diagrams" />
-    </group>
+      <action id="Myplugin.Textboxes" class="org.pmesmeur.sketchit.SketchIt" text="Sketch It! (generate UML diagrams)" description="Generate component diagrams">
+        <add-to-group group-id="ToolsMenu" anchor="last" />
+      </action>
   </actions>
 
 </idea-plugin>
