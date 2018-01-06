@@ -1,4 +1,4 @@
-package org.pmesmeur.sketch.diagram.clazz;
+package org.pmesmeur.sketchit.diagram.clazz;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;

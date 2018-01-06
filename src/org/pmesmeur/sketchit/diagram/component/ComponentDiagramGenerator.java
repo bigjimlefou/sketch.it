@@ -1,4 +1,4 @@
-package org.pmesmeur.sketch.diagram.component;
+package org.pmesmeur.sketchit.diagram.component;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;

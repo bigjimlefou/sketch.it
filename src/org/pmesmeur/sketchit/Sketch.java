@@ -1,8 +1,8 @@
-package org.pmesmeur.sketch;
+package org.pmesmeur.sketchit;
 
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
-import org.pmesmeur.sketch.diagram.UmlDiagramsGenerator;
+import org.pmesmeur.sketchit.diagram.UmlDiagramsGenerator;
 
 
 public class Sketch extends AnAction {
