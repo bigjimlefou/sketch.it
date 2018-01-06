@@ -9,31 +9,43 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
-public class ClassFileFinder {
+public class JavaFileFinder {
 
-    private Project project;
-    private Module module;
+    private final Project project;
+    private final Module module;
+    private final List<PsiJavaFile> javaFiles;
+    private final Set<VirtualFile> directories;
 
 
-    public ClassFileFinder(Project project, Module module) {
+    public JavaFileFinder(Project project, Module module) {
         this.project = project;
         this.module = module;
-    }
+        this.javaFiles = new ArrayList<PsiJavaFile>();
+        this.directories = new HashSet<VirtualFile>();
 
-
-    public List<PsiFile> findFiles() {
-        List<PsiFile> pFiles = new ArrayList<PsiFile>();
-        findFiles(pFiles);
-
-        return pFiles;
+        find();
     }
 
 
 
-    private void findFiles(List<PsiFile> files)
+    public List<PsiJavaFile> getFoundFiles() {
+        return javaFiles;
+    }
+
+
+
+    public Set<VirtualFile> getFoundDirectories() {
+        return directories;
+    }
+
+
+
+    private void find()
     {
         VirtualFile[] roots = ModuleRootManager.getInstance(module).getContentRoots();
         for (VirtualFile file : roots)
@@ -41,20 +53,22 @@ public class ClassFileFinder {
             PsiDirectory dir = PsiManager.getInstance(project).findDirectory(file);
             if (dir != null)
             {
-                findFiles(files, dir, true);
+                findFiles(dir, true);
             }
         }
     }
 
 
 
-    private void findFiles(List<PsiFile> files, PsiDirectory directory, boolean subdirs)
+    private void findFiles(PsiDirectory directory, boolean subdirs)
     {
         PsiFile[] locals = directory.getFiles();
         for (PsiFile local : locals)
         {
-            if (psiFileBelongsToCurrentModule(local)) {
-                files.add(local);
+            if (psiFileBelongsToCurrentModule(local) &&
+                local instanceof PsiJavaFile) {
+                javaFiles.add((PsiJavaFile) local);
+                directories.add(local.getParent().getVirtualFile());
             }
         }
 
@@ -63,7 +77,7 @@ public class ClassFileFinder {
             PsiDirectory[] dirs = directory.getSubdirectories();
             for (PsiDirectory dir : dirs)
             {
-                findFiles(files, dir, subdirs);
+                findFiles(dir, subdirs);
             }
 
         }

@@ -3,7 +3,7 @@ package org.pmesmeur.sketch.diagram.clazz;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
-import org.pmesmeur.sketch.diagram.ClassFileFinder;
+import org.pmesmeur.sketch.diagram.JavaFileFinder;
 
 import java.util.HashSet;
 import java.util.List;
@@ -16,7 +16,6 @@ public class Finder {
     private final Module module;
     private Set<PsiClass> classes;
     private Set<String> packages;
-    private Set<String> sourceDirectories;
     private final List<String> patternsToExclude;
 
 
@@ -25,7 +24,6 @@ public class Finder {
         this.module = module;
         this.patternsToExclude = patternsToExclude;
         this.packages = new HashSet<String>();
-        this.sourceDirectories = new HashSet<String>();
         this.classes = findClasses();
     }
 
@@ -43,32 +41,22 @@ public class Finder {
 
 
 
-    public Set<String> getSourceDirectories() {
-        return sourceDirectories;
-    }
-
-
-
     private Set<PsiClass> findClasses() {
-        ClassFileFinder classFileFinder = new ClassFileFinder(project, module);
+        JavaFileFinder javaFileFinder = new JavaFileFinder(project, module);
 
-        return computeManagedPsiClassesFromFiles(classFileFinder.findFiles());
+        return computeManagedPsiClassesFromFiles(javaFileFinder.getFoundFiles());
     }
 
 
 
-    private Set<PsiClass> computeManagedPsiClassesFromFiles(List<PsiFile> pfiles) {
+    private Set<PsiClass> computeManagedPsiClassesFromFiles(List<PsiJavaFile> pfiles) {
         Set<PsiClass> managedPsiClasses = new HashSet<PsiClass>();
 
-        for (PsiFile file : pfiles) {
-            if (file instanceof PsiJavaFile) {
-                recordFilePackageAsKnownPackage((PsiJavaFile) file);
-            }
+        for (PsiJavaFile file : pfiles) {
+            recordFilePackageAsKnownPackage(file);
 
-            if (file instanceof PsiClassOwner && !isTestFile(file)) {
-                sourceDirectories.add(file.getParent().getVirtualFile().getPath());
-
-                PsiClass[] classes = ((PsiClassOwner) file).getClasses();
+            if (!isTestFile(file)) {
+                PsiClass[] classes = file.getClasses();
                 for (PsiClass clazz : classes) {
                     managedPsiClasses.add(clazz);
                 }
