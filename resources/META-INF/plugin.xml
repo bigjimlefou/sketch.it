@@ -2,7 +2,7 @@
   <id>org.pmesmeur.sketchit</id>
   <name>Plugin display name here</name>
   <version>1.0</version>
-  <vendor email="philippe.mesmeur@gmail.com" url="https://bitbucket.org/pmesmeur/sketch">Sketch</vendor>
+  <vendor email="philippe.mesmeur@gmail.com" url="https://bitbucket.org/pmesmeur/sketch.it">Sketch.It!</vendor>
 
   <description><![CDATA[
       Generate UML diagram from source code<br>
@@ -28,7 +28,7 @@
   </extensions>
 
   <actions>
-      <action id="Myplugin.Textboxes" class="org.pmesmeur.sketchit.Sketch" text="Sketch: generate UML diagrams" description="Generate component diagrams">
+      <action id="Myplugin.Textboxes" class="org.pmesmeur.sketchit.SketchIt" text="Sketch It! (generate UML diagrams)" description="Generate component diagrams">
         <add-to-group group-id="ToolsMenu" anchor="last" />
       </action>
   </actions>
