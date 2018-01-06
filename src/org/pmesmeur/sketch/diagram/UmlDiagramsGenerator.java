@@ -10,13 +10,13 @@ import org.pmesmeur.sketch.diagram.component.ComponentDiagramGenerator;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 
 public class UmlDiagramsGenerator {
 
-    public static final String COMPONENT_DIAGRAM_FILE_NAME = "components.plantuml";
-    public static final String CLASS_DIAGRAM_FILE_NAME = "classes.plantuml";
+    private static final String FILE_EXTENSION = "plantuml";
     private final Project project;
 
     public UmlDiagramsGenerator(Project project) {
@@ -31,6 +31,7 @@ public class UmlDiagramsGenerator {
 
             ComponentDiagramGenerator componentDiagramGenerator =
                     ComponentDiagramGenerator.newBuilder(outputStream, project)
+                            .title(project.getName().toUpperCase() + "'s Component Diagram")
                             .exclude("test")
                             .exclude("feature")
                             .build();
@@ -47,8 +48,16 @@ public class UmlDiagramsGenerator {
 
     @NotNull
     private OutputStream getComponentDiagramOutputStream()  throws IOException {
-        VirtualFile childData = project.getBaseDir().findOrCreateChildData(this, COMPONENT_DIAGRAM_FILE_NAME);
+        String outputFileName = createOutputFileName(project.getName());
+        VirtualFile childData = project.getBaseDir().findOrCreateChildData(this, outputFileName);
         return childData.getOutputStream(this);
+    }
+
+
+
+    @NotNull
+    private String createOutputFileName(String name) {
+        return name + "." + FILE_EXTENSION;
     }
 
 
@@ -64,14 +73,28 @@ public class UmlDiagramsGenerator {
 
 
     private void generateModuleClassDiagram(Module module) {
+        VirtualFile outputFile = null;
+
         try {
-            OutputStream outputStream = getClassDiagramOutputStream(module);
+            outputFile = getClassDiagramOutputStream(module);
+            OutputStream outputStream = outputFile.getOutputStream(this);
+
             ClassDiagramGenerator classDiagramGenerator =
                     ClassDiagramGenerator.newBuilder(outputStream, project, module)
+                                         .title(module.getName().toUpperCase() + "'s Class Diagram")
                                          .exclude("test")
                                          .build();
+
             classDiagramGenerator.generate();
             outputStream.close();
+        } catch (NoSuchElementException e) {
+            if (outputFile != null) {
+                try {
+                    outputFile.delete(this);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -81,7 +104,7 @@ public class UmlDiagramsGenerator {
 
 
     @NotNull
-    private OutputStream getClassDiagramOutputStream(Module module) throws IOException {
+    private VirtualFile getClassDiagramOutputStream(Module module) throws IOException {
         VirtualFile moduleFile = module.getModuleFile();
         VirtualFile moduleDirectory = moduleFile.getParent();
 
@@ -90,9 +113,9 @@ public class UmlDiagramsGenerator {
 
 
 
-    private OutputStream getClassDiagramOutputStream(VirtualFile moduleDirectory) throws IOException {
-        VirtualFile childData = moduleDirectory.findOrCreateChildData(this, CLASS_DIAGRAM_FILE_NAME);
-        return childData.getOutputStream(this);
+    private VirtualFile getClassDiagramOutputStream(VirtualFile moduleDirectory) throws IOException {
+        String outputFileName = createOutputFileName(moduleDirectory.getName());
+        return moduleDirectory.findOrCreateChildData(this, outputFileName);
     }
 
 
@@ -109,15 +132,28 @@ public class UmlDiagramsGenerator {
 
 
     private void generateModuleClassDiagramForSourceDirectory(Module module, VirtualFile directory) {
+        VirtualFile outputFile = null;
+
         try {
-            OutputStream outputStream = getClassDiagramOutputStream(directory);
+            outputFile = getClassDiagramOutputStream(directory);
+            OutputStream outputStream = outputFile.getOutputStream(this);
+
             ClassDiagramGenerator classDiagramGenerator =
                     ClassDiagramGenerator.newBuilder(outputStream, project, module)
+                            .title(directory.getName().toUpperCase() + "'s Class Diagram")
                             .sourceDirectory(directory)
                             .build();
+
             classDiagramGenerator.generate();
             outputStream.close();
-
+        } catch (NoSuchElementException e) {
+            if (outputFile != null) {
+                try {
+                    outputFile.delete(this);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,6 +1,7 @@
 package org.pmesmeur.sketch;
 
 import com.intellij.openapi.actionSystem.*;
+import com.intellij.openapi.application.ApplicationManager;
 import org.pmesmeur.sketch.diagram.UmlDiagramsGenerator;
 
 
@@ -18,10 +19,24 @@ public class Sketch extends AnAction {
 
 
     @Override
-    public void actionPerformed(AnActionEvent event) {
+    public void actionPerformed(final AnActionEvent event) {
+        runInsideAnIntellijWriteAction(event);
+    }
+
+
+
+    private void runInsideAnIntellijWriteAction(final AnActionEvent event) {
+        ApplicationManager.getApplication().runWriteAction(new Runnable() {
+            public void run() {
+                actionBody(event);
+            }
+        });
+    }
+
+
+    private void actionBody(AnActionEvent event) {
         UmlDiagramsGenerator umlDiagramsGenerator = new UmlDiagramsGenerator(event.getProject());
         umlDiagramsGenerator.generateComponentDiagram();
-        System.out.print("\n\n\n");
         umlDiagramsGenerator.generateClassDiagrams();
     }
 

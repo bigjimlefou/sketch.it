@@ -21,6 +21,7 @@ public class ClassDiagramGenerator {
     private final List<String> patternsToExclude;
     private final List<String> packages;
     private final VirtualFile sourceDirectory;
+    private final String title;
 
 
     public static ClassDiagramGenerator.Builder newBuilder(OutputStream outputStream,
@@ -37,6 +38,7 @@ public class ClassDiagramGenerator {
         private final Module module;
         private final List<String> patternsToExclude;
         private VirtualFile sourceDirectory;
+        private String title;
 
 
         public Builder(OutputStream outputStream, Project project, Module module) {
@@ -61,6 +63,11 @@ public class ClassDiagramGenerator {
             this.sourceDirectory = sourceDirectory;
             return this;
         }
+
+        public Builder title(String title) {
+            this.title = title;
+            return this;
+        }
     }
 
 
@@ -71,6 +78,7 @@ public class ClassDiagramGenerator {
         this.module = builder.module;
         this.patternsToExclude = builder.patternsToExclude;
         this.sourceDirectory = builder.sourceDirectory;
+        this.title = builder.title;
         this.packages = new ArrayList<String>();
         this.managedPsiClasses = computeManagedPsiClasses();
     }
@@ -81,6 +89,9 @@ public class ClassDiagramGenerator {
         Finder finder = new Finder(project, module, patternsToExclude);
 
         Set<PsiClass> classes = finder.getClasses();
+        if (classes.isEmpty()) {
+            throw new NoSuchElementException("No classes found");
+        }
 
         Set<String> packageSet = finder.getPackages();
         for (String packag : packageSet) {
@@ -115,6 +126,12 @@ public class ClassDiagramGenerator {
     {
         write("@startuml");
         write("");
+
+        if (title != null) {
+            String underlignedTitle = "__" + title + "__";
+            write("title " + underlignedTitle + "\\n");
+            write("");
+        }
 
         for (PsiClass clazz : managedPsiClasses) {
             declareClass(clazz);
