@@ -81,6 +81,9 @@ public class ClassDiagramGenerator {
         Finder finder = new Finder(project, module, patternsToExclude);
 
         Set<PsiClass> classes = finder.getClasses();
+        if (classes.isEmpty()) {
+            throw new NoSuchElementException("No classes found");
+        }
 
         Set<String> packageSet = finder.getPackages();
         for (String packag : packageSet) {

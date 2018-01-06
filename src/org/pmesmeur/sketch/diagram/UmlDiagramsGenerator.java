@@ -10,6 +10,7 @@ import org.pmesmeur.sketch.diagram.component.ComponentDiagramGenerator;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 
@@ -64,14 +65,27 @@ public class UmlDiagramsGenerator {
 
 
     private void generateModuleClassDiagram(Module module) {
+        VirtualFile outputFile = null;
+
         try {
-            OutputStream outputStream = getClassDiagramOutputStream(module);
+            outputFile = getClassDiagramOutputStream(module);
+            OutputStream outputStream = outputFile.getOutputStream(this);
+
             ClassDiagramGenerator classDiagramGenerator =
                     ClassDiagramGenerator.newBuilder(outputStream, project, module)
                                          .exclude("test")
                                          .build();
+
             classDiagramGenerator.generate();
             outputStream.close();
+        } catch (NoSuchElementException e) {
+            if (outputFile != null) {
+                try {
+                    outputFile.delete(this);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -81,7 +95,7 @@ public class UmlDiagramsGenerator {
 
 
     @NotNull
-    private OutputStream getClassDiagramOutputStream(Module module) throws IOException {
+    private VirtualFile getClassDiagramOutputStream(Module module) throws IOException {
         VirtualFile moduleFile = module.getModuleFile();
         VirtualFile moduleDirectory = moduleFile.getParent();
 
@@ -90,9 +104,8 @@ public class UmlDiagramsGenerator {
 
 
 
-    private OutputStream getClassDiagramOutputStream(VirtualFile moduleDirectory) throws IOException {
-        VirtualFile childData = moduleDirectory.findOrCreateChildData(this, CLASS_DIAGRAM_FILE_NAME);
-        return childData.getOutputStream(this);
+    private VirtualFile getClassDiagramOutputStream(VirtualFile moduleDirectory) throws IOException {
+        return moduleDirectory.findOrCreateChildData(this, CLASS_DIAGRAM_FILE_NAME);
     }
 
 
@@ -109,15 +122,27 @@ public class UmlDiagramsGenerator {
 
 
     private void generateModuleClassDiagramForSourceDirectory(Module module, VirtualFile directory) {
+        VirtualFile outputFile = null;
+
         try {
-            OutputStream outputStream = getClassDiagramOutputStream(directory);
+            outputFile = getClassDiagramOutputStream(directory);
+            OutputStream outputStream = outputFile.getOutputStream(this);
+
             ClassDiagramGenerator classDiagramGenerator =
                     ClassDiagramGenerator.newBuilder(outputStream, project, module)
                             .sourceDirectory(directory)
                             .build();
+
             classDiagramGenerator.generate();
             outputStream.close();
-
+        } catch (NoSuchElementException e) {
+            if (outputFile != null) {
+                try {
+                    outputFile.delete(this);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
