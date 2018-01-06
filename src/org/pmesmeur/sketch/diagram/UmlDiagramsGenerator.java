@@ -16,8 +16,7 @@ import java.util.Set;
 
 public class UmlDiagramsGenerator {
 
-    public static final String COMPONENT_DIAGRAM_FILE_NAME = "components.plantuml";
-    public static final String CLASS_DIAGRAM_FILE_NAME = "classes.plantuml";
+    private static final String FILE_EXTENSION = "plantuml";
     private final Project project;
 
     public UmlDiagramsGenerator(Project project) {
@@ -48,8 +47,16 @@ public class UmlDiagramsGenerator {
 
     @NotNull
     private OutputStream getComponentDiagramOutputStream()  throws IOException {
-        VirtualFile childData = project.getBaseDir().findOrCreateChildData(this, COMPONENT_DIAGRAM_FILE_NAME);
+        String outputFileName = createOutputFileName(project.getName());
+        VirtualFile childData = project.getBaseDir().findOrCreateChildData(this, outputFileName);
         return childData.getOutputStream(this);
+    }
+
+
+
+    @NotNull
+    private String createOutputFileName(String name) {
+        return name + "." + FILE_EXTENSION;
     }
 
 
@@ -105,7 +112,8 @@ public class UmlDiagramsGenerator {
 
 
     private VirtualFile getClassDiagramOutputStream(VirtualFile moduleDirectory) throws IOException {
-        return moduleDirectory.findOrCreateChildData(this, CLASS_DIAGRAM_FILE_NAME);
+        String outputFileName = createOutputFileName(moduleDirectory.getName());
+        return moduleDirectory.findOrCreateChildData(this, outputFileName);
     }
 
 
