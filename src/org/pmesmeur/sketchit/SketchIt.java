@@ -36,6 +36,7 @@ public class SketchIt extends AnAction {
 
     private void actionBody(AnActionEvent event) {
         UmlDiagramsGenerator umlDiagramsGenerator = new UmlDiagramsGenerator(event.getProject());
+
         umlDiagramsGenerator.generateComponentDiagram();
         umlDiagramsGenerator.generateClassDiagrams();
     }
