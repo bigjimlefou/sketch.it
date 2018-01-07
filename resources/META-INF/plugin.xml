@@ -28,9 +28,11 @@
   </extensions>
 
   <actions>
-      <action id="Myplugin.Textboxes" class="org.pmesmeur.sketchit.SketchIt" text="Sketch It! (generate UML diagrams)" description="Generate component diagrams">
-        <add-to-group group-id="ToolsMenu" anchor="last" />
-      </action>
+      <group id="MyPlugin.SampleMenu" text="_Sketch" description="Generate SketchIt! Diagrams">
+          <add-to-group group-id="ToolsMenu" anchor="last" />
+          <separator/>
+          <action id="Myplugin.Textboxes" class="org.pmesmeur.sketchit.SketchIt" text="Sketch It! (generate UML diagrams)" description="Generate component diagrams" />
+      </group>
   </actions>
 
 </idea-plugin>
