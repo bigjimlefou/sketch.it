@@ -16,7 +16,7 @@ public class ClassDiagramGenerator {
     private final PlantUmlWriter plantUmlWriter;
     private final Project project;
     private final Module module;
-    private final Set<PsiClass> managedPsiClasses;
+    private final Set<PsiClass> managedClasses;
     private final List<String> patternsToExclude;
     private final List<String> packages;
     private final VirtualFile sourceDirectory;
@@ -79,12 +79,12 @@ public class ClassDiagramGenerator {
         this.sourceDirectory = builder.sourceDirectory;
         this.title = builder.title;
         this.packages = new ArrayList<String>();
-        this.managedPsiClasses = computeManagedPsiClasses();
+        this.managedClasses = createListOfClassesToManage();
     }
 
 
 
-    private Set<PsiClass> computeManagedPsiClasses() {
+    private Set<PsiClass> createListOfClassesToManage() {
         Finder finder = new Finder(project, module, patternsToExclude);
 
         Set<PsiClass> classes = finder.getClasses();
@@ -125,12 +125,12 @@ public class ClassDiagramGenerator {
     {
         plantUmlWriter.startDiagram(title);
 
-        for (PsiClass clazz : managedPsiClasses) {
+        for (PsiClass clazz : managedClasses) {
             declareClass(clazz);
         }
 
 
-        for (PsiClass clazz : managedPsiClasses) {
+        for (PsiClass clazz : managedClasses) {
             declareClassRelationships(clazz);
         }
 
