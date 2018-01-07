@@ -7,14 +7,13 @@ import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.util.VisibilityUtil;
 import org.jetbrains.annotations.NotNull;
+import org.pmesmeur.sketchit.diagram.plantuml.PlantUmlWriter;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.*;
 
 
 public class ClassDiagramGenerator {
-    private final OutputStream outputStream;
+    private final PlantUmlWriter plantUmlWriter;
     private final Project project;
     private final Module module;
     private final Set<PsiClass> managedPsiClasses;
@@ -24,16 +23,16 @@ public class ClassDiagramGenerator {
     private final String title;
 
 
-    public static ClassDiagramGenerator.Builder newBuilder(OutputStream outputStream,
+    public static ClassDiagramGenerator.Builder newBuilder(PlantUmlWriter plantUmlWriter,
                                                            Project project,
                                                            Module module) {
-        return new ClassDiagramGenerator.Builder(outputStream, project, module);
+        return new ClassDiagramGenerator.Builder(plantUmlWriter, project, module);
     }
 
 
 
     public static class Builder {
-        private final OutputStream outputStream;
+        private final PlantUmlWriter plantUmlWriter;
         private final Project project;
         private final Module module;
         private final List<String> patternsToExclude;
@@ -41,8 +40,8 @@ public class ClassDiagramGenerator {
         private String title;
 
 
-        public Builder(OutputStream outputStream, Project project, Module module) {
-            this.outputStream = outputStream;
+        public Builder(PlantUmlWriter plantUmlWriter, Project project, Module module) {
+            this.plantUmlWriter = plantUmlWriter;
             this.project = project;
             this.module = module;
             this.patternsToExclude = new ArrayList<String>();
@@ -73,7 +72,7 @@ public class ClassDiagramGenerator {
 
 
     protected ClassDiagramGenerator(Builder builder) {
-        this.outputStream = builder.outputStream;
+        this.plantUmlWriter = builder.plantUmlWriter;
         this.project = builder.project;
         this.module = builder.module;
         this.patternsToExclude = builder.patternsToExclude;
@@ -124,72 +123,56 @@ public class ClassDiagramGenerator {
 
     public void generate()
     {
-        write("@startuml");
-        write("");
-
-        if (title != null) {
-            String underlignedTitle = "__" + title + "__";
-            write("title " + underlignedTitle + "\\n");
-            write("");
-        }
+        plantUmlWriter.startDiagram(title);
 
         for (PsiClass clazz : managedPsiClasses) {
             declareClass(clazz);
-            write("\n");
         }
 
-        write("\n\n");
 
         for (PsiClass clazz : managedPsiClasses) {
             declareClassRelationships(clazz);
         }
 
-        write("");
-        write("@enduml");
-    }
-
-
-
-    private void write(String s) {
-        String dataToWrite = s + "\n";
-        try {
-            outputStream.write(dataToWrite.getBytes());
-            outputStream.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        plantUmlWriter.endDiagram();
     }
 
 
 
     private void declareClass(PsiClass clazz) {
-        int nbPackage = 0;
         String packageName = ((PsiJavaFile) clazz.getContainingFile()).getPackageName();
-        for (String packag : packages) {
-            if (packageName.startsWith(packag)) {
-                write("package " + packag + " {");
-                nbPackage++;
-            }
-        }
+
+        List<String> packageStack = computePackageStack(packageName);
+
 
         if (clazz.isEnum()) {
-            write("enum " + clazz.getName());
+            plantUmlWriter.declareEnum(packageStack, clazz.getName());
         } else {
             if (clazz.isInterface()) {
-                write("interface " + clazz.getName() + " {");
+                plantUmlWriter.startInterfaceDeclaration(packageStack, clazz.getName());
             } else if (clazz.hasModifierProperty(PsiModifier.ABSTRACT)) {
-                write("abstract class " + clazz.getName() + " {");
+                plantUmlWriter.startAbstractClassDeclaration(packageStack, clazz.getName());
             } else {
-                write("class " + clazz.getName() + " {");
+                plantUmlWriter.startClassDeclaration(packageStack, clazz.getName());
             }
             declareClassMembers(clazz);
-            write("}");
+            plantUmlWriter.endClassDeclaration(packageStack);
         }
 
-        while (nbPackage-- > 0) {
-            write("}");
+    }
+
+
+
+    private List<String> computePackageStack(String packageName) {
+        List<String> packageStack = new ArrayList<String>();
+
+        for (String pkg : packages) {
+            if (packageName.startsWith(pkg)) {
+                packageStack.add(pkg);
+            }
         }
 
+        return packageStack;
     }
 
 
@@ -222,34 +205,21 @@ public class ClassDiagramGenerator {
     private void declareClassField(PsiField field) {
         String visibility = getVisibility(field.getModifierList());
         String fieldType = field.getType().getInternalCanonicalText();
-        String fieldDeclaration = visibility + " " + field.getName() + " : " + fieldType;
 
-        if (field.hasModifierProperty(PsiModifier.STATIC)) {
-            fieldDeclaration = "{static} " + fieldDeclaration;
+        if (!field.hasModifierProperty(PsiModifier.STATIC)) {
+            plantUmlWriter.declareField(visibility, fieldType, field.getName());
+        } else {
+            plantUmlWriter.declareStaticField(visibility, fieldType, field.getName());
         }
 
-        write("  " + fieldDeclaration);
     }
 
 
 
     @NotNull
     private String getVisibility(PsiModifierList methodModifiers) {
-        String visibility = VisibilityUtil.getVisibilityModifier(methodModifiers);
-
-        if (visibility == "public") {
-            visibility = "+";
-        } else if (visibility == "protected") {
-            visibility = "#";
-        } else if (visibility == "private") {
-            visibility = "-";
-        } else if (visibility == "packageLocal") {
-            visibility = "~";
-        }
-
-        return visibility;
+        return VisibilityUtil.getVisibilityModifier(methodModifiers);
     }
-
 
 
     private void declareClassMethods(PsiClass clazz) {
@@ -264,17 +234,14 @@ public class ClassDiagramGenerator {
 
     private void declareClassMethod(PsiMethod method) {
         String visibility = getVisibility(method.getModifierList());
-        String methodDeclaration = "  " + visibility + " " + method.getName() + "()";
 
         if (method.hasModifierProperty(PsiModifier.ABSTRACT)) {
-            methodDeclaration = "{abstract} " + methodDeclaration;
+            plantUmlWriter.declareAbstractMethod(visibility, method.getName());
+        } else if (method.hasModifierProperty(PsiModifier.STATIC)) {
+            plantUmlWriter.declareStaticMethod(visibility, method.getName());
+        } else {
+            plantUmlWriter.declareMethod(visibility, method.getName());
         }
-
-        if (method.hasModifierProperty(PsiModifier.STATIC)) {
-            methodDeclaration = "{static} " + methodDeclaration;
-        }
-
-        write(methodDeclaration);
     }
 
 
@@ -289,7 +256,7 @@ public class ClassDiagramGenerator {
     private void declareClassInheritence(PsiClass clazz) {
         PsiClass superClass = clazz.getSuperClass();
         if (superClass != null) {
-            write(clazz.getName() + " -up--|> " + superClass.getName());
+            plantUmlWriter.addClassesInheritence(clazz.getName(), superClass.getName());
         }
     }
 
@@ -300,7 +267,9 @@ public class ClassDiagramGenerator {
             if (typeBelongsToCurrentProject(field.getType()) &&
                     field.getContainingClass().equals(clazz) &&
                     !field.hasModifierProperty(PsiModifier.STATIC)) {
-                write(clazz.getName() + " o-- " + field.getType().getPresentableText() + " : " + field.getName());
+                plantUmlWriter.addClassesAssociation(clazz.getName(),
+                                                     field.getType().getPresentableText(),
+                                                     field.getName());
             }
         }
     }

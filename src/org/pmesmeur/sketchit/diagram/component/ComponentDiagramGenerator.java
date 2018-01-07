@@ -4,6 +4,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
+import org.pmesmeur.sketchit.diagram.plantuml.PlantUmlWriter;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -15,28 +16,28 @@ import java.util.Set;
 
 public class ComponentDiagramGenerator {
 
-    private final OutputStream outputStream;
+    private final PlantUmlWriter plantUmlWriter;
     private final Project project;
     private final List<String> patternsToExclude;
     private final Set<Module> managedModules;
     private final String title;
 
 
-    public static Builder newBuilder(OutputStream outputStream, Project project) {
-        return new Builder(outputStream, project);
+    public static Builder newBuilder(PlantUmlWriter plantUmlWriter, Project project) {
+        return new Builder(plantUmlWriter, project);
     }
 
 
 
     public static class Builder {
-        private final OutputStream outputStream;
+        private final PlantUmlWriter plantUmlWriter;
         private final Project project;
         private final List<String> patternsToExclude;
         private String title;
 
 
-        public Builder(OutputStream outputStream, Project project) {
-            this.outputStream = outputStream;
+        public Builder(PlantUmlWriter plantUmlWriter, Project project) {
+            this.plantUmlWriter = plantUmlWriter;
             this.project = project;
             this.patternsToExclude = new ArrayList<String>();
         }
@@ -61,7 +62,7 @@ public class ComponentDiagramGenerator {
 
 
     protected ComponentDiagramGenerator(Builder builder) {
-        this.outputStream = builder.outputStream;
+        this.plantUmlWriter = builder.plantUmlWriter;
         this.project = builder.project;
         this.patternsToExclude = builder.patternsToExclude;
         this.title = builder.title;
@@ -103,37 +104,16 @@ public class ComponentDiagramGenerator {
 
 
     public void generate() {
-        write("@startuml");
-        write("");
-
-
-        if (title != null) {
-            String underlignedTitle = "__" + title + "__";
-            write("title " + underlignedTitle + "\\n");
-            write("");
-        }
+        plantUmlWriter.startDiagram(title);
 
         ModulesHierarchyGenerator modulesHierarchyGenerator = new ModulesHierarchyGenerator(managedModules);
-        modulesHierarchyGenerator.generate(outputStream);
+        modulesHierarchyGenerator.generate(plantUmlWriter);
 
         for (Module module : managedModules) {
             printModuleDependencies(module);
         }
 
-        write("");
-        write("@enduml");
-    }
-
-
-
-    private void write(String s) {
-        String dataToWrite = s + "\n";
-        try {
-            outputStream.write(dataToWrite.getBytes());
-            outputStream.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        plantUmlWriter.endDiagram();
     }
 
 
@@ -146,21 +126,9 @@ public class ComponentDiagramGenerator {
 
         for (String dependentModulesName : dependentModulesNames) {
             if (!excluded(dependentModulesName)) {
-                printModuleDependency(moduleName, dependentModulesName);
+                plantUmlWriter.addComponentDependency(moduleName, dependentModulesName);
             }
         }
-    }
-
-
-
-    private void printModuleDependency(String moduleName, String dependentModulesName) {
-        write(componentName(moduleName) + " --> " + componentName(dependentModulesName));
-    }
-
-
-
-    private String componentName(String originalName) {
-        return "[" + originalName + "]";
     }
 
 }

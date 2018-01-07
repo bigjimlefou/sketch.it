@@ -1,6 +1,7 @@
 package org.pmesmeur.sketchit.diagram;
 
 import com.intellij.openapi.vfs.VirtualFile;
+import org.pmesmeur.sketchit.diagram.plantuml.PlantUmlWriter;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -21,13 +22,8 @@ abstract class UmlDiagram {
 
             outputStream.close();
         } catch (NoSuchElementException e) {
-            if (outputFile != null) {
-                try {
-                    outputFile.delete(this);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
+            System.out.println("Output file empty: deleting it");
+            deleteEmptyFile(outputFile);
         } catch (IOException e) {
             System.out.println("Error while generating diagram");
             e.printStackTrace();
@@ -35,8 +31,30 @@ abstract class UmlDiagram {
     }
 
 
+
     protected abstract VirtualFile getOutputFile() throws IOException;
-    protected abstract void generateDiagram(OutputStream outputStream);
+
+
+
+    private void generateDiagram(OutputStream outputStream) {
+        generateDiagram(new PlantUmlWriter(outputStream));
+    }
+
+
+
+    protected abstract void generateDiagram(PlantUmlWriter plantUmlWriter);
+
+
+    private void deleteEmptyFile(VirtualFile outputFile) {
+        if (outputFile != null) {
+            try {
+                outputFile.delete(this);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+
 
 
     protected String createOutputFileName(String name) {

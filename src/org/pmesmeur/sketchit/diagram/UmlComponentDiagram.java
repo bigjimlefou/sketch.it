@@ -3,6 +3,7 @@ package org.pmesmeur.sketchit.diagram;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.pmesmeur.sketchit.diagram.component.ComponentDiagramGenerator;
+import org.pmesmeur.sketchit.diagram.plantuml.PlantUmlWriter;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -27,17 +28,17 @@ class UmlComponentDiagram extends UmlDiagram {
 
 
     @Override
-    protected void generateDiagram(OutputStream outputStream) {
-        ComponentDiagramGenerator componentDiagramGenerator = getDiagramGeneratorBuilder(outputStream).build();
+    protected void generateDiagram(PlantUmlWriter plantUmlWriter) {
+        ComponentDiagramGenerator componentDiagramGenerator = getDiagramGeneratorBuilder(plantUmlWriter).build();
         componentDiagramGenerator.generate();
     }
 
 
 
-    private ComponentDiagramGenerator.Builder getDiagramGeneratorBuilder(OutputStream outputStream) {
+    private ComponentDiagramGenerator.Builder getDiagramGeneratorBuilder(PlantUmlWriter plantUmlWriter) {
         String title = project.getName().toUpperCase() + "'s Component Diagram";
 
-        return ComponentDiagramGenerator.newBuilder(outputStream, project)
+        return ComponentDiagramGenerator.newBuilder(plantUmlWriter, project)
                 .title(title)
                 .exclude("test")
                 .exclude("feature");

@@ -1,6 +1,7 @@
 package org.pmesmeur.sketchit.diagram.component;
 
 import com.intellij.openapi.module.Module;
+import org.pmesmeur.sketchit.diagram.plantuml.PlantUmlWriter;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,44 +46,32 @@ public class ModulesHierarchyGenerator {
 
 
 
-    public void generate(OutputStream outputStream) {
+    public void generate(PlantUmlWriter plantUmlWriter) {
         for (int i = modulePaths.size() - 1 ; i >= 0 ; --i) {
             ModulePath modulePath = modulePaths.get(i);
 
-            generate(outputStream, modulePath);
+            generate(plantUmlWriter, modulePath);
         }
     }
 
 
 
-    private void generate(OutputStream outputStream, ModulePath modulePath) {
+    private void generate(PlantUmlWriter plantUmlWriter, ModulePath modulePath) {
         if (!modulePathsDone.contains(modulePath)) {
             modulePathsDone.add(modulePath);
             if (modulePath.subModules.size() > 0) {
-                write(outputStream, "component \"" + modulePath.module.getName() + "\" {");
+                plantUmlWriter.startComponentDeclaration(modulePath.module.getName());
 
                 for (ModulePath subModulePath : modulePath.subModules) {
-                    write(outputStream, "    [" + subModulePath.module.getName() + "]");
+                    plantUmlWriter.addSubComponent(subModulePath.module.getName());
                 }
 
                 for (ModulePath subModulePath : modulePath.subModules) {
-                    generate(outputStream, subModulePath);
+                    generate(plantUmlWriter, subModulePath);
                 }
 
-                write(outputStream, "}\n\n");
+                plantUmlWriter.endComponentDeclaration();
             }
-        }
-    }
-
-
-
-    private void write(OutputStream outputStream, String s) {
-        String dataToWrite = s + "\n";
-        try {
-            outputStream.write(dataToWrite.getBytes());
-            outputStream.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
