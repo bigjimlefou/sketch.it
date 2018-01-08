@@ -2,12 +2,14 @@ package org.pmesmeur.sketchit.diagram.plantuml;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.CharBuffer;
 import java.util.List;
 
 
 public class PlantUmlWriter {
 
     private final OutputStream outputStream;
+    private int indentation = 0;
 
     public PlantUmlWriter(OutputStream outputStream) {
         this.outputStream = outputStream;
@@ -16,24 +18,43 @@ public class PlantUmlWriter {
 
 
     public void startDiagram(String title) {
+        indentation = 0;
         write("@startuml");
         write("");
 
         if (title != null) {
             writeTitle(title);
         }
+
+        indentation++;
     }
 
 
 
-    private void write(String s) {
-        String dataToWrite = s + "\n";
+    private void write(String str) {
+        String dataToWrite = str + "\n";
+        if (!str.isEmpty()) {
+            dataToWrite = indentation() + dataToWrite;
+        }
+
         try {
             outputStream.write(dataToWrite.getBytes());
             outputStream.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+
+    private String indentation() {
+        int indentation = this.indentation;
+        if (indentation < 0) {
+            indentation = 0;
+            System.out.println("Error: negative indentation!");
+        }
+
+        return CharBuffer.allocate(2 * indentation).toString().replace( '\0', ' ' );
     }
 
 
@@ -47,6 +68,10 @@ public class PlantUmlWriter {
 
 
     public void endDiagram() {
+        if (--indentation != 0) {
+            System.out.println("Warning: indentation should be null when writing the end of the document!");
+        }
+
         write("");
         writeFooter();
         write("");
@@ -79,11 +104,13 @@ public class PlantUmlWriter {
 
     public void startComponentDeclaration(String componentName) {
         write("component \"" + componentName + "\" {");
+        indentation++;
     }
 
 
 
     public void endComponentDeclaration() {
+        indentation--;
         write("}\n\n");
     }
 
@@ -106,6 +133,7 @@ public class PlantUmlWriter {
     private void startPackageStack(List<String> packageStack) {
         for (String pkg : packageStack) {
             write("package " + pkg + " {");
+            indentation++;
         }
     }
 
@@ -115,6 +143,7 @@ public class PlantUmlWriter {
         int nbPackage = packageStack.size();
 
         while (nbPackage-- > 0) {
+            indentation--;
             write("}");
         }
 
@@ -126,6 +155,7 @@ public class PlantUmlWriter {
     public void startClassDeclaration(List<String> packageStack, String className) {
         startPackageStack(packageStack);
         write("class " + className + " {");
+        indentation++;
     }
 
 
@@ -133,6 +163,7 @@ public class PlantUmlWriter {
     public void startAbstractClassDeclaration(List<String> packageStack, String abstractClassName) {
         startPackageStack(packageStack);
         write("abstract class " + abstractClassName + " {");
+        indentation++;
     }
 
 
@@ -140,11 +171,13 @@ public class PlantUmlWriter {
     public void startInterfaceDeclaration(List<String> packageStack, String interfaceName) {
         startPackageStack(packageStack);
         write("interface " + interfaceName + " {");
+        indentation++;
     }
 
 
 
     public void endClassDeclaration(List<String> packageStack) {
+        indentation--;
         write("}");
         endPackageStack(packageStack);
     }
