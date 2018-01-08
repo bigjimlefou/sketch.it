@@ -21,6 +21,8 @@ public class ClassDiagramGenerator {
     private final List<String> packages;
     private final VirtualFile sourceDirectory;
     private final String title;
+    private boolean hideMethods = false;
+    private boolean hideAttributes = false;
 
 
     public static ClassDiagramGenerator.Builder newBuilder(PlantUmlWriter plantUmlWriter,
@@ -38,6 +40,8 @@ public class ClassDiagramGenerator {
         private final List<String> patternsToExclude;
         private VirtualFile sourceDirectory;
         private String title;
+        private boolean hideMethods = false;
+        private boolean hideAttributes = false;
 
 
         public Builder(PlantUmlWriter plantUmlWriter, Project project, Module module) {
@@ -54,18 +58,32 @@ public class ClassDiagramGenerator {
         }
 
 
-        public ClassDiagramGenerator build() {
-            return new ClassDiagramGenerator(this);
-        }
-
         public Builder sourceDirectory(VirtualFile sourceDirectory) {
             this.sourceDirectory = sourceDirectory;
             return this;
         }
 
+
         public Builder title(String title) {
             this.title = title;
             return this;
+        }
+
+
+        public Builder hideMethods(boolean hideMethods) {
+            this.hideMethods = hideMethods;
+            return this;
+        }
+
+
+        public Builder hideAttributes(boolean hideAttributes) {
+            this.hideAttributes = hideAttributes;
+            return this;
+        }
+
+
+        public ClassDiagramGenerator build() {
+            return new ClassDiagramGenerator(this);
         }
     }
 
@@ -78,6 +96,8 @@ public class ClassDiagramGenerator {
         this.patternsToExclude = builder.patternsToExclude;
         this.sourceDirectory = builder.sourceDirectory;
         this.title = builder.title;
+        this.hideMethods = builder.hideMethods;
+        this.hideAttributes = builder.hideAttributes;
         this.packages = new ArrayList<String>();
         this.managedClasses = createListOfClassesToManage();
     }
@@ -188,8 +208,13 @@ public class ClassDiagramGenerator {
 
 
     private void declareClassMembers(PsiClass clazz) {
-        declareClassAttributes(clazz);
-        declareClassMethods(clazz);
+        if (!hideAttributes) {
+            declareClassAttributes(clazz);
+        }
+
+        if (!hideMethods) {
+            declareClassMethods(clazz);
+        }
     }
 
 
