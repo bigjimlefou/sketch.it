@@ -1,16 +1,16 @@
 <idea-plugin>
   <id>org.pmesmeur.sketchit</id>
-  <name>Plugin display name here</name>
-  <version>1.0</version>
+  <name>Sketch It!</name>
+  <version>0.01</version>
   <vendor email="philippe.mesmeur@gmail.com" url="https://bitbucket.org/pmesmeur/sketch.it">Sketch.It!</vendor>
 
   <description><![CDATA[
-      Generate UML diagram from source code<br>
+      Generate UML diagram from source code in the PlantUML format<br>
+      (You can use this plugin with "PlantUML integration")<br>
     ]]></description>
 
   <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
+      Create the plugin
     ]]>
   </change-notes>
 
@@ -28,7 +28,7 @@
   </extensions>
 
   <actions>
-      <group id="MyPlugin.SampleMenu" text="_SketchIt" description="Generate SketchIt! Diagrams">
+      <group id="SketchIt.SampleMenu" text="_SketchIt" description="Generate SketchIt! Diagrams">
           <add-to-group group-id="ToolsMenu" anchor="last" />
           <separator/>
           <action id="Myplugin.Textboxes" class="org.pmesmeur.sketchit.SketchIt" text="Sketch It! (generate UML diagrams)" description="Generate component diagrams" />
