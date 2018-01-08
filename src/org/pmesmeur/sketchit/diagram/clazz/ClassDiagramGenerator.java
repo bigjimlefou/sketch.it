@@ -255,9 +255,18 @@ public class ClassDiagramGenerator {
 
     private void declareClassInheritence(PsiClass clazz) {
         PsiClass superClass = clazz.getSuperClass();
-        if (superClass != null) {
+        if (superClass != null && !superClassIsObject(superClass)) {
             plantUmlWriter.addClassesInheritence(clazz.getName(), superClass.getName());
         }
+    }
+
+
+
+    private boolean superClassIsObject(PsiClass superClass) {
+        String superClassName = superClass.getName();
+        String superClassPackage = ((PsiJavaFile) superClass.getContainingFile()).getPackageName();
+
+        return superClassName.equals("Object") && superClassPackage.equals("java.lang");
     }
 
 
