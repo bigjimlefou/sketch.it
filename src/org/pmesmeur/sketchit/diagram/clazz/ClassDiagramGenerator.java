@@ -292,8 +292,18 @@ public class ClassDiagramGenerator {
 
 
     private void declareClassRelationships(PsiClass clazz) {
+        declareInterfaceImplementation(clazz);
         declareClassInheritence(clazz);
         declareClassAssociations(clazz);
+    }
+
+
+
+    private void declareInterfaceImplementation(PsiClass clazz) {
+        PsiReferenceList implementsList = clazz.getImplementsList();
+        for (PsiClassType implementedInterface : implementsList.getReferencedTypes()) {
+            plantUmlWriter.addClassesInheritence(clazz.getName(), implementedInterface.getName());
+        }
     }
 
 
