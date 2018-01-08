@@ -7,7 +7,6 @@ import org.pmesmeur.sketchit.diagram.clazz.ClassDiagramGenerator;
 import org.pmesmeur.sketchit.diagram.plantuml.PlantUmlWriter;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 
 class UmlModuleClassDiagram extends UmlDiagram {
@@ -55,7 +54,8 @@ class UmlModuleClassDiagram extends UmlDiagram {
                 .title(title)
                 .exclude("test")
                 .hideMethods(true)
-                .hideAttributes(true);
+                .hideAttributes(true)
+                .hideInnerClasses(true);
     }
 
 }

@@ -152,15 +152,19 @@ public class PlantUmlWriter {
 
 
     public void addClassesInheritence(String inheritedClass, String parentClass) {
-        write(inheritedClass + " -up--|> " + parentClass);
-
+        write(inheritedClass + " -up-|> " + parentClass);
     }
 
 
 
     public void addClassesAssociation(String fromClass, String toClass, String associationName) {
         write(fromClass + " o-- " + toClass + " : " + associationName);
+    }
 
+
+
+    public void addInnerClassesAssociation(String clazz, String innerClazz) {
+        write(clazz + " +-right- " + innerClazz);
     }
 
 

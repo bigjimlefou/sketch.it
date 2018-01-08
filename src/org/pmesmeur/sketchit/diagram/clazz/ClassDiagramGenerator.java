@@ -21,8 +21,9 @@ public class ClassDiagramGenerator {
     private final List<String> packages;
     private final VirtualFile sourceDirectory;
     private final String title;
-    private boolean hideMethods = false;
-    private boolean hideAttributes = false;
+    private final boolean hideMethods;
+    private final boolean hideAttributes;
+    private final boolean hideInnerClasses;
 
 
     public static ClassDiagramGenerator.Builder newBuilder(PlantUmlWriter plantUmlWriter,
@@ -42,6 +43,7 @@ public class ClassDiagramGenerator {
         private String title;
         private boolean hideMethods = false;
         private boolean hideAttributes = false;
+        private boolean hideInnerClasses = false;
 
 
         public Builder(PlantUmlWriter plantUmlWriter, Project project, Module module) {
@@ -82,6 +84,12 @@ public class ClassDiagramGenerator {
         }
 
 
+        public Builder hideInnerClasses(boolean hideInnerClasses) {
+            this.hideInnerClasses = hideInnerClasses;
+            return this;
+        }
+
+
         public ClassDiagramGenerator build() {
             return new ClassDiagramGenerator(this);
         }
@@ -98,6 +106,7 @@ public class ClassDiagramGenerator {
         this.title = builder.title;
         this.hideMethods = builder.hideMethods;
         this.hideAttributes = builder.hideAttributes;
+        this.hideInnerClasses = builder.hideInnerClasses;
         this.packages = new ArrayList<String>();
         this.managedClasses = createListOfClassesToManage();
     }
@@ -171,13 +180,22 @@ public class ClassDiagramGenerator {
 
     private void declareClass(PsiClass clazz) {
         String packageName = ((PsiJavaFile) clazz.getContainingFile()).getPackageName();
-
         List<String> packageStack = computePackageStack(packageName);
 
+        declareClass(packageStack, clazz);
 
+        if (!hideInnerClasses) {
+            declareInnerClasses(clazz);
+        }
+    }
+
+
+
+    private void declareClass(List<String> packageStack, PsiClass clazz) {
         if (clazz.isEnum()) {
             plantUmlWriter.declareEnum(packageStack, clazz.getName());
         } else {
+
             if (clazz.isInterface()) {
                 plantUmlWriter.startInterfaceDeclaration(packageStack, clazz.getName());
             } else if (clazz.hasModifierProperty(PsiModifier.ABSTRACT)) {
@@ -185,10 +203,19 @@ public class ClassDiagramGenerator {
             } else {
                 plantUmlWriter.startClassDeclaration(packageStack, clazz.getName());
             }
+
             declareClassMembers(clazz);
             plantUmlWriter.endClassDeclaration(packageStack);
-        }
 
+        }
+    }
+
+
+
+    private void declareInnerClasses(PsiClass clazz) {
+        for (PsiClass innerClass : clazz.getAllInnerClasses()) {
+            declareClass(innerClass);
+        }
     }
 
 
@@ -295,6 +322,10 @@ public class ClassDiagramGenerator {
         declareInterfaceImplementation(clazz);
         declareClassInheritence(clazz);
         declareClassAssociations(clazz);
+
+        if (!hideInnerClasses) {
+            declareInnerClassesAssociations(clazz);
+        }
     }
 
 
@@ -336,6 +367,18 @@ public class ClassDiagramGenerator {
                                                      field.getType().getPresentableText(),
                                                      field.getName());
             }
+        }
+    }
+
+
+
+    private void declareInnerClassesAssociations(PsiClass clazz) {
+        for (PsiClass innerClass : clazz.getAllInnerClasses()) {
+            plantUmlWriter.addInnerClassesAssociation(clazz.getName(), innerClass.getName());
+        }
+
+        for (PsiClass innerClass : clazz.getAllInnerClasses()) {
+            declareClassRelationships(innerClass);
         }
     }
 
