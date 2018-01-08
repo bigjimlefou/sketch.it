@@ -186,7 +186,7 @@ public class ClassDiagramGenerator {
 
     private void declareClassAttributes(PsiClass clazz) {
         for (PsiField field : clazz.getAllFields()) {
-            if (!typeBelongsToCurrentProject(field.getType()) &&
+            if ((!typeBelongsToCurrentProject(field.getType()) || typeContainsGeneric(field)) &&
                     field.getContainingClass().equals(clazz)) {
                 declareClassField(field);
             }
@@ -199,6 +199,16 @@ public class ClassDiagramGenerator {
         PsiClass typeClass = PsiTypesUtil.getPsiClass(type);
         return typeClass != null && typeClass.getProject().equals(project);
     }
+
+
+
+    private boolean typeContainsGeneric(PsiField field) {
+        String presentableText = field.getType().getPresentableText();
+        return presentableText.contains("<") || presentableText.contains(">");
+    }
+
+
+
 
 
 
@@ -275,7 +285,8 @@ public class ClassDiagramGenerator {
         for (PsiField field : clazz.getAllFields()) {
             if (typeBelongsToCurrentProject(field.getType()) &&
                     field.getContainingClass().equals(clazz) &&
-                    !field.hasModifierProperty(PsiModifier.STATIC)) {
+                    !field.hasModifierProperty(PsiModifier.STATIC) &&
+                    !typeContainsGeneric(field)) {
                 plantUmlWriter.addClassesAssociation(clazz.getName(),
                                                      field.getType().getPresentableText(),
                                                      field.getName());
