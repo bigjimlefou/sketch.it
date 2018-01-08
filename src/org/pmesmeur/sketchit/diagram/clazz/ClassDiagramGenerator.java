@@ -126,8 +126,6 @@ public class ClassDiagramGenerator {
         plantUmlWriter.startDiagram(title);
 
         List<PsiClass> classes = getListOfManagedClassesOrderedAlphabetically();
-
-
         for (PsiClass clazz : classes) {
             declareClass(clazz);
         }
@@ -143,7 +141,7 @@ public class ClassDiagramGenerator {
 
 
     private List<PsiClass> getListOfManagedClassesOrderedAlphabetically() {
-        List<PsiClass> classes = new ArrayList(managedClasses);
+        List<PsiClass> classes = new ArrayList<PsiClass>(managedClasses);
         Collections.sort(classes, new PsiClassComparator());
 
         return classes;
@@ -330,4 +328,5 @@ public class ClassDiagramGenerator {
         }
 
     }
+
 }
