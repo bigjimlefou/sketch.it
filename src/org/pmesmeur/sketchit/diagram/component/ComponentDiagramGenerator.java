@@ -6,12 +6,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
 import org.pmesmeur.sketchit.diagram.plantuml.PlantUmlWriter;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 public class ComponentDiagramGenerator {
@@ -109,11 +104,22 @@ public class ComponentDiagramGenerator {
         ModulesHierarchyGenerator modulesHierarchyGenerator = new ModulesHierarchyGenerator(managedModules);
         modulesHierarchyGenerator.generate(plantUmlWriter);
 
-        for (Module module : managedModules) {
+
+        List<Module> modules = getListOfManagedModulesOrderedAlphabetically();
+        for (Module module : modules) {
             printModuleDependencies(module);
         }
 
         plantUmlWriter.endDiagram();
+    }
+
+
+
+    private List<Module> getListOfManagedModulesOrderedAlphabetically() {
+        List<Module> modules = new ArrayList<Module>(managedModules);
+        Collections.sort(modules, new ModuleComparator());
+
+        return modules;
     }
 
 
@@ -129,6 +135,20 @@ public class ComponentDiagramGenerator {
                 plantUmlWriter.addComponentDependency(moduleName, dependentModulesName);
             }
         }
+    }
+
+
+
+    private class ModuleComparator implements Comparator<Module> {
+
+        @Override
+        public int compare(Module module1, Module module2) {
+            String name1 = module1.getName();
+            String name2 = module2.getName();
+
+            return name1.compareTo(name2) ;
+        }
+
     }
 
 }
