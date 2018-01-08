@@ -93,8 +93,8 @@ public class ClassDiagramGenerator {
         }
 
         Set<String> packageSet = finder.getPackages();
-        for (String packag : packageSet) {
-            packages.add(packag);
+        for (String pkg : packageSet) {
+            packages.add(pkg);
         }
         Collections.sort(packages, new StringLengthComparator());
 
@@ -125,16 +125,28 @@ public class ClassDiagramGenerator {
     {
         plantUmlWriter.startDiagram(title);
 
-        for (PsiClass clazz : managedClasses) {
+        List<PsiClass> classes = getListOfManagedClassesOrderedAlphabetically();
+
+
+        for (PsiClass clazz : classes) {
             declareClass(clazz);
         }
 
 
-        for (PsiClass clazz : managedClasses) {
+        for (PsiClass clazz : classes) {
             declareClassRelationships(clazz);
         }
 
         plantUmlWriter.endDiagram();
+    }
+
+
+
+    private List<PsiClass> getListOfManagedClassesOrderedAlphabetically() {
+        List<PsiClass> classes = new ArrayList(managedClasses);
+        Collections.sort(classes, new PsiClassComparator());
+
+        return classes;
     }
 
 
@@ -305,4 +317,17 @@ public class ClassDiagramGenerator {
 
     }
 
+
+
+    private class PsiClassComparator implements Comparator<PsiClass> {
+
+        @Override
+        public int compare(PsiClass class1, PsiClass class2) {
+            String name1 = class1.getName();
+            String name2 = class2.getName();
+
+            return name1.compareTo(name2) ;
+        }
+
+    }
 }
