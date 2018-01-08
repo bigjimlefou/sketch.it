@@ -2,68 +2,133 @@
 
 title __CLAZZ's Class Diagram__\n
 
-package org.pmesmeur.sketchit {
-package org.pmesmeur.sketchit.diagram {
-package org.pmesmeur.sketchit.diagram.clazz {
-class Finder {
-  - classes : java.util.Set<com.intellij.psi.PsiClass>
-  - packages : java.util.Set<java.lang.String>
-  - patternsToExclude : java.util.List<java.lang.String>
-  + Finder()
-  + getClasses()
-  + getPackages()
-  - findClasses()
-  - computeManagedPsiClassesFromFiles()
-  - recordFilePackageAsKnownPackage()
-  - isTestFile()
-  - excluded()
-}
-}
-}
-}
+  package org.pmesmeur.sketchit {
+    package org.pmesmeur.sketchit.diagram {
+      package org.pmesmeur.sketchit.diagram.clazz {
+        class ClassDiagramGenerator {
+            - managedClasses : java.util.Set<com.intellij.psi.PsiClass>
+            - patternsToExclude : java.util.List<java.lang.String>
+            - packages : java.util.List<java.lang.String>
+            - hideMethods : boolean
+            - hideAttributes : boolean
+            - hideInnerClasses : boolean
+            {static} + newBuilder()
+            # ClassDiagramGenerator()
+            - createListOfClassesToManage()
+            - filterClasses()
+            + generate()
+            - getListOfManagedClassesOrderedAlphabetically()
+            - declareClass()
+            - declareClass()
+            - declareInnerClasses()
+            - computePackageStack()
+            - declareClassMembers()
+            - declareClassAttributes()
+            - typeBelongsToCurrentProject()
+            - typeContainsGeneric()
+            - declareClassField()
+            - getVisibility()
+            - declareClassMethods()
+            - declareClassMethod()
+            - declareClassRelationships()
+            - declareInterfaceImplementation()
+            - declareClassInheritence()
+            - superClassIsObject()
+            - declareClassAssociations()
+            - declareInnerClassesAssociations()
+        }
+      }
+    }
+  }
+  
 
+  package org.pmesmeur.sketchit {
+    package org.pmesmeur.sketchit.diagram {
+      package org.pmesmeur.sketchit.diagram.clazz {
+        class Builder {
+            - patternsToExclude : java.util.List<java.lang.String>
+            - hideMethods : boolean
+            - hideAttributes : boolean
+            - hideInnerClasses : boolean
+            + Builder()
+            + exclude()
+            + sourceDirectory()
+            + title()
+            + hideMethods()
+            + hideAttributes()
+            + hideInnerClasses()
+            + build()
+        }
+      }
+    }
+  }
+  
 
-package org.pmesmeur.sketchit {
-package org.pmesmeur.sketchit.diagram {
-package org.pmesmeur.sketchit.diagram.clazz {
-class ClassDiagramGenerator {
-  - managedClasses : java.util.Set<com.intellij.psi.PsiClass>
-  - patternsToExclude : java.util.List<java.lang.String>
-  - packages : java.util.List<java.lang.String>
-  {static} + newBuilder()
-  # ClassDiagramGenerator()
-  - createListOfClassesToManage()
-  - filterClasses()
-  + generate()
-  - declareClass()
-  - computePackageStack()
-  - declareClassMembers()
-  - declareClassAttributes()
-  - typeBelongsToCurrentProject()
-  - typeContainsGeneric()
-  - declareClassField()
-  - getVisibility()
-  - declareClassMethods()
-  - declareClassMethod()
-  - declareClassRelationships()
-  - declareClassInheritence()
-  - superClassIsObject()
-  - declareClassAssociations()
-}
-}
-}
-}
+  package org.pmesmeur.sketchit {
+    package org.pmesmeur.sketchit.diagram {
+      package org.pmesmeur.sketchit.diagram.clazz {
+        class StringLengthComparator {
+            + compare()
+        }
+      }
+    }
+  }
+  
 
+  package org.pmesmeur.sketchit {
+    package org.pmesmeur.sketchit.diagram {
+      package org.pmesmeur.sketchit.diagram.clazz {
+        class PsiClassComparator {
+            + compare()
+        }
+      }
+    }
+  }
+  
 
-Finder o-- Project : project
-Finder o-- Module : module
-ClassDiagramGenerator o-- PlantUmlWriter : plantUmlWriter
-ClassDiagramGenerator o-- Project : project
-ClassDiagramGenerator o-- Module : module
-ClassDiagramGenerator o-- VirtualFile : sourceDirectory
-ClassDiagramGenerator o-- String : title
+  package org.pmesmeur.sketchit {
+    package org.pmesmeur.sketchit.diagram {
+      package org.pmesmeur.sketchit.diagram.clazz {
+        class Finder {
+            - classes : java.util.Set<com.intellij.psi.PsiClass>
+            - packages : java.util.Set<java.lang.String>
+            - patternsToExclude : java.util.List<java.lang.String>
+            + Finder()
+            + getClasses()
+            + getPackages()
+            - findClasses()
+            - computeManagedPsiClassesFromFiles()
+            - recordFilePackageAsKnownPackage()
+            - isTestFile()
+            - excluded()
+        }
+      }
+    }
+  }
+  
+
+  ClassDiagramGenerator o-- PlantUmlWriter : plantUmlWriter
+  ClassDiagramGenerator o-- Project : project
+  ClassDiagramGenerator o-- Module : module
+  ClassDiagramGenerator o-- VirtualFile : sourceDirectory
+  ClassDiagramGenerator o-- String : title
+  ClassDiagramGenerator +-right- Builder
+  ClassDiagramGenerator +-right- StringLengthComparator
+  ClassDiagramGenerator +-right- PsiClassComparator
+  Builder o-- PlantUmlWriter : plantUmlWriter
+  Builder o-- Project : project
+  Builder o-- Module : module
+  Builder o-- VirtualFile : sourceDirectory
+  Builder o-- String : title
+  StringLengthComparator -up-|> Comparator
+  PsiClassComparator -up-|> Comparator
+  Finder o-- Project : project
+  Finder o-- Module : module
+
 
 right footer
+
+
 PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
 For more information about this tool, please contact philippe.mesmeur@gmail.com
 endfooter

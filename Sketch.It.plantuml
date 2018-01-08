@@ -2,253 +2,139 @@
 
 title __SKETCHIT's Class Diagram__\n
 
-package org.pmesmeur.sketchit {
-package org.pmesmeur.sketchit.diagram {
-abstract class UmlDiagram {
-  + generate()
-  {abstract} # getOutputFile()
-  - generateDiagram()
-  {abstract} # generateDiagram()
-  - deleteEmptyFile()
-  # createOutputFileName()
-}
-}
-}
+  package org.pmesmeur.sketchit {
+    package org.pmesmeur.sketchit.diagram {
+      package org.pmesmeur.sketchit.diagram.clazz {
+        class ClassDiagramGenerator {
+        }
+      }
+    }
+  }
+  
 
+  package org.pmesmeur.sketchit {
+    package org.pmesmeur.sketchit.diagram {
+      package org.pmesmeur.sketchit.diagram.component {
+        class ComponentDiagramGenerator {
+        }
+      }
+    }
+  }
+  
 
-package org.pmesmeur.sketchit {
-package org.pmesmeur.sketchit.diagram {
-package org.pmesmeur.sketchit.diagram.clazz {
-class Finder {
-  - classes : java.util.Set<com.intellij.psi.PsiClass>
-  - packages : java.util.Set<java.lang.String>
-  - patternsToExclude : java.util.List<java.lang.String>
-  + Finder()
-  + getClasses()
-  + getPackages()
-  - findClasses()
-  - computeManagedPsiClassesFromFiles()
-  - recordFilePackageAsKnownPackage()
-  - isTestFile()
-  - excluded()
-}
-}
-}
-}
+  package org.pmesmeur.sketchit {
+    package org.pmesmeur.sketchit.diagram {
+      package org.pmesmeur.sketchit.diagram.clazz {
+        class Finder {
+        }
+      }
+    }
+  }
+  
 
+  package org.pmesmeur.sketchit {
+    package org.pmesmeur.sketchit.diagram {
+      class JavaFileFinder {
+      }
+    }
+  }
+  
 
-package org.pmesmeur.sketchit {
-package org.pmesmeur.sketchit.diagram {
-class JavaFileFinder {
-  - javaFiles : java.util.List<com.intellij.psi.PsiJavaFile>
-  - directories : java.util.Set<com.intellij.openapi.vfs.VirtualFile>
-  + JavaFileFinder()
-  + getFoundFiles()
-  + getFoundDirectories()
-  - find()
-  - findFiles()
-  - psiFileBelongsToCurrentModule()
-}
-}
-}
+  package org.pmesmeur.sketchit {
+    package org.pmesmeur.sketchit.diagram {
+      package org.pmesmeur.sketchit.diagram.component {
+        class ModulesHierarchyGenerator {
+        }
+      }
+    }
+  }
+  
 
+  package org.pmesmeur.sketchit {
+    package org.pmesmeur.sketchit.diagram {
+      package org.pmesmeur.sketchit.diagram.plantuml {
+        class PlantUmlWriter {
+        }
+      }
+    }
+  }
+  
 
-package org.pmesmeur.sketchit {
-package org.pmesmeur.sketchit.diagram {
-class UmlSourceDirectoryClassDiagram {
-  + UmlSourceDirectoryClassDiagram()
-  # getOutputFile()
-  # generateDiagram()
-  - getDiagramGeneratorBuilder()
-}
-}
-}
+  package org.pmesmeur.sketchit {
+    class SketchIt {
+    }
+  }
+  
 
+  package org.pmesmeur.sketchit {
+    package org.pmesmeur.sketchit.diagram {
+      class UmlComponentDiagram {
+      }
+    }
+  }
+  
 
-package org.pmesmeur.sketchit {
-class SketchIt {
-  + SketchIt()
-  + actionPerformed()
-  - runInsideAnIntellijWriteAction()
-  - actionBody()
-}
-}
+  package org.pmesmeur.sketchit {
+    package org.pmesmeur.sketchit.diagram {
+      abstract class UmlDiagram {
+      }
+    }
+  }
+  
 
+  package org.pmesmeur.sketchit {
+    package org.pmesmeur.sketchit.diagram {
+      class UmlDiagramsGenerator {
+      }
+    }
+  }
+  
 
-package org.pmesmeur.sketchit {
-package org.pmesmeur.sketchit.diagram {
-class UmlComponentDiagram {
-  + UmlComponentDiagram()
-  # getOutputFile()
-  # generateDiagram()
-  - getDiagramGeneratorBuilder()
-}
-}
-}
+  package org.pmesmeur.sketchit {
+    package org.pmesmeur.sketchit.diagram {
+      class UmlModuleClassDiagram {
+      }
+    }
+  }
+  
 
+  package org.pmesmeur.sketchit {
+    package org.pmesmeur.sketchit.diagram {
+      class UmlSourceDirectoryClassDiagram {
+      }
+    }
+  }
+  
 
-package org.pmesmeur.sketchit {
-package org.pmesmeur.sketchit.diagram {
-package org.pmesmeur.sketchit.diagram.plantuml {
-class PlantUmlWriter {
-  + PlantUmlWriter()
-  + startDiagram()
-  - write()
-  - writeTitle()
-  + endDiagram()
-  - writeFooter()
-  + addComponentDependency()
-  - formatComponentName()
-  + startComponentDeclaration()
-  + endComponentDeclaration()
-  + addSubComponent()
-  + declareEnum()
-  - startPackageStack()
-  - endPackageStack()
-  + startClassDeclaration()
-  + startAbstractClassDeclaration()
-  + startInterfaceDeclaration()
-  + endClassDeclaration()
-  + addClassesInheritence()
-  + addClassesAssociation()
-  + declareField()
-  - writeMember()
-  - computeMethodDeclaration()
-  - computeVisibility()
-  + declareStaticField()
-  - writeStaticMember()
-  + declareMethod()
-  - computeMethodDeclaration()
-  + declareStaticMethod()
-  + declareAbstractMethod()
-  - writeAbstractMember()
-}
-}
-}
-}
+  ClassDiagramGenerator o-- PlantUmlWriter : plantUmlWriter
+  ClassDiagramGenerator o-- Project : project
+  ClassDiagramGenerator o-- Module : module
+  ClassDiagramGenerator o-- VirtualFile : sourceDirectory
+  ClassDiagramGenerator o-- String : title
+  ComponentDiagramGenerator o-- PlantUmlWriter : plantUmlWriter
+  ComponentDiagramGenerator o-- Project : project
+  ComponentDiagramGenerator o-- String : title
+  Finder o-- Project : project
+  Finder o-- Module : module
+  JavaFileFinder o-- Project : project
+  JavaFileFinder o-- Module : module
+  PlantUmlWriter o-- OutputStream : outputStream
+  SketchIt -up-|> AnAction
+  UmlComponentDiagram -up-|> UmlDiagram
+  UmlComponentDiagram o-- Project : project
+  UmlDiagramsGenerator o-- Project : project
+  UmlModuleClassDiagram -up-|> UmlDiagram
+  UmlModuleClassDiagram o-- Project : project
+  UmlModuleClassDiagram o-- Module : module
+  UmlSourceDirectoryClassDiagram -up-|> UmlDiagram
+  UmlSourceDirectoryClassDiagram o-- Project : project
+  UmlSourceDirectoryClassDiagram o-- Module : module
+  UmlSourceDirectoryClassDiagram o-- VirtualFile : moduleDirectory
 
-
-package org.pmesmeur.sketchit {
-package org.pmesmeur.sketchit.diagram {
-package org.pmesmeur.sketchit.diagram.component {
-class ModulesHierarchyGenerator {
-  - modulePaths : java.util.List<org.pmesmeur.sketchit.diagram.component.ModulesHierarchyGenerator.ModulePath>
-  ~ modulePathsDone : java.util.Set<org.pmesmeur.sketchit.diagram.component.ModulesHierarchyGenerator.ModulePath>
-  + ModulesHierarchyGenerator()
-  - buildModulePaths()
-  - buildModulePathsDependencies()
-  + generate()
-  - generate()
-}
-}
-}
-}
-
-
-package org.pmesmeur.sketchit {
-package org.pmesmeur.sketchit.diagram {
-class UmlModuleClassDiagram {
-  + UmlModuleClassDiagram()
-  # getOutputFile()
-  - getClassDiagramOutputStream()
-  # generateDiagram()
-  - getDiagramGeneratorBuilder()
-}
-}
-}
-
-
-package org.pmesmeur.sketchit {
-package org.pmesmeur.sketchit.diagram {
-package org.pmesmeur.sketchit.diagram.clazz {
-class ClassDiagramGenerator {
-  - managedClasses : java.util.Set<com.intellij.psi.PsiClass>
-  - patternsToExclude : java.util.List<java.lang.String>
-  - packages : java.util.List<java.lang.String>
-  {static} + newBuilder()
-  # ClassDiagramGenerator()
-  - createListOfClassesToManage()
-  - filterClasses()
-  + generate()
-  - declareClass()
-  - computePackageStack()
-  - declareClassMembers()
-  - declareClassAttributes()
-  - typeBelongsToCurrentProject()
-  - typeContainsGeneric()
-  - declareClassField()
-  - getVisibility()
-  - declareClassMethods()
-  - declareClassMethod()
-  - declareClassRelationships()
-  - declareClassInheritence()
-  - superClassIsObject()
-  - declareClassAssociations()
-}
-}
-}
-}
-
-
-package org.pmesmeur.sketchit {
-package org.pmesmeur.sketchit.diagram {
-package org.pmesmeur.sketchit.diagram.component {
-class ComponentDiagramGenerator {
-  - patternsToExclude : java.util.List<java.lang.String>
-  - managedModules : java.util.Set<com.intellij.openapi.module.Module>
-  {static} + newBuilder()
-  # ComponentDiagramGenerator()
-  - computeManagedModuleList()
-  - excluded()
-  - excluded()
-  + generate()
-  - printModuleDependencies()
-}
-}
-}
-}
-
-
-package org.pmesmeur.sketchit {
-package org.pmesmeur.sketchit.diagram {
-class UmlDiagramsGenerator {
-  + UmlDiagramsGenerator()
-  + generateComponentDiagram()
-  + generateClassDiagrams()
-  - generateModuleClassDiagram()
-  - generateModuleClassDiagramForEachSourceDirectory()
-  - generateModuleClassDiagramForSourceDirectory()
-}
-}
-}
-
-
-Finder o-- Project : project
-Finder o-- Module : module
-JavaFileFinder o-- Project : project
-JavaFileFinder o-- Module : module
-UmlSourceDirectoryClassDiagram -up--|> UmlDiagram
-UmlSourceDirectoryClassDiagram o-- Project : project
-UmlSourceDirectoryClassDiagram o-- Module : module
-UmlSourceDirectoryClassDiagram o-- VirtualFile : moduleDirectory
-SketchIt -up--|> AnAction
-UmlComponentDiagram -up--|> UmlDiagram
-UmlComponentDiagram o-- Project : project
-PlantUmlWriter o-- OutputStream : outputStream
-UmlModuleClassDiagram -up--|> UmlDiagram
-UmlModuleClassDiagram o-- Project : project
-UmlModuleClassDiagram o-- Module : module
-ClassDiagramGenerator o-- PlantUmlWriter : plantUmlWriter
-ClassDiagramGenerator o-- Project : project
-ClassDiagramGenerator o-- Module : module
-ClassDiagramGenerator o-- VirtualFile : sourceDirectory
-ClassDiagramGenerator o-- String : title
-ComponentDiagramGenerator o-- PlantUmlWriter : plantUmlWriter
-ComponentDiagramGenerator o-- Project : project
-ComponentDiagramGenerator o-- String : title
-UmlDiagramsGenerator o-- Project : project
 
 right footer
+
+
 PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
 For more information about this tool, please contact philippe.mesmeur@gmail.com
 endfooter
