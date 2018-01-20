@@ -6,6 +6,8 @@ title __PLANTUML's Class Diagram__\n
     package org.pmesmeur.sketchit.diagram {
       package org.pmesmeur.sketchit.diagram.plantuml {
         class PlantUmlWriter {
+            {static} - LOG : Logger
+            - outputStream : OutputStream
             - indentation : int
             + PlantUmlWriter()
             + startDiagram()
@@ -46,7 +48,6 @@ title __PLANTUML's Class Diagram__\n
   }
   
 
-  PlantUmlWriter o-- OutputStream : outputStream
 
 
 right footer

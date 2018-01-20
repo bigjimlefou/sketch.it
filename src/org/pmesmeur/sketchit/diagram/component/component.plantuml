@@ -6,8 +6,10 @@ title __COMPONENT's Class Diagram__\n
     package org.pmesmeur.sketchit.diagram {
       package org.pmesmeur.sketchit.diagram.component {
         class ComponentDiagramGenerator {
-            - patternsToExclude : java.util.List<java.lang.String>
-            - managedModules : java.util.Set<com.intellij.openapi.module.Module>
+            - project : Project
+            - patternsToExclude : List<String>
+            - managedModules : Set<Module>
+            - title : String
             {static} + newBuilder()
             # ComponentDiagramGenerator()
             - computeManagedModuleList()
@@ -26,7 +28,9 @@ title __COMPONENT's Class Diagram__\n
     package org.pmesmeur.sketchit.diagram {
       package org.pmesmeur.sketchit.diagram.component {
         class Builder {
-            - patternsToExclude : java.util.List<java.lang.String>
+            - project : Project
+            - patternsToExclude : List<String>
+            - title : String
             + Builder()
             + exclude()
             + build()
@@ -52,8 +56,8 @@ title __COMPONENT's Class Diagram__\n
     package org.pmesmeur.sketchit.diagram {
       package org.pmesmeur.sketchit.diagram.component {
         class ModulesHierarchyGenerator {
-            - modulePaths : java.util.List<org.pmesmeur.sketchit.diagram.component.ModulesHierarchyGenerator.ModulePath>
-            ~ modulePathsDone : java.util.Set<org.pmesmeur.sketchit.diagram.component.ModulesHierarchyGenerator.ModulePath>
+            - modulePaths : List<ModulePath>
+            ~ modulePathsDone : Set<ModulePath>
             + ModulesHierarchyGenerator()
             - buildModulePaths()
             - buildModulePathsDependencies()
@@ -69,7 +73,9 @@ title __COMPONENT's Class Diagram__\n
     package org.pmesmeur.sketchit.diagram {
       package org.pmesmeur.sketchit.diagram.component {
         class ModulePath {
-            + subModules : java.util.ArrayList<org.pmesmeur.sketchit.diagram.component.ModulesHierarchyGenerator.ModulePath>
+            - module : Module
+            - path : String
+            + subModules : ArrayList<ModulePath>
             - ModulePath()
             - getModuleFilePath()
         }
@@ -90,18 +96,12 @@ title __COMPONENT's Class Diagram__\n
   
 
   ComponentDiagramGenerator o-- PlantUmlWriter : plantUmlWriter
-  ComponentDiagramGenerator o-- Project : project
-  ComponentDiagramGenerator o-- String : title
-  ComponentDiagramGenerator +-right- Builder
-  ComponentDiagramGenerator +-right- ModuleComparator
+  ComponentDiagramGenerator +-down- Builder
+  ComponentDiagramGenerator +-down- ModuleComparator
   Builder o-- PlantUmlWriter : plantUmlWriter
-  Builder o-- Project : project
-  Builder o-- String : title
   ModuleComparator -up-|> Comparator
-  ModulesHierarchyGenerator +-right- ModulePath
-  ModulesHierarchyGenerator +-right- ModulePathComparator
-  ModulePath o-- Module : module
-  ModulePath o-- String : path
+  ModulesHierarchyGenerator +-down- ModulePath
+  ModulesHierarchyGenerator +-down- ModulePathComparator
   ModulePathComparator -up-|> Comparator
 
 

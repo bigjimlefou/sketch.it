@@ -6,9 +6,14 @@ title __CLAZZ's Class Diagram__\n
     package org.pmesmeur.sketchit.diagram {
       package org.pmesmeur.sketchit.diagram.clazz {
         class ClassDiagramGenerator {
-            - managedClasses : java.util.Set<com.intellij.psi.PsiClass>
-            - patternsToExclude : java.util.List<java.lang.String>
-            - packages : java.util.List<java.lang.String>
+            {static} - LOG : Logger
+            - project : Project
+            - module : Module
+            - managedClasses : Set<PsiClass>
+            - patternsToExclude : List<String>
+            - packages : List<String>
+            - sourceDirectory : VirtualFile
+            - title : String
             - hideMethods : boolean
             - hideAttributes : boolean
             - hideInnerClasses : boolean
@@ -24,8 +29,6 @@ title __CLAZZ's Class Diagram__\n
             - computePackageStack()
             - declareClassMembers()
             - declareClassAttributes()
-            - typeBelongsToCurrentProject()
-            - typeContainsGeneric()
             - declareClassField()
             - getVisibility()
             - declareClassMethods()
@@ -36,6 +39,11 @@ title __CLAZZ's Class Diagram__\n
             - superClassIsObject()
             - declareClassAssociations()
             - declareInnerClassesAssociations()
+            ~ getFieldDisplayType()
+            - typeContainsGeneric()
+            - typeBelongsToCurrentProject()
+            - classBelongsToProject()
+            - isBinaryFile()
         }
       }
     }
@@ -46,7 +54,11 @@ title __CLAZZ's Class Diagram__\n
     package org.pmesmeur.sketchit.diagram {
       package org.pmesmeur.sketchit.diagram.clazz {
         class Builder {
-            - patternsToExclude : java.util.List<java.lang.String>
+            - project : Project
+            - module : Module
+            - patternsToExclude : List<String>
+            - sourceDirectory : VirtualFile
+            - title : String
             - hideMethods : boolean
             - hideAttributes : boolean
             - hideInnerClasses : boolean
@@ -89,10 +101,21 @@ title __CLAZZ's Class Diagram__\n
   package org.pmesmeur.sketchit {
     package org.pmesmeur.sketchit.diagram {
       package org.pmesmeur.sketchit.diagram.clazz {
+        enum FieldDisplayType
+      }
+    }
+  }
+  
+
+  package org.pmesmeur.sketchit {
+    package org.pmesmeur.sketchit.diagram {
+      package org.pmesmeur.sketchit.diagram.clazz {
         class Finder {
-            - classes : java.util.Set<com.intellij.psi.PsiClass>
-            - packages : java.util.Set<java.lang.String>
-            - patternsToExclude : java.util.List<java.lang.String>
+            - project : Project
+            - module : Module
+            - classes : Set<PsiClass>
+            - packages : Set<String>
+            - patternsToExclude : List<String>
             + Finder()
             + getClasses()
             + getPackages()
@@ -108,22 +131,14 @@ title __CLAZZ's Class Diagram__\n
   
 
   ClassDiagramGenerator o-- PlantUmlWriter : plantUmlWriter
-  ClassDiagramGenerator o-- Project : project
-  ClassDiagramGenerator o-- Module : module
-  ClassDiagramGenerator o-- VirtualFile : sourceDirectory
-  ClassDiagramGenerator o-- String : title
-  ClassDiagramGenerator +-right- Builder
-  ClassDiagramGenerator +-right- StringLengthComparator
-  ClassDiagramGenerator +-right- PsiClassComparator
+  ClassDiagramGenerator +-down- Builder
+  ClassDiagramGenerator +-down- StringLengthComparator
+  ClassDiagramGenerator +-down- PsiClassComparator
+  ClassDiagramGenerator +-down- FieldDisplayType
   Builder o-- PlantUmlWriter : plantUmlWriter
-  Builder o-- Project : project
-  Builder o-- Module : module
-  Builder o-- VirtualFile : sourceDirectory
-  Builder o-- String : title
   StringLengthComparator -up-|> Comparator
   PsiClassComparator -up-|> Comparator
-  Finder o-- Project : project
-  Finder o-- Module : module
+  FieldDisplayType -up-|> Enum
 
 
 right footer

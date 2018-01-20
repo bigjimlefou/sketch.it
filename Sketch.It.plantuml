@@ -107,29 +107,11 @@ title __SKETCHIT's Class Diagram__\n
   
 
   ClassDiagramGenerator o-- PlantUmlWriter : plantUmlWriter
-  ClassDiagramGenerator o-- Project : project
-  ClassDiagramGenerator o-- Module : module
-  ClassDiagramGenerator o-- VirtualFile : sourceDirectory
-  ClassDiagramGenerator o-- String : title
   ComponentDiagramGenerator o-- PlantUmlWriter : plantUmlWriter
-  ComponentDiagramGenerator o-- Project : project
-  ComponentDiagramGenerator o-- String : title
-  Finder o-- Project : project
-  Finder o-- Module : module
-  JavaFileFinder o-- Project : project
-  JavaFileFinder o-- Module : module
-  PlantUmlWriter o-- OutputStream : outputStream
   SketchIt -up-|> AnAction
   UmlComponentDiagram -up-|> UmlDiagram
-  UmlComponentDiagram o-- Project : project
-  UmlDiagramsGenerator o-- Project : project
   UmlModuleClassDiagram -up-|> UmlDiagram
-  UmlModuleClassDiagram o-- Project : project
-  UmlModuleClassDiagram o-- Module : module
   UmlSourceDirectoryClassDiagram -up-|> UmlDiagram
-  UmlSourceDirectoryClassDiagram o-- Project : project
-  UmlSourceDirectoryClassDiagram o-- Module : module
-  UmlSourceDirectoryClassDiagram o-- VirtualFile : moduleDirectory
 
 
 right footer

@@ -5,8 +5,10 @@ title __DIAGRAM's Class Diagram__\n
   package org.pmesmeur.sketchit {
     package org.pmesmeur.sketchit.diagram {
       class JavaFileFinder {
-          - javaFiles : java.util.List<com.intellij.psi.PsiJavaFile>
-          - directories : java.util.Set<com.intellij.openapi.vfs.VirtualFile>
+          - project : Project
+          - module : Module
+          - javaFiles : List<PsiJavaFile>
+          - directories : Set<VirtualFile>
           + JavaFileFinder()
           + getFoundFiles()
           + getFoundDirectories()
@@ -21,6 +23,7 @@ title __DIAGRAM's Class Diagram__\n
   package org.pmesmeur.sketchit {
     package org.pmesmeur.sketchit.diagram {
       class UmlComponentDiagram {
+          - project : Project
           + UmlComponentDiagram()
           # getOutputFile()
           # generateDiagram()
@@ -33,6 +36,8 @@ title __DIAGRAM's Class Diagram__\n
   package org.pmesmeur.sketchit {
     package org.pmesmeur.sketchit.diagram {
       abstract class UmlDiagram {
+          {static} - LOG : Logger
+          {static} - FILE_EXTENSION : String
           + generate()
           {abstract} # getOutputFile()
           - generateDiagram()
@@ -47,6 +52,7 @@ title __DIAGRAM's Class Diagram__\n
   package org.pmesmeur.sketchit {
     package org.pmesmeur.sketchit.diagram {
       class UmlDiagramsGenerator {
+          - project : Project
           + UmlDiagramsGenerator()
           + generateComponentDiagram()
           + generateClassDiagrams()
@@ -61,6 +67,8 @@ title __DIAGRAM's Class Diagram__\n
   package org.pmesmeur.sketchit {
     package org.pmesmeur.sketchit.diagram {
       class UmlModuleClassDiagram {
+          - project : Project
+          - module : Module
           + UmlModuleClassDiagram()
           # getOutputFile()
           - getClassDiagramOutputStream()
@@ -74,6 +82,9 @@ title __DIAGRAM's Class Diagram__\n
   package org.pmesmeur.sketchit {
     package org.pmesmeur.sketchit.diagram {
       class UmlSourceDirectoryClassDiagram {
+          - project : Project
+          - module : Module
+          - moduleDirectory : VirtualFile
           + UmlSourceDirectoryClassDiagram()
           # getOutputFile()
           # generateDiagram()
@@ -83,18 +94,9 @@ title __DIAGRAM's Class Diagram__\n
   }
   
 
-  JavaFileFinder o-- Project : project
-  JavaFileFinder o-- Module : module
   UmlComponentDiagram -up-|> UmlDiagram
-  UmlComponentDiagram o-- Project : project
-  UmlDiagramsGenerator o-- Project : project
   UmlModuleClassDiagram -up-|> UmlDiagram
-  UmlModuleClassDiagram o-- Project : project
-  UmlModuleClassDiagram o-- Module : module
   UmlSourceDirectoryClassDiagram -up-|> UmlDiagram
-  UmlSourceDirectoryClassDiagram o-- Project : project
-  UmlSourceDirectoryClassDiagram o-- Module : module
-  UmlSourceDirectoryClassDiagram o-- VirtualFile : moduleDirectory
 
 
 right footer

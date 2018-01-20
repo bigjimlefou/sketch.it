@@ -17,7 +17,7 @@ title __SKETCHIT's Class Diagram__\n
   
 
   SketchIt -up-|> AnAction
-  SketchIt +-right- TransparentUpdate
+  SketchIt +-down- TransparentUpdate
 
 
 right footer
