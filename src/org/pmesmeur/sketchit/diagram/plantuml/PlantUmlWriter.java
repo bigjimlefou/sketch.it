@@ -203,7 +203,7 @@ public class PlantUmlWriter {
 
 
     public void addInnerClassesAssociation(String clazz, String innerClazz) {
-        write(clazz + " +-right- " + innerClazz);
+        write(clazz + " +-down- " + innerClazz);
     }
 
 
