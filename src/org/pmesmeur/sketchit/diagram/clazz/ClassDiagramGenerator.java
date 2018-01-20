@@ -251,52 +251,11 @@ public class ClassDiagramGenerator {
 
     private void declareClassAttributes(PsiClass clazz) {
         for (PsiField field : clazz.getAllFields()) {
-            if ((!typeBelongsToCurrentProject(field.getType()) ||
-                    typeContainsGeneric(field)) &&
-                    field.getContainingClass().equals(clazz)) {
+            if (getFieldDisplayType(clazz, field) == FieldDisplayType.ATTRIBUTE) {
                 declareClassField(field);
             }
         }
     }
-
-
-
-    private boolean typeBelongsToCurrentProject(PsiType type) {
-        PsiClass typeClass = PsiTypesUtil.getPsiClass(type);
-        if (typeClass == null) {
-            return false;
-        }
-
-
-        return classBelongsToProject(typeClass);
-    }
-
-
-
-    private boolean classBelongsToProject(PsiClass clazz) {
-        PsiFile classFile = clazz.getContainingFile();
-        if (classFile == null) {
-            return false;
-        }
-
-        return isBinaryFile(classFile);
-    }
-
-
-
-    private boolean isBinaryFile(PsiFile containingFile) {
-        return containingFile.getFileType().isBinary() == false;
-    }
-
-
-
-    private boolean typeContainsGeneric(PsiField field) {
-        String presentableText = field.getType().getPresentableText();
-        return presentableText.contains("<") || presentableText.contains(">");
-    }
-
-
-
 
 
 
@@ -385,10 +344,7 @@ public class ClassDiagramGenerator {
 
     private void declareClassAssociations(PsiClass clazz) {
         for (PsiField field : clazz.getAllFields()) {
-            if (typeBelongsToCurrentProject(field.getType()) &&
-                    field.getContainingClass().equals(clazz) &&
-                    !field.hasModifierProperty(PsiModifier.STATIC) &&
-                    !typeContainsGeneric(field)) {
+            if (getFieldDisplayType(clazz, field) == FieldDisplayType.AGGREGATION) {
                 plantUmlWriter.addClassesAssociation(clazz.getName(),
                                                      field.getType().getPresentableText(),
                                                      field.getName());
@@ -431,6 +387,67 @@ public class ClassDiagramGenerator {
             return name1.compareTo(name2) ;
         }
 
+    }
+
+
+
+    enum FieldDisplayType {
+        NONE,
+        ATTRIBUTE,
+        AGGREGATION
+    }
+
+
+
+    FieldDisplayType getFieldDisplayType(PsiClass clazz, PsiField field) {
+        if (!field.getContainingClass().equals(clazz)) {
+            return FieldDisplayType.NONE;
+        }
+
+        if (field.getContainingClass().equals(clazz) &&
+                typeBelongsToCurrentProject(field.getType()) &&
+                !typeContainsGeneric(field) &&
+                !field.hasModifierProperty(PsiModifier.STATIC)) {
+            return FieldDisplayType.AGGREGATION;
+        }
+
+        return FieldDisplayType.ATTRIBUTE;
+    }
+
+
+
+    private boolean typeContainsGeneric(PsiField field) {
+        String presentableText = field.getType().getPresentableText();
+        return presentableText.contains("<") || presentableText.contains(">");
+    }
+
+
+
+    private boolean typeBelongsToCurrentProject(PsiType type) {
+        PsiClass typeClass = PsiTypesUtil.getPsiClass(type);
+        if (typeClass == null) {
+            return false;
+        }
+
+
+        return classBelongsToProject(typeClass);
+    }
+
+
+
+    private boolean classBelongsToProject(PsiClass clazz) {
+        PsiFile classFile = clazz.getContainingFile();
+        if (classFile == null) {
+            return false;
+        }
+
+        return isBinaryFile(classFile);
+    }
+
+
+
+    private boolean isBinaryFile(PsiFile containingFile) {
+        return containingFile.getFileType().isBinary() == false;
     }
 
 }
