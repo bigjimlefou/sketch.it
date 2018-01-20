@@ -27,6 +27,9 @@ title __CLAZZ's Class Diagram__\n
             - declareClass()
             - declareInnerClasses()
             - computePackageStack()
+            - declareEnumValues()
+            - isInheritedMember()
+            - declareEnumValue()
             - declareClassMembers()
             - declareClassAttributes()
             - declareClassField()
@@ -36,7 +39,7 @@ title __CLAZZ's Class Diagram__\n
             - declareClassRelationships()
             - declareInterfaceImplementation()
             - declareClassInheritence()
-            - superClassIsObject()
+            - classIsFromJavaLangPackage()
             - declareClassAssociations()
             - declareInnerClassesAssociations()
             ~ getFieldDisplayType()
@@ -101,7 +104,11 @@ title __CLAZZ's Class Diagram__\n
   package org.pmesmeur.sketchit {
     package org.pmesmeur.sketchit.diagram {
       package org.pmesmeur.sketchit.diagram.clazz {
-        enum FieldDisplayType
+        enum FieldDisplayType {
+          NONE
+          ATTRIBUTE
+          AGGREGATION
+        }
       }
     }
   }
@@ -138,7 +145,6 @@ title __CLAZZ's Class Diagram__\n
   Builder o-- PlantUmlWriter : plantUmlWriter
   StringLengthComparator -up-|> Comparator
   PsiClassComparator -up-|> Comparator
-  FieldDisplayType -up-|> Enum
 
 
 right footer

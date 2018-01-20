@@ -128,10 +128,10 @@ public class PlantUmlWriter {
 
 
 
-    public void declareEnum(List<String> packageStack, String enumName) {
+    public void startEnumDeclaration(List<String> packageStack, String enumName) {
         startPackageStack(packageStack);
-        write("enum " + enumName);
-        endPackageStack(packageStack);
+        write("enum " + enumName + " {");
+        indentation++;
     }
 
 
@@ -204,6 +204,12 @@ public class PlantUmlWriter {
 
     public void addInnerClassesAssociation(String clazz, String innerClazz) {
         write(clazz + " +-down- " + innerClazz);
+    }
+
+
+
+    public void declareEnumValue(String enumValue) {
+        write(enumValue);
     }
 
 

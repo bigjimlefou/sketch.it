@@ -196,7 +196,8 @@ public class ClassDiagramGenerator {
 
     private void declareClass(List<String> packageStack, PsiClass clazz) {
         if (clazz.isEnum()) {
-            plantUmlWriter.declareEnum(packageStack, clazz.getName());
+            plantUmlWriter.startEnumDeclaration(packageStack, clazz.getName());
+            declareEnumValues(clazz);
         } else {
 
             if (clazz.isInterface()) {
@@ -208,9 +209,9 @@ public class ClassDiagramGenerator {
             }
 
             declareClassMembers(clazz);
-            plantUmlWriter.endClassDeclaration(packageStack);
-
         }
+
+        plantUmlWriter.endClassDeclaration(packageStack);
     }
 
 
@@ -233,6 +234,30 @@ public class ClassDiagramGenerator {
         }
 
         return packageStack;
+    }
+
+
+
+    private void declareEnumValues(PsiClass clazz) {
+        for (PsiField enumValue : clazz.getAllFields()) {
+            if (!isInheritedMember(enumValue, clazz)) {
+                declareEnumValue(enumValue);
+            }
+        }
+    }
+
+
+
+    private boolean isInheritedMember(PsiMember member, PsiClass clazz) {
+        return !member.getContainingClass().equals(clazz);
+    }
+
+
+
+    private void declareEnumValue(PsiField enumValue) {
+        if (!hideAttributes) {
+            plantUmlWriter.declareEnumValue(enumValue.getName());
+        }
     }
 
 
@@ -268,7 +293,6 @@ public class ClassDiagramGenerator {
         } else {
             plantUmlWriter.declareStaticField(visibility, fieldType, field.getName());
         }
-
     }
 
 
@@ -281,7 +305,7 @@ public class ClassDiagramGenerator {
 
     private void declareClassMethods(PsiClass clazz) {
         for (PsiMethod method : clazz.getAllMethods()) {
-            if (method.getContainingClass().equals(clazz)) {
+            if (!isInheritedMember(method, clazz)) {
                 declareClassMethod(method);
             }
         }
@@ -326,18 +350,16 @@ public class ClassDiagramGenerator {
 
     private void declareClassInheritence(PsiClass clazz) {
         PsiClass superClass = clazz.getSuperClass();
-        if (superClass != null && !superClassIsObject(superClass)) {
+        if (superClass != null && !classIsFromJavaLangPackage(superClass)) {
             plantUmlWriter.addClassesInheritence(clazz.getName(), superClass.getName());
         }
     }
 
 
 
-    private boolean superClassIsObject(PsiClass superClass) {
-        String superClassName = superClass.getName();
-        String superClassPackage = ((PsiJavaFile) superClass.getContainingFile()).getPackageName();
-
-        return superClassName.equals("Object") && superClassPackage.equals("java.lang");
+    private boolean classIsFromJavaLangPackage(PsiClass clazz) {
+        String classPackage = ((PsiJavaFile) clazz.getContainingFile()).getPackageName();
+        return classPackage.equals("java.lang");
     }
 
 
@@ -400,12 +422,11 @@ public class ClassDiagramGenerator {
 
 
     FieldDisplayType getFieldDisplayType(PsiClass clazz, PsiField field) {
-        if (!field.getContainingClass().equals(clazz)) {
+        if (isInheritedMember(field, clazz)) {
             return FieldDisplayType.NONE;
         }
 
-        if (field.getContainingClass().equals(clazz) &&
-                typeBelongsToCurrentProject(field.getType()) &&
+        if (typeBelongsToCurrentProject(field.getType()) &&
                 !typeContainsGeneric(field) &&
                 !field.hasModifierProperty(PsiModifier.STATIC)) {
             return FieldDisplayType.AGGREGATION;

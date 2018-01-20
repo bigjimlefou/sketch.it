@@ -1,16 +1,29 @@
 <idea-plugin>
   <id>org.pmesmeur.sketchit</id>
   <name>Sketch It!</name>
-  <version>0.01</version>
+  <version>0.02</version>
   <vendor email="philippe.mesmeur@gmail.com" url="https://bitbucket.org/pmesmeur/sketch.it">Sketch.It!</vendor>
 
   <description><![CDATA[
       Generate UML diagram from source code in the PlantUML format<br>
       (You can use this plugin with "PlantUML integration")<br>
-    ]]></description>
+    ]]>
+  </description>
 
   <change-notes><![CDATA[
-      Create the plugin
+    <p>0.02</p>
+    <ul>
+     <li>Sort classes and modules alphabetically</li>
+     <li>Do not display methods and attributes in class diagram at module level</li>
+     <li>Handle inner classes</li>
+     <li>Indent generated PlantUML code</li>
+     <li>Enhance "attributes vs association" handling</li>
+     <li>Write enum values</li>
+    </ul>
+    <p>0.01</p>
+    <ul>
+     <li>Create the plugin</li>
+    </ul>
     ]]>
   </change-notes>
 
