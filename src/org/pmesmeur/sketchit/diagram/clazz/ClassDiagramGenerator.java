@@ -424,6 +424,14 @@ public class ClassDiagramGenerator {
 
         private void generateInnerClasses() {
             for (PsiClass innerClass : clazz.getAllInnerClasses()) {
+                generateInnerClass(innerClass);
+            }
+        }
+
+
+
+        private void generateInnerClass(PsiClass innerClass) {
+            if (innerClass != clazz) {
                 new ClassGenerator(innerClass).generate();
             }
         }
@@ -496,6 +504,14 @@ public class ClassDiagramGenerator {
             }
 
             for (PsiClass innerClass : clazz.getAllInnerClasses()) {
+                generateInnerClassesRelationships(innerClass);
+            }
+        }
+
+
+
+        private void generateInnerClassesRelationships(PsiClass innerClass) {
+            if (innerClass != clazz) {
                 new RelationshipsGenerator(innerClass).generate();
             }
         }
