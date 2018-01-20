@@ -1,5 +1,6 @@
 package org.pmesmeur.sketchit.diagram;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.pmesmeur.sketchit.diagram.plantuml.PlantUmlWriter;
 
@@ -9,6 +10,8 @@ import java.util.NoSuchElementException;
 
 
 abstract class UmlDiagram {
+    private static final Logger LOG = Logger.getInstance(UmlDiagram.class);
+
     private static final String FILE_EXTENSION = "plantuml";
 
     public void generate() {
@@ -22,10 +25,10 @@ abstract class UmlDiagram {
 
             outputStream.close();
         } catch (NoSuchElementException e) {
-            System.out.println("Output file empty: deleting it");
+            LOG.info("Output file empty: deleting it");
             deleteEmptyFile(outputFile);
         } catch (IOException e) {
-            System.out.println("Error while generating diagram");
+            LOG.info("Error while generating diagram");
             e.printStackTrace();
         }
     }

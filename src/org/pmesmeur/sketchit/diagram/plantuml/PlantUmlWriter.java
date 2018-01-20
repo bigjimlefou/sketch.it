@@ -1,5 +1,7 @@
 package org.pmesmeur.sketchit.diagram.plantuml;
 
+import com.intellij.openapi.diagnostic.Logger;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.CharBuffer;
@@ -7,6 +9,7 @@ import java.util.List;
 
 
 public class PlantUmlWriter {
+    private static final Logger LOG = Logger.getInstance(PlantUmlWriter.class);
 
     private final OutputStream outputStream;
     private int indentation = 0;
@@ -51,7 +54,7 @@ public class PlantUmlWriter {
         int indentation = this.indentation;
         if (indentation < 0) {
             indentation = 0;
-            System.out.println("Error: negative indentation!");
+            LOG.info("Error: negative indentation!");
         }
 
         return CharBuffer.allocate(2 * indentation).toString().replace( '\0', ' ' );
@@ -69,7 +72,7 @@ public class PlantUmlWriter {
 
     public void endDiagram() {
         if (--indentation != 0) {
-            System.out.println("Warning: indentation should be null when writing the end of the document!");
+            LOG.info("Warning: indentation should be null when writing the end of the document!");
         }
 
         write("");
