@@ -159,17 +159,16 @@ public class ClassDiagramGenerator {
 
         List<PsiClass> classes = getListOfManagedClassesOrderedAlphabetically();
         for (PsiClass clazz : classes) {
-            declareClass(clazz);
+            new ClassGenerator(clazz).invoke();
         }
 
 
         for (PsiClass clazz : classes) {
-            declareClassRelationships(clazz);
+            new RelationshipsGenerator(clazz).invoke();
         }
 
         plantUmlWriter.endDiagram();
     }
-
 
 
     private List<PsiClass> getListOfManagedClassesOrderedAlphabetically() {
@@ -181,214 +180,7 @@ public class ClassDiagramGenerator {
 
 
 
-    private void declareClass(PsiClass clazz) {
-        String packageName = ((PsiJavaFile) clazz.getContainingFile()).getPackageName();
-        List<String> packageStack = computePackageStack(packageName);
-
-        declareClass(packageStack, clazz);
-
-        if (!hideInnerClasses) {
-            declareInnerClasses(clazz);
-        }
-    }
-
-
-
-    private void declareClass(List<String> packageStack, PsiClass clazz) {
-        if (clazz.isEnum()) {
-            plantUmlWriter.startEnumDeclaration(packageStack, clazz.getName());
-            declareEnumValues(clazz);
-        } else {
-
-            if (clazz.isInterface()) {
-                plantUmlWriter.startInterfaceDeclaration(packageStack, clazz.getName());
-            } else if (clazz.hasModifierProperty(PsiModifier.ABSTRACT)) {
-                plantUmlWriter.startAbstractClassDeclaration(packageStack, clazz.getName());
-            } else {
-                plantUmlWriter.startClassDeclaration(packageStack, clazz.getName());
-            }
-
-            declareClassMembers(clazz);
-        }
-
-        plantUmlWriter.endClassDeclaration(packageStack);
-    }
-
-
-
-    private void declareInnerClasses(PsiClass clazz) {
-        for (PsiClass innerClass : clazz.getAllInnerClasses()) {
-            declareClass(innerClass);
-        }
-    }
-
-
-
-    private List<String> computePackageStack(String packageName) {
-        List<String> packageStack = new ArrayList<String>();
-
-        for (String pkg : packages) {
-            if (packageName.startsWith(pkg)) {
-                packageStack.add(pkg);
-            }
-        }
-
-        return packageStack;
-    }
-
-
-
-    private void declareEnumValues(PsiClass clazz) {
-        for (PsiField enumValue : clazz.getAllFields()) {
-            if (!isInheritedMember(enumValue, clazz)) {
-                declareEnumValue(enumValue);
-            }
-        }
-    }
-
-
-
-    private boolean isInheritedMember(PsiMember member, PsiClass clazz) {
-        return !member.getContainingClass().equals(clazz);
-    }
-
-
-
-    private void declareEnumValue(PsiField enumValue) {
-        if (!hideAttributes) {
-            plantUmlWriter.declareEnumValue(enumValue.getName());
-        }
-    }
-
-
-
-    private void declareClassMembers(PsiClass clazz) {
-        if (!hideAttributes) {
-            declareClassAttributes(clazz);
-        }
-
-        if (!hideMethods) {
-            declareClassMethods(clazz);
-        }
-    }
-
-
-
-    private void declareClassAttributes(PsiClass clazz) {
-        for (PsiField field : clazz.getAllFields()) {
-            if (getFieldDisplayType(clazz, field) == FieldDisplayType.ATTRIBUTE) {
-                declareClassField(field);
-            }
-        }
-    }
-
-
-
-    private void declareClassField(PsiField field) {
-        String visibility = getVisibility(field.getModifierList());
-        String fieldType = field.getType().getPresentableText();
-
-        if (!field.hasModifierProperty(PsiModifier.STATIC)) {
-            plantUmlWriter.declareField(visibility, fieldType, field.getName());
-        } else {
-            plantUmlWriter.declareStaticField(visibility, fieldType, field.getName());
-        }
-    }
-
-
-
-    @NotNull
-    private String getVisibility(PsiModifierList methodModifiers) {
-        return VisibilityUtil.getVisibilityModifier(methodModifiers);
-    }
-
-
-    private void declareClassMethods(PsiClass clazz) {
-        for (PsiMethod method : clazz.getAllMethods()) {
-            if (!isInheritedMember(method, clazz)) {
-                declareClassMethod(method);
-            }
-        }
-    }
-
-
-
-    private void declareClassMethod(PsiMethod method) {
-        String visibility = getVisibility(method.getModifierList());
-
-        if (method.hasModifierProperty(PsiModifier.ABSTRACT)) {
-            plantUmlWriter.declareAbstractMethod(visibility, method.getName());
-        } else if (method.hasModifierProperty(PsiModifier.STATIC)) {
-            plantUmlWriter.declareStaticMethod(visibility, method.getName());
-        } else {
-            plantUmlWriter.declareMethod(visibility, method.getName());
-        }
-    }
-
-
-
-    private void declareClassRelationships(PsiClass clazz) {
-        declareInterfaceImplementation(clazz);
-        declareClassInheritence(clazz);
-        declareClassAssociations(clazz);
-
-        if (!hideInnerClasses) {
-            declareInnerClassesAssociations(clazz);
-        }
-    }
-
-
-
-    private void declareInterfaceImplementation(PsiClass clazz) {
-        PsiReferenceList implementsList = clazz.getImplementsList();
-        for (PsiClassType implementedInterface : implementsList.getReferencedTypes()) {
-            plantUmlWriter.addClassesInheritence(clazz.getName(), implementedInterface.getName());
-        }
-    }
-
-
-
-    private void declareClassInheritence(PsiClass clazz) {
-        PsiClass superClass = clazz.getSuperClass();
-        if (superClass != null && !classIsFromJavaLangPackage(superClass)) {
-            plantUmlWriter.addClassesInheritence(clazz.getName(), superClass.getName());
-        }
-    }
-
-
-
-    private boolean classIsFromJavaLangPackage(PsiClass clazz) {
-        String classPackage = ((PsiJavaFile) clazz.getContainingFile()).getPackageName();
-        return classPackage.equals("java.lang");
-    }
-
-
-
-    private void declareClassAssociations(PsiClass clazz) {
-        for (PsiField field : clazz.getAllFields()) {
-            if (getFieldDisplayType(clazz, field) == FieldDisplayType.AGGREGATION) {
-                plantUmlWriter.addClassesAssociation(clazz.getName(),
-                                                     field.getType().getPresentableText(),
-                                                     field.getName());
-            }
-        }
-    }
-
-
-
-    private void declareInnerClassesAssociations(PsiClass clazz) {
-        for (PsiClass innerClass : clazz.getAllInnerClasses()) {
-            plantUmlWriter.addInnerClassesAssociation(clazz.getName(), innerClass.getName());
-        }
-
-        for (PsiClass innerClass : clazz.getAllInnerClasses()) {
-            declareClassRelationships(innerClass);
-        }
-    }
-
-
-
-    private class StringLengthComparator implements Comparator<String> {
+    private static class StringLengthComparator implements Comparator<String> {
 
         @Override
         public int compare(String o1, String o2) {
@@ -399,7 +191,7 @@ public class ClassDiagramGenerator {
 
 
 
-    private class PsiClassComparator implements Comparator<PsiClass> {
+    private static class PsiClassComparator implements Comparator<PsiClass> {
 
         @Override
         public int compare(PsiClass class1, PsiClass class2) {
@@ -420,55 +212,304 @@ public class ClassDiagramGenerator {
     }
 
 
-
-    FieldDisplayType getFieldDisplayType(PsiClass clazz, PsiField field) {
-        if (isInheritedMember(field, clazz)) {
-            return FieldDisplayType.NONE;
-        }
-
-        if (typeBelongsToCurrentProject(field.getType()) &&
-                !typeContainsGeneric(field) &&
-                !field.hasModifierProperty(PsiModifier.STATIC)) {
-            return FieldDisplayType.AGGREGATION;
-        }
-
-        return FieldDisplayType.ATTRIBUTE;
-    }
+    private class BaseGenerator {
+        protected final PsiClass clazz;
 
 
-
-    private boolean typeContainsGeneric(PsiField field) {
-        String presentableText = field.getType().getPresentableText();
-        return presentableText.contains("<") || presentableText.contains(">");
-    }
-
-
-
-    private boolean typeBelongsToCurrentProject(PsiType type) {
-        PsiClass typeClass = PsiTypesUtil.getPsiClass(type);
-        if (typeClass == null) {
-            return false;
+        private BaseGenerator(PsiClass clazz) {
+            this.clazz = clazz;
         }
 
 
-        return classBelongsToProject(typeClass);
-    }
 
+        protected FieldDisplayType getFieldDisplayType(PsiClass clazz, PsiField field) {
+            if (isInheritedMember(field, clazz)) {
+                return FieldDisplayType.NONE;
+            }
 
+            if (typeBelongsToCurrentProject(field.getType()) &&
+                    !typeContainsGeneric(field) &&
+                    !field.hasModifierProperty(PsiModifier.STATIC)) {
+                return FieldDisplayType.AGGREGATION;
+            }
 
-    private boolean classBelongsToProject(PsiClass clazz) {
-        PsiFile classFile = clazz.getContainingFile();
-        if (classFile == null) {
-            return false;
+            return FieldDisplayType.ATTRIBUTE;
         }
 
-        return isBinaryFile(classFile);
+
+
+        protected boolean isInheritedMember(PsiMember member, PsiClass clazz) {
+            return !member.getContainingClass().equals(clazz);
+        }
+
+
+
+        private boolean typeBelongsToCurrentProject(PsiType type) {
+            PsiClass typeClass = PsiTypesUtil.getPsiClass(type);
+            if (typeClass == null) {
+                return false;
+            }
+
+
+            return classBelongsToProject(typeClass);
+        }
+
+
+
+        private boolean classBelongsToProject(PsiClass clazz) {
+            PsiFile classFile = clazz.getContainingFile();
+            if (classFile == null) {
+                return false;
+            }
+
+            return isBinaryFile(classFile);
+        }
+
+
+
+        private boolean isBinaryFile(PsiFile containingFile) {
+            return containingFile.getFileType().isBinary() == false;
+        }
+
+
+
+        private boolean typeContainsGeneric(PsiField field) {
+            String presentableText = field.getType().getPresentableText();
+            return presentableText.contains("<") || presentableText.contains(">");
+        }
+
+    }
+
+
+    private class ClassGenerator extends BaseGenerator {
+
+        public ClassGenerator(PsiClass clazz) {
+            super(clazz);
+        }
+
+        public void invoke() {
+            declareClass(clazz);
+        }
+
+
+
+        private void declareClass(PsiClass clazz) {
+            String packageName = ((PsiJavaFile) clazz.getContainingFile()).getPackageName();
+            List<String> packageStack = computePackageStack(packageName);
+
+            declareClass(packageStack, clazz);
+
+            if (!hideInnerClasses) {
+                declareInnerClasses(clazz);
+            }
+        }
+
+
+
+        private List<String> computePackageStack(String packageName) {
+            List<String> packageStack = new ArrayList<String>();
+
+            for (String pkg : packages) {
+                if (packageName.startsWith(pkg)) {
+                    packageStack.add(pkg);
+                }
+            }
+
+            return packageStack;
+        }
+
+
+
+        private void declareClass(List<String> packageStack, PsiClass clazz) {
+            if (clazz.isEnum()) {
+                plantUmlWriter.startEnumDeclaration(packageStack, clazz.getName());
+                declareEnumValues(clazz);
+            } else {
+
+                if (clazz.isInterface()) {
+                    plantUmlWriter.startInterfaceDeclaration(packageStack, clazz.getName());
+                } else if (clazz.hasModifierProperty(PsiModifier.ABSTRACT)) {
+                    plantUmlWriter.startAbstractClassDeclaration(packageStack, clazz.getName());
+                } else {
+                    plantUmlWriter.startClassDeclaration(packageStack, clazz.getName());
+                }
+
+                declareClassMembers(clazz);
+            }
+
+            plantUmlWriter.endClassDeclaration(packageStack);
+        }
+
+
+
+        private void declareEnumValues(PsiClass clazz) {
+            for (PsiField enumValue : clazz.getAllFields()) {
+                if (!isInheritedMember(enumValue, clazz)) {
+                    declareEnumValue(enumValue);
+                }
+            }
+        }
+
+
+
+        private void declareEnumValue(PsiField enumValue) {
+            if (!hideAttributes) {
+                plantUmlWriter.declareEnumValue(enumValue.getName());
+            }
+        }
+
+
+
+        private void declareClassMembers(PsiClass clazz) {
+            if (!hideAttributes) {
+                declareClassAttributes(clazz);
+            }
+
+            if (!hideMethods) {
+                declareClassMethods(clazz);
+            }
+        }
+
+
+
+        private void declareClassAttributes(PsiClass clazz) {
+            for (PsiField field : clazz.getAllFields()) {
+                if (getFieldDisplayType(clazz, field) == FieldDisplayType.ATTRIBUTE) {
+                    declareClassField(field);
+                }
+            }
+        }
+
+
+
+        private void declareClassField(PsiField field) {
+            String visibility = getVisibility(field.getModifierList());
+            String fieldType = field.getType().getPresentableText();
+
+            if (!field.hasModifierProperty(PsiModifier.STATIC)) {
+                plantUmlWriter.declareField(visibility, fieldType, field.getName());
+            } else {
+                plantUmlWriter.declareStaticField(visibility, fieldType, field.getName());
+            }
+        }
+
+
+
+        @NotNull
+        private String getVisibility(PsiModifierList methodModifiers) {
+            return VisibilityUtil.getVisibilityModifier(methodModifiers);
+        }
+
+
+
+        private void declareClassMethods(PsiClass clazz) {
+            for (PsiMethod method : clazz.getAllMethods()) {
+                if (!isInheritedMember(method, clazz)) {
+                    declareClassMethod(method);
+                }
+            }
+        }
+
+
+
+        private void declareClassMethod(PsiMethod method) {
+            String visibility = getVisibility(method.getModifierList());
+
+            if (method.hasModifierProperty(PsiModifier.ABSTRACT)) {
+                plantUmlWriter.declareAbstractMethod(visibility, method.getName());
+            } else if (method.hasModifierProperty(PsiModifier.STATIC)) {
+                plantUmlWriter.declareStaticMethod(visibility, method.getName());
+            } else {
+                plantUmlWriter.declareMethod(visibility, method.getName());
+            }
+        }
+
+
+
+        private void declareInnerClasses(PsiClass clazz) {
+            for (PsiClass innerClass : clazz.getAllInnerClasses()) {
+                new ClassGenerator(innerClass).invoke();
+            }
+        }
+
     }
 
 
 
-    private boolean isBinaryFile(PsiFile containingFile) {
-        return containingFile.getFileType().isBinary() == false;
-    }
+    private class RelationshipsGenerator extends BaseGenerator {
 
+
+        public RelationshipsGenerator(PsiClass clazz) {
+            super(clazz);
+        }
+
+
+
+        public void invoke() {
+            declareClassRelationships(clazz);
+        }
+
+
+
+
+        private void declareClassRelationships(PsiClass clazz) {
+            declareInterfaceImplementation(clazz);
+            declareClassInheritence(clazz);
+            declareClassAssociations(clazz);
+
+            if (!hideInnerClasses) {
+                declareInnerClassesAssociations(clazz);
+            }
+        }
+
+
+
+        private void declareInterfaceImplementation(PsiClass clazz) {
+            PsiReferenceList implementsList = clazz.getImplementsList();
+            for (PsiClassType implementedInterface : implementsList.getReferencedTypes()) {
+                plantUmlWriter.addClassesInheritence(clazz.getName(), implementedInterface.getName());
+            }
+        }
+
+
+
+        private void declareClassInheritence(PsiClass clazz) {
+            PsiClass superClass = clazz.getSuperClass();
+            if (superClass != null && !classIsFromJavaLangPackage(superClass)) {
+                plantUmlWriter.addClassesInheritence(clazz.getName(), superClass.getName());
+            }
+        }
+
+
+
+        private boolean classIsFromJavaLangPackage(PsiClass clazz) {
+            String classPackage = ((PsiJavaFile) clazz.getContainingFile()).getPackageName();
+            return classPackage.equals("java.lang");
+        }
+
+
+
+        private void declareClassAssociations(PsiClass clazz) {
+            for (PsiField field : clazz.getAllFields()) {
+                if (getFieldDisplayType(clazz, field) == FieldDisplayType.AGGREGATION) {
+                    plantUmlWriter.addClassesAssociation(clazz.getName(),
+                            field.getType().getPresentableText(),
+                            field.getName());
+                }
+            }
+        }
+
+
+
+        private void declareInnerClassesAssociations(PsiClass clazz) {
+            for (PsiClass innerClass : clazz.getAllInnerClasses()) {
+                plantUmlWriter.addInnerClassesAssociation(clazz.getName(), innerClass.getName());
+            }
+
+            for (PsiClass innerClass : clazz.getAllInnerClasses()) {
+                new RelationshipsGenerator(innerClass).invoke();
+            }
+        }
+
+    }
 }
