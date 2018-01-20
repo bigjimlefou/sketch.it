@@ -10,9 +10,12 @@ import org.jetbrains.annotations.NotNull;
 import org.pmesmeur.sketchit.diagram.plantuml.PlantUmlWriter;
 
 import java.util.*;
+import com.intellij.openapi.diagnostic.Logger;
 
 
 public class ClassDiagramGenerator {
+    private static final Logger LOG = Logger.getInstance(ClassDiagramGenerator.class);
+
     private final PlantUmlWriter plantUmlWriter;
     private final Project project;
     private final Module module;
@@ -248,7 +251,8 @@ public class ClassDiagramGenerator {
 
     private void declareClassAttributes(PsiClass clazz) {
         for (PsiField field : clazz.getAllFields()) {
-            if ((!typeBelongsToCurrentProject(field.getType()) || typeContainsGeneric(field)) &&
+            if ((!typeBelongsToCurrentProject(field.getType()) ||
+                    typeContainsGeneric(field)) &&
                     field.getContainingClass().equals(clazz)) {
                 declareClassField(field);
             }
@@ -259,7 +263,29 @@ public class ClassDiagramGenerator {
 
     private boolean typeBelongsToCurrentProject(PsiType type) {
         PsiClass typeClass = PsiTypesUtil.getPsiClass(type);
-        return typeClass != null && typeClass.getProject().equals(project);
+        if (typeClass == null) {
+            return false;
+        }
+
+
+        return classBelongsToProject(typeClass);
+    }
+
+
+
+    private boolean classBelongsToProject(PsiClass clazz) {
+        PsiFile classFile = clazz.getContainingFile();
+        if (classFile == null) {
+            return false;
+        }
+
+        return isBinaryFile(classFile);
+    }
+
+
+
+    private boolean isBinaryFile(PsiFile containingFile) {
+        return containingFile.getFileType().isBinary() == false;
     }
 
 
@@ -276,7 +302,7 @@ public class ClassDiagramGenerator {
 
     private void declareClassField(PsiField field) {
         String visibility = getVisibility(field.getModifierList());
-        String fieldType = field.getType().getInternalCanonicalText();
+        String fieldType = field.getType().getPresentableText();
 
         if (!field.hasModifierProperty(PsiModifier.STATIC)) {
             plantUmlWriter.declareField(visibility, fieldType, field.getName());
