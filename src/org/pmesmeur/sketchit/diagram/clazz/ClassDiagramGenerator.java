@@ -159,12 +159,12 @@ public class ClassDiagramGenerator {
 
         List<PsiClass> classes = getListOfManagedClassesOrderedAlphabetically();
         for (PsiClass clazz : classes) {
-            new ClassGenerator(clazz).invoke();
+            new ClassGenerator(clazz).generate();
         }
 
 
         for (PsiClass clazz : classes) {
-            new RelationshipsGenerator(clazz).invoke();
+            new RelationshipsGenerator(clazz).generate();
         }
 
         plantUmlWriter.endDiagram();
@@ -287,20 +287,16 @@ public class ClassDiagramGenerator {
             super(clazz);
         }
 
-        public void invoke() {
-            declareClass(clazz);
-        }
 
 
-
-        private void declareClass(PsiClass clazz) {
+        public void generate() {
             String packageName = ((PsiJavaFile) clazz.getContainingFile()).getPackageName();
             List<String> packageStack = computePackageStack(packageName);
 
-            declareClass(packageStack, clazz);
+            generateClassIntoPackage(packageStack);
 
             if (!hideInnerClasses) {
-                declareInnerClasses(clazz);
+                generateInnerClasses();
             }
         }
 
@@ -320,10 +316,10 @@ public class ClassDiagramGenerator {
 
 
 
-        private void declareClass(List<String> packageStack, PsiClass clazz) {
+        private void generateClassIntoPackage(List<String> packageStack) {
             if (clazz.isEnum()) {
                 plantUmlWriter.startEnumDeclaration(packageStack, clazz.getName());
-                declareEnumValues(clazz);
+                generateEnumValues();
             } else {
 
                 if (clazz.isInterface()) {
@@ -334,7 +330,7 @@ public class ClassDiagramGenerator {
                     plantUmlWriter.startClassDeclaration(packageStack, clazz.getName());
                 }
 
-                declareClassMembers(clazz);
+                generateClassMembers();
             }
 
             plantUmlWriter.endClassDeclaration(packageStack);
@@ -342,17 +338,17 @@ public class ClassDiagramGenerator {
 
 
 
-        private void declareEnumValues(PsiClass clazz) {
+        private void generateEnumValues() {
             for (PsiField enumValue : clazz.getAllFields()) {
                 if (!isInheritedMember(enumValue, clazz)) {
-                    declareEnumValue(enumValue);
+                    generateEnumValue(enumValue);
                 }
             }
         }
 
 
 
-        private void declareEnumValue(PsiField enumValue) {
+        private void generateEnumValue(PsiField enumValue) {
             if (!hideAttributes) {
                 plantUmlWriter.declareEnumValue(enumValue.getName());
             }
@@ -360,29 +356,29 @@ public class ClassDiagramGenerator {
 
 
 
-        private void declareClassMembers(PsiClass clazz) {
+        private void generateClassMembers() {
             if (!hideAttributes) {
-                declareClassAttributes(clazz);
+                generateClassAttributes();
             }
 
             if (!hideMethods) {
-                declareClassMethods(clazz);
+                generateClassMethods();
             }
         }
 
 
 
-        private void declareClassAttributes(PsiClass clazz) {
+        private void generateClassAttributes() {
             for (PsiField field : clazz.getAllFields()) {
                 if (getFieldDisplayType(clazz, field) == FieldDisplayType.ATTRIBUTE) {
-                    declareClassField(field);
+                    generateClassField(field);
                 }
             }
         }
 
 
 
-        private void declareClassField(PsiField field) {
+        private void generateClassField(PsiField field) {
             String visibility = getVisibility(field.getModifierList());
             String fieldType = field.getType().getPresentableText();
 
@@ -402,17 +398,17 @@ public class ClassDiagramGenerator {
 
 
 
-        private void declareClassMethods(PsiClass clazz) {
+        private void generateClassMethods() {
             for (PsiMethod method : clazz.getAllMethods()) {
                 if (!isInheritedMember(method, clazz)) {
-                    declareClassMethod(method);
+                    generateClassMethod(method);
                 }
             }
         }
 
 
 
-        private void declareClassMethod(PsiMethod method) {
+        private void generateClassMethod(PsiMethod method) {
             String visibility = getVisibility(method.getModifierList());
 
             if (method.hasModifierProperty(PsiModifier.ABSTRACT)) {
@@ -426,9 +422,9 @@ public class ClassDiagramGenerator {
 
 
 
-        private void declareInnerClasses(PsiClass clazz) {
+        private void generateInnerClasses() {
             for (PsiClass innerClass : clazz.getAllInnerClasses()) {
-                new ClassGenerator(innerClass).invoke();
+                new ClassGenerator(innerClass).generate();
             }
         }
 
@@ -445,26 +441,19 @@ public class ClassDiagramGenerator {
 
 
 
-        public void invoke() {
-            declareClassRelationships(clazz);
-        }
-
-
-
-
-        private void declareClassRelationships(PsiClass clazz) {
-            declareInterfaceImplementation(clazz);
-            declareClassInheritence(clazz);
-            declareClassAssociations(clazz);
+        public void generate() {
+            generateInterfaceImplementation();
+            generateClassInheritence();
+            generateClassAssociations();
 
             if (!hideInnerClasses) {
-                declareInnerClassesAssociations(clazz);
+                generateInnerClassesAssociations();
             }
         }
 
 
 
-        private void declareInterfaceImplementation(PsiClass clazz) {
+        private void generateInterfaceImplementation() {
             PsiReferenceList implementsList = clazz.getImplementsList();
             for (PsiClassType implementedInterface : implementsList.getReferencedTypes()) {
                 plantUmlWriter.addClassesInheritence(clazz.getName(), implementedInterface.getName());
@@ -473,7 +462,7 @@ public class ClassDiagramGenerator {
 
 
 
-        private void declareClassInheritence(PsiClass clazz) {
+        private void generateClassInheritence() {
             PsiClass superClass = clazz.getSuperClass();
             if (superClass != null && !classIsFromJavaLangPackage(superClass)) {
                 plantUmlWriter.addClassesInheritence(clazz.getName(), superClass.getName());
@@ -489,7 +478,7 @@ public class ClassDiagramGenerator {
 
 
 
-        private void declareClassAssociations(PsiClass clazz) {
+        private void generateClassAssociations() {
             for (PsiField field : clazz.getAllFields()) {
                 if (getFieldDisplayType(clazz, field) == FieldDisplayType.AGGREGATION) {
                     plantUmlWriter.addClassesAssociation(clazz.getName(),
@@ -501,13 +490,13 @@ public class ClassDiagramGenerator {
 
 
 
-        private void declareInnerClassesAssociations(PsiClass clazz) {
+        private void generateInnerClassesAssociations() {
             for (PsiClass innerClass : clazz.getAllInnerClasses()) {
                 plantUmlWriter.addInnerClassesAssociation(clazz.getName(), innerClass.getName());
             }
 
             for (PsiClass innerClass : clazz.getAllInnerClasses()) {
-                new RelationshipsGenerator(innerClass).invoke();
+                new RelationshipsGenerator(innerClass).generate();
             }
         }
 
