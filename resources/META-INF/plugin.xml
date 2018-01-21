@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>org.pmesmeur.sketchit</id>
   <name>Sketch It!</name>
-  <version>0.02</version>
+  <version>0.03</version>
   <vendor email="philippe.mesmeur@gmail.com" url="https://bitbucket.org/pmesmeur/sketch.it">Sketch.It!</vendor>
 
   <description><![CDATA[
@@ -9,9 +9,10 @@
       <h1>SketchIt!</h1>
       <br/>
 
-      <a href="https://bitbucket.org/pmesmeur/sketch.it">Website</a> |
+      <a href="https://bitbucket.org/pmesmeur/sketch.it">SketchIt@bitbucket.org</a> |
+      <a href="https://plugins.jetbrains.com/plugin/10387-sketch-it-">SketchIt@jetbrains.com</a> |
       <a href="mailto:philippe.mesmeur@gmail.com">Author</a> |
-      <a href="https://www.paypal.me/TODO">Donate with PayPal</a>
+      <a href="https://www.paypal.me/pmesmeur">Donate with PayPal</a>
       <br/>
       <br/>
 
@@ -49,6 +50,10 @@
   </description>
 
   <change-notes><![CDATA[
+      <p>v0.03</p>
+      <ul>
+       <li>Update plugin.xml</li>
+      </ul>
       <p>v0.02</p>
       <ul>
        <li>Sort classes and modules alphabetically</li>
