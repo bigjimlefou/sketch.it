@@ -432,7 +432,9 @@ public class ClassDiagramGenerator {
 
         private void generateInnerClass(PsiClass innerClass) {
             if (innerClass != clazz) {
-                new ClassGenerator(innerClass).generate();
+                if (innerClass.getParent() == clazz) {
+                    new ClassGenerator(innerClass).generate();
+                }
             }
         }
 
@@ -500,7 +502,9 @@ public class ClassDiagramGenerator {
 
         private void generateInnerClassesAssociations() {
             for (PsiClass innerClass : clazz.getAllInnerClasses()) {
-                plantUmlWriter.addInnerClassesAssociation(clazz.getName(), innerClass.getName());
+                if (innerClass.getParent() == clazz) {
+                    plantUmlWriter.addInnerClassesAssociation(clazz.getName(), innerClass.getName());
+                }
             }
 
             for (PsiClass innerClass : clazz.getAllInnerClasses()) {
