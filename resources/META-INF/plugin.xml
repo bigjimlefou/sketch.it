@@ -16,7 +16,7 @@
       <br/>
       <br/>
 
-      <b>SketchIt!</b> is a reverse-engineering plugin that generates UML diagrams from your code in the PlantUML format. For this reason, it works perfectly with plugin "PlantUML integration"
+      <b>SketchIt!</b> is a reverse-engineering plugin that generates UML diagrams from your code in the PlantUML format. For this reason, it works perfectly with plugin <a href="https://plugins.jetbrains.com/plugin/7017-plantuml-integration">PlantUML integration</a>
       <i>
         (In its current version, it has only been tested with Java code)
       </i>
