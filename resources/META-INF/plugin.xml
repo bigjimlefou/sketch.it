@@ -5,25 +5,63 @@
   <vendor email="philippe.mesmeur@gmail.com" url="https://bitbucket.org/pmesmeur/sketch.it">Sketch.It!</vendor>
 
   <description><![CDATA[
-      Generate UML diagram from source code in the PlantUML format<br>
-      (You can use this plugin with "PlantUML integration")<br>
+
+      <h1>SketchIt!</h1>
+      <br/>
+
+      <a href="https://bitbucket.org/pmesmeur/sketch.it">Website</a> |
+      <a href="mailto:philippe.mesmeur@gmail.com">Author</a> |
+      <a href="https://www.paypal.me/TODO">Donate with PayPal</a>
+      <br/>
+      <br/>
+
+      <b>SketchIt!</b> is a reverse-engineering plugin that generates UML diagrams from your code in the PlantUML format. For this reason, it works perfectly with plugin "PlantUML integration"
+      <i>
+        (In its current version, it has only been tested with Java code)
+      </i>
+      <br/>
+      <br/>
+
+      <b>Usage</b>
+      <br/>
+        To generate or refresh diagrams, nothing more simple; let's go to the Tools menu and select "Sketch It! (generate UML diagrams)"
+      <br/>
+      <br/>
+
+
+      <b>Features</b>
+      <ul>
+        <li>Generate a component diagram at the project root</li>
+        <li>Generate a light class diagram per module</li>
+        <li>Generate a detailed class diagram per package</li>
+        <li>Generate methods inside classes</li>
+        <li>Generate attributes inside classes</li>
+        <li>Generate inheritance relationships between classes</li>
+        <li>Generate association relationships between classes</li>
+        <li>Generate inner-classes relationships</li>
+        <li>Distinguish classes, abstract classes, interfaces, enumerations</li>
+        <li>Generate possible values for enumeration</li>
+        <li>Generate visibility for methods and attributes</li>
+        <li>Distinguish static methods and attributes</li>
+      </ul>
+
     ]]>
   </description>
 
   <change-notes><![CDATA[
-    <p>0.02</p>
-    <ul>
-     <li>Sort classes and modules alphabetically</li>
-     <li>Do not display methods and attributes in class diagram at module level</li>
-     <li>Handle inner classes</li>
-     <li>Indent generated PlantUML code</li>
-     <li>Enhance "attributes vs association" handling</li>
-     <li>Write enum values</li>
-    </ul>
-    <p>0.01</p>
-    <ul>
-     <li>Create the plugin</li>
-    </ul>
+      <p>v0.02</p>
+      <ul>
+       <li>Sort classes and modules alphabetically</li>
+       <li>Do not display methods and attributes in class diagram at module level</li>
+       <li>Handle inner classes</li>
+       <li>Indent generated PlantUML code</li>
+       <li>Enhance "attributes vs association" handling</li>
+       <li>Write enum values</li>
+      </ul>
+      <p>v0.01</p>
+      <ul>
+       <li>Create the plugin</li>
+      </ul>
     ]]>
   </change-notes>
 
