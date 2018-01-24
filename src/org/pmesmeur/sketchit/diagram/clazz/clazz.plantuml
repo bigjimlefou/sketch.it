@@ -23,30 +23,6 @@ title __CLAZZ's Class Diagram__\n
             - filterClasses()
             + generate()
             - getListOfManagedClassesOrderedAlphabetically()
-            - declareClass()
-            - declareClass()
-            - declareInnerClasses()
-            - computePackageStack()
-            - declareEnumValues()
-            - isInheritedMember()
-            - declareEnumValue()
-            - declareClassMembers()
-            - declareClassAttributes()
-            - declareClassField()
-            - getVisibility()
-            - declareClassMethods()
-            - declareClassMethod()
-            - declareClassRelationships()
-            - declareInterfaceImplementation()
-            - declareClassInheritence()
-            - classIsFromJavaLangPackage()
-            - declareClassAssociations()
-            - declareInnerClassesAssociations()
-            ~ getFieldDisplayType()
-            - typeContainsGeneric()
-            - typeBelongsToCurrentProject()
-            - classBelongsToProject()
-            - isBinaryFile()
         }
       }
     }
@@ -117,6 +93,66 @@ title __CLAZZ's Class Diagram__\n
   package org.pmesmeur.sketchit {
     package org.pmesmeur.sketchit.diagram {
       package org.pmesmeur.sketchit.diagram.clazz {
+        class BaseGenerator {
+            # clazz : PsiClass
+            - BaseGenerator()
+            # getFieldDisplayType()
+            # isInheritedMember()
+            - typeBelongsToCurrentProject()
+            - classBelongsToProject()
+            - isBinaryFile()
+            - typeContainsGeneric()
+        }
+      }
+    }
+  }
+  
+
+  package org.pmesmeur.sketchit {
+    package org.pmesmeur.sketchit.diagram {
+      package org.pmesmeur.sketchit.diagram.clazz {
+        class ClassGenerator {
+            + ClassGenerator()
+            + generate()
+            - computePackageStack()
+            - generateClassIntoPackage()
+            - generateEnumValues()
+            - generateEnumValue()
+            - generateClassMembers()
+            - generateClassAttributes()
+            - generateClassField()
+            - getVisibility()
+            - generateClassMethods()
+            - generateClassMethod()
+            - generateInnerClasses()
+            - generateInnerClass()
+        }
+      }
+    }
+  }
+  
+
+  package org.pmesmeur.sketchit {
+    package org.pmesmeur.sketchit.diagram {
+      package org.pmesmeur.sketchit.diagram.clazz {
+        class RelationshipsGenerator {
+            + RelationshipsGenerator()
+            + generate()
+            - generateInterfaceImplementation()
+            - generateClassInheritence()
+            - classIsFromJavaLangPackage()
+            - generateClassAssociations()
+            - generateInnerClassesAssociations()
+            - generateInnerClassesRelationships()
+        }
+      }
+    }
+  }
+  
+
+  package org.pmesmeur.sketchit {
+    package org.pmesmeur.sketchit.diagram {
+      package org.pmesmeur.sketchit.diagram.clazz {
         class Finder {
             - project : Project
             - module : Module
@@ -142,9 +178,14 @@ title __CLAZZ's Class Diagram__\n
   ClassDiagramGenerator +-down- StringLengthComparator
   ClassDiagramGenerator +-down- PsiClassComparator
   ClassDiagramGenerator +-down- FieldDisplayType
+  ClassDiagramGenerator +-down- BaseGenerator
+  ClassDiagramGenerator +-down- ClassGenerator
+  ClassDiagramGenerator +-down- RelationshipsGenerator
   Builder o-- PlantUmlWriter : plantUmlWriter
   StringLengthComparator -up-|> Comparator
   PsiClassComparator -up-|> Comparator
+  ClassGenerator -up-|> BaseGenerator
+  RelationshipsGenerator -up-|> BaseGenerator
 
 
 right footer

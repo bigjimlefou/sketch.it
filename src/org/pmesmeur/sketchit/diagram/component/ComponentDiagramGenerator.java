@@ -4,6 +4,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
+import org.jetbrains.annotations.NotNull;
 import org.pmesmeur.sketchit.diagram.plantuml.PlantUmlWriter;
 
 import java.util.*;
@@ -104,7 +105,6 @@ public class ComponentDiagramGenerator {
         ModulesHierarchyGenerator modulesHierarchyGenerator = new ModulesHierarchyGenerator(managedModules);
         modulesHierarchyGenerator.generate(plantUmlWriter);
 
-
         List<Module> modules = getListOfManagedModulesOrderedAlphabetically();
         for (Module module : modules) {
             printModuleDependencies(module);
@@ -127,14 +127,19 @@ public class ComponentDiagramGenerator {
     private void printModuleDependencies(Module module) {
         String moduleName = module.getName();
 
-        ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
-        String[] dependentModulesNames = moduleRootManager.getDependencyModuleNames();
-
-        for (String dependentModulesName : dependentModulesNames) {
+        for (String dependentModulesName : getNamesOfDependentModules(module)) {
             if (!excluded(dependentModulesName)) {
                 plantUmlWriter.addComponentDependency(moduleName, dependentModulesName);
             }
         }
+    }
+
+
+
+    @NotNull
+    private String[] getNamesOfDependentModules(Module module) {
+        ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
+        return moduleRootManager.getDependencyModuleNames();
     }
 
 

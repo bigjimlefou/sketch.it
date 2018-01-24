@@ -59,19 +59,17 @@ public class ModulesHierarchyGenerator {
     private void generate(PlantUmlWriter plantUmlWriter, ModulePath modulePath) {
         if (!modulePathsDone.contains(modulePath)) {
             modulePathsDone.add(modulePath);
-            if (modulePath.subModules.size() > 0) {
-                plantUmlWriter.startComponentDeclaration(modulePath.module.getName());
+              plantUmlWriter.startComponentDeclaration(modulePath.module.getName());
 
-                for (ModulePath subModulePath : modulePath.subModules) {
-                    plantUmlWriter.addSubComponent(subModulePath.module.getName());
-                }
+              for (ModulePath subModulePath : modulePath.subModules) {
+                  plantUmlWriter.addSubComponent(subModulePath.module.getName());
+              }
 
-                for (ModulePath subModulePath : modulePath.subModules) {
-                    generate(plantUmlWriter, subModulePath);
-                }
+              for (ModulePath subModulePath : modulePath.subModules) {
+                  generate(plantUmlWriter, subModulePath);
+              }
 
-                plantUmlWriter.endComponentDeclaration();
-            }
+              plantUmlWriter.endComponentDeclaration();
         }
     }
 
