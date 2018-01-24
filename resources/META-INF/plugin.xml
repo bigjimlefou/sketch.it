@@ -93,6 +93,11 @@
           <separator/>
           <action id="Myplugin.Textboxes" class="org.pmesmeur.sketchit.SketchIt" text="Sketch It! (generate UML diagrams)" description="Generate component diagrams" />
       </group>
+      <group id="SketchIt.NewGroup" text="_SketchIt" description="Generate SketchIt! Diagrams">
+          <add-to-group group-id="ProjectViewPopupMenu" anchor="last" />
+          <separator/>
+          <action id="Myplugin.Textboxes" class="org.pmesmeur.sketchit.SketchIt" text="Sketch It! (generate UML diagrams)" description="Generate component diagrams" />
+      </group>
   </actions>
 
 </idea-plugin>
