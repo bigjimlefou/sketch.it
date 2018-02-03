@@ -15,18 +15,17 @@ abstract class UmlDiagram {
     private static final String FILE_EXTENSION = "plantuml";
 
     public void generate() {
-        VirtualFile outputFile = null;
+        SketchItFile sketchItFile = null;
 
         try {
-            outputFile = getOutputFile();
-            OutputStream outputStream = outputFile.getOutputStream(this);
+            sketchItFile = new SketchItFile(getOutputFile());
 
-            generateDiagram(outputStream);
+            generateDiagram(sketchItFile);
 
-            outputStream.close();
+            sketchItFile.close();
         } catch (NoSuchElementException e) {
             LOG.info("Output file empty: deleting it");
-            deleteEmptyFile(outputFile);
+            sketchItFile.delete();
         } catch (IOException e) {
             LOG.info("Error while generating diagram");
             e.printStackTrace();
@@ -39,8 +38,8 @@ abstract class UmlDiagram {
 
 
 
-    private void generateDiagram(OutputStream outputStream) {
-        generateDiagram(new PlantUmlWriter(outputStream));
+    private void generateDiagram(SketchItFile sketchItFile) {
+        generateDiagram(new PlantUmlWriter(sketchItFile.getOutputStream()));
     }
 
 
