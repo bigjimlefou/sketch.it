@@ -47,6 +47,8 @@ public class SketchIt extends AnAction {
 
 
     private void generatePlantUmlDiagram(Project project) {
+        project.save();
+
         UmlDiagramsGenerator umlDiagramsGenerator = new UmlDiagramsGenerator(project);
 
         umlDiagramsGenerator.generateComponentDiagram();
