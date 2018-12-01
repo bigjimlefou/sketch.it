@@ -1,5 +1,8 @@
 package org.pmesmeur.sketchit;
 
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationType;
+import com.intellij.notification.Notifications;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
@@ -39,8 +42,11 @@ public class SketchIt extends AnAction {
     private void actionBody(AnActionEvent event) {
         Project project = event.getProject();
 
-        if (project.isInitialized()) {
+        if (!project.isInitialized()) {
+            Notifications.Bus.notify(new Notification("Settings Error", "Sketch.It!", "Project not yet loaded: please wait and relaunch", NotificationType.WARNING));
+        } else {
             generatePlantUmlDiagram(project);
+            Notifications.Bus.notify(new Notification("Settings Error", "Sketch.It!", "UML model generated successfully", NotificationType.INFORMATION));
         }
     }
 
