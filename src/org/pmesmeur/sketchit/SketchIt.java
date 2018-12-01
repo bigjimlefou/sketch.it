@@ -7,6 +7,7 @@ import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import org.pmesmeur.sketchit.diagram.UmlDiagramsGenerator;
+import org.pmesmeur.sketchit.ui.Notifyer;
 
 
 public class SketchIt extends AnAction {
@@ -43,10 +44,11 @@ public class SketchIt extends AnAction {
         Project project = event.getProject();
 
         if (!project.isInitialized()) {
-            Notifications.Bus.notify(new Notification("Settings Error", "Sketch.It!", "Project not yet loaded: please wait and relaunch", NotificationType.WARNING));
+            Notifyer.warning("Project not yet loaded: please wait and relaunch");
         } else {
+            Notifyer.info("Generating PlantUML model...");
             generatePlantUmlDiagram(project);
-            Notifications.Bus.notify(new Notification("Settings Error", "Sketch.It!", "UML model generated successfully", NotificationType.INFORMATION));
+            Notifyer.info("PlantUML model generated successfully");
         }
     }
 
