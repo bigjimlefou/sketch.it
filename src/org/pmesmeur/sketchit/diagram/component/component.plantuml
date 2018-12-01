@@ -18,6 +18,7 @@ title __COMPONENT's Class Diagram__\n
             + generate()
             - getListOfManagedModulesOrderedAlphabetically()
             - printModuleDependencies()
+            - getNamesOfDependentModules()
         }
       }
     }
