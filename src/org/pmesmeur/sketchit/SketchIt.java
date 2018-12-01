@@ -2,6 +2,7 @@ package org.pmesmeur.sketchit;
 
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.project.Project;
 import org.pmesmeur.sketchit.diagram.UmlDiagramsGenerator;
 
 
@@ -34,8 +35,19 @@ public class SketchIt extends AnAction {
     }
 
 
+
     private void actionBody(AnActionEvent event) {
-        UmlDiagramsGenerator umlDiagramsGenerator = new UmlDiagramsGenerator(event.getProject());
+        Project project = event.getProject();
+
+        if (project.isInitialized()) {
+            generatePlantUmlDiagram(project);
+        }
+    }
+
+
+
+    private void generatePlantUmlDiagram(Project project) {
+        UmlDiagramsGenerator umlDiagramsGenerator = new UmlDiagramsGenerator(project);
 
         umlDiagramsGenerator.generateComponentDiagram();
         umlDiagramsGenerator.generateClassDiagrams();
