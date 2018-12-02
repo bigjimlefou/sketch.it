@@ -46,7 +46,6 @@ public class SketchIt extends AnAction {
         if (!project.isInitialized()) {
             Notifyer.warning("Project not yet loaded: please wait and relaunch");
         } else {
-            Notifyer.info("Generating PlantUML model...");
             generatePlantUmlDiagram(project);
             Notifyer.info("PlantUML model generated successfully");
         }
