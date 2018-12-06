@@ -13,12 +13,7 @@ title __SKETCHIT's Class Diagram__\n
   }
   
 
-  interface TransparentUpdate {
-  }
-  
-
   SketchIt -up-|> AnAction
-  SketchIt +-down- TransparentUpdate
 
 
 right footer

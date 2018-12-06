@@ -1,6 +1,6 @@
 @startuml
 
-title __SKETCHIT's Class Diagram__\n
+title __SKETCH.IT's Class Diagram__\n
 
   package org.pmesmeur.sketchit {
     package org.pmesmeur.sketchit.diagram {
@@ -10,7 +10,7 @@ title __SKETCHIT's Class Diagram__\n
       }
     }
   }
-  
+
 
   package org.pmesmeur.sketchit {
     package org.pmesmeur.sketchit.diagram {
@@ -20,7 +20,7 @@ title __SKETCHIT's Class Diagram__\n
       }
     }
   }
-  
+
 
   package org.pmesmeur.sketchit {
     package org.pmesmeur.sketchit.diagram {
@@ -30,7 +30,7 @@ title __SKETCHIT's Class Diagram__\n
       }
     }
   }
-  
+
 
   package org.pmesmeur.sketchit {
     package org.pmesmeur.sketchit.diagram {
@@ -38,13 +38,21 @@ title __SKETCHIT's Class Diagram__\n
       }
     }
   }
-  
+
 
   package org.pmesmeur.sketchit {
     package org.pmesmeur.sketchit.diagram {
       package org.pmesmeur.sketchit.diagram.component {
         class ModulesHierarchyGenerator {
         }
+      }
+    }
+  }
+
+
+  package org.pmesmeur.sketchit {
+    package org.pmesmeur.sketchit.ui {
+      class Notifyer {
       }
     }
   }

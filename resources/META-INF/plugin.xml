@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>org.pmesmeur.sketchit</id>
   <name>Sketch It!</name>
-  <version>0.05-Dev</version>
+  <version>0.04.01</version>
   <vendor email="philippe.mesmeur@gmail.com" url="https://bitbucket.org/pmesmeur/sketch.it">Sketch.It!</vendor>
 
   <description><![CDATA[
@@ -50,6 +50,10 @@
   </description>
 
   <change-notes><![CDATA[
+      <p><u>v0.05.1</u></p>
+      <ul>
+       <li><a href="https://bitbucket.org/pmesmeur/sketch.it/issues/11/nullpointexception-when-using-sketchit">Issue-11</a>: Enhance previous correction that did not solve <a href="https://bitbucket.org/pmesmeur/sketch.it/issues/13/nullpointerexception">Issue-13</a></li>
+      </ul>
       <p><u>v0.04</u></p>
       <ul>
        <li><a href="https://bitbucket.org/pmesmeur/sketch.it/issues/11/nullpointexception-when-using-sketchit">Issue-11</a>: NullPointException when using SketchIt!</li>
