@@ -50,7 +50,7 @@
   </description>
 
   <change-notes><![CDATA[
-      <p><u>v0.05.1</u></p>
+      <p><u>v0.04.01</u></p>
       <ul>
        <li><a href="https://bitbucket.org/pmesmeur/sketch.it/issues/11/nullpointexception-when-using-sketchit">Issue-11</a>: Enhance previous correction that did not solve <a href="https://bitbucket.org/pmesmeur/sketch.it/issues/13/nullpointerexception">Issue-13</a></li>
       </ul>
