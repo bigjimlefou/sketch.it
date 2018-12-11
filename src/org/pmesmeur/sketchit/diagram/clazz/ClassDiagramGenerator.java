@@ -320,6 +320,7 @@ public class ClassDiagramGenerator {
             if (clazz.isEnum()) {
                 plantUmlWriter.startEnumDeclaration(packageStack, clazz.getName());
                 generateEnumValues();
+                generateClassMethodsIfNotHidden();
             } else {
 
                 if (clazz.isInterface()) {
@@ -357,15 +358,17 @@ public class ClassDiagramGenerator {
 
 
         private void generateClassMembers() {
+            generateClassAttributesIfNotHidden();
+            generateClassMethodsIfNotHidden();
+        }
+
+
+
+        private void generateClassAttributesIfNotHidden() {
             if (!hideAttributes) {
                 generateClassAttributes();
             }
-
-            if (!hideMethods) {
-                generateClassMethods();
-            }
         }
-
 
 
         private void generateClassAttributes() {
@@ -394,6 +397,14 @@ public class ClassDiagramGenerator {
         @NotNull
         private String getVisibility(PsiModifierList methodModifiers) {
             return VisibilityUtil.getVisibilityModifier(methodModifiers);
+        }
+
+
+
+        private void generateClassMethodsIfNotHidden() {
+            if (!hideMethods) {
+                generateClassMethods();
+            }
         }
 
 
