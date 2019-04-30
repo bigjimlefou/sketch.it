@@ -1,8 +1,5 @@
 package org.pmesmeur.sketchit;
 
-import com.intellij.notification.Notification;
-import com.intellij.notification.NotificationType;
-import com.intellij.notification.Notifications;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
@@ -16,7 +13,7 @@ public class SketchIt extends AnAction {
     // You can omit this constructor when registering the action in the plugin.xml file.
     public SketchIt() {
         // Set the menu item name.
-        super("Text _Boxes");
+        super();
         // Set the menu item name, description and icon.
         // super("Text _Boxes","Item description",IconLoader.getIcon("/Mypackage/icon.png"));
     }
