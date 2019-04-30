@@ -93,7 +93,7 @@
   </extensions>
 
   <actions>
-      <group id="SketchIt.SampleMenu" text="_SketchIt" description="Generate SketchIt! Diagrams">
+      <group id="SketchIt.SampleMenu" text="_Sketch.It!" description="Generate SketchIt! Diagrams">
           <add-to-group group-id="ToolsMenu" anchor="last" />
           <separator/>
           <action id="Myplugin.Textboxes" class="org.pmesmeur.sketchit.SketchIt" text="Sketch It! (generate UML diagrams)" description="Generate component diagrams" />
