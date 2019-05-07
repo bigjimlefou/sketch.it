@@ -10,7 +10,6 @@ import java.io.IOException;
 
 
 class UmlSourceDirectoryClassDiagram extends UmlDiagram {
-    private final Project project;
     private final Module module;
     private final VirtualFile moduleDirectory;
 
@@ -19,7 +18,7 @@ class UmlSourceDirectoryClassDiagram extends UmlDiagram {
     public UmlSourceDirectoryClassDiagram(Project project,
                                           Module module,
                                           VirtualFile moduleDirectory) {
-        this.project = project;
+        super(project);
         this.module = module;
         this.moduleDirectory = moduleDirectory;
     }
