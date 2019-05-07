@@ -6,15 +6,12 @@ import org.pmesmeur.sketchit.diagram.component.ComponentDiagramGenerator;
 import org.pmesmeur.sketchit.diagram.plantuml.PlantUmlWriter;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 
 class UmlComponentDiagram extends UmlDiagram {
-    private final Project project;
-
 
     public UmlComponentDiagram(Project project) {
-        this.project = project;
+        super(project);
     }
 
 

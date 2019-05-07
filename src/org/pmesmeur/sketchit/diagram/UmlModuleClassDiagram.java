@@ -13,13 +13,11 @@ import java.io.IOException;
 
 
 class UmlModuleClassDiagram extends UmlDiagram {
-    private final Project project;
     private final Module module;
 
 
-
     public UmlModuleClassDiagram(Project project, Module module) {
-        this.project = project;
+        super(project);
         this.module = module;
     }
 
