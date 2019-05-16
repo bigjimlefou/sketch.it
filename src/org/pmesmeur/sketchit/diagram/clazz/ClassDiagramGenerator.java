@@ -155,19 +155,23 @@ public class ClassDiagramGenerator {
 
     public void generate()
     {
+        LOG.info("Starting to generate class diagram: " + title);
         plantUmlWriter.startDiagram(title);
 
         List<PsiClass> classes = getListOfManagedClassesOrderedAlphabetically();
         for (PsiClass clazz : classes) {
+            LOG.info("* generating class: " + clazz.getQualifiedName());
             new ClassGenerator(clazz).generate();
         }
 
 
         for (PsiClass clazz : classes) {
+            LOG.info("* generating relationships for class: " + clazz.getQualifiedName());
             new RelationshipsGenerator(clazz).generate();
         }
 
         plantUmlWriter.endDiagram();
+        LOG.info("Ending to generate component diagram: " + title);
     }
 
 
@@ -466,6 +470,7 @@ public class ClassDiagramGenerator {
         private void generateInterfaceImplementation() {
             PsiReferenceList implementsList = clazz.getImplementsList();
             for (PsiClassType implementedInterface : implementsList.getReferencedTypes()) {
+                LOG.info("  - generating implementation interface " + implementedInterface.getName() + " of class " + clazz.getQualifiedName());
                 plantUmlWriter.addClassesInheritence(clazz.getName(), implementedInterface.getName());
             }
         }
@@ -475,6 +480,7 @@ public class ClassDiagramGenerator {
         private void generateClassInheritence() {
             PsiClass superClass = clazz.getSuperClass();
             if (superClass != null && !classIsFromJavaLangPackage(superClass)) {
+                LOG.info("  - generating inheritance of class " + superClass.getQualifiedName() + " for class " + clazz.getQualifiedName());
                 plantUmlWriter.addClassesInheritence(clazz.getName(), superClass.getName());
             }
         }
@@ -491,6 +497,7 @@ public class ClassDiagramGenerator {
         private void generateClassAssociations() {
             for (PsiField field : clazz.getAllFields()) {
                 if (getFieldDisplayType(clazz, field) == FieldDisplayType.AGGREGATION) {
+                    LOG.info("  - generating association from class " + clazz.getQualifiedName() + " to class " + field.getType().getPresentableText());
                     plantUmlWriter.addClassesAssociation(clazz.getName(),
                             field.getType().getPresentableText(),
                             field.getName());
@@ -503,11 +510,13 @@ public class ClassDiagramGenerator {
         private void generateInnerClassesAssociations() {
             for (PsiClass innerClass : clazz.getAllInnerClasses()) {
                 if (innerClass.getParent() == clazz) {
+                    LOG.info("  - generating association from class " + clazz.getQualifiedName() + " to inner class " + innerClass.getQualifiedName());
                     plantUmlWriter.addInnerClassesAssociation(clazz.getName(), innerClass.getName());
                 }
             }
 
             for (PsiClass innerClass : clazz.getAllInnerClasses()) {
+                LOG.info("  - generating relationships for inner class " + innerClass.getQualifiedName() + " of class " + clazz.getQualifiedName());
                 generateInnerClassesRelationships(innerClass);
             }
         }

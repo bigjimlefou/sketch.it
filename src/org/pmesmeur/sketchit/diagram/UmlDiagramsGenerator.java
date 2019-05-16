@@ -1,14 +1,18 @@
 package org.pmesmeur.sketchit.diagram;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.pmesmeur.sketchit.SketchIt;
 
 import java.util.Set;
 
 
 public class UmlDiagramsGenerator {
+    private static final Logger LOG = Logger.getInstance(UmlDiagramsGenerator.class);
+
     private final Project project;
 
     public UmlDiagramsGenerator(Project project) {
@@ -18,6 +22,7 @@ public class UmlDiagramsGenerator {
 
 
     public void generateComponentDiagram() {
+        LOG.info("Generating project component diagram");
         UmlComponentDiagram umlComponentDiagram = new UmlComponentDiagram(project);
         umlComponentDiagram.generate();
     }

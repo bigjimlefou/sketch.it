@@ -1,5 +1,6 @@
 package org.pmesmeur.sketchit.diagram.component;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.project.Project;
@@ -11,6 +12,8 @@ import java.util.*;
 
 
 public class ComponentDiagramGenerator {
+
+    private static final Logger LOG = Logger.getInstance(ComponentDiagramGenerator.class);
 
     private final PlantUmlWriter plantUmlWriter;
     private final Project project;
@@ -100,6 +103,7 @@ public class ComponentDiagramGenerator {
 
 
     public void generate() {
+        LOG.info("Starting to generate component diagram: " + title);
         plantUmlWriter.startDiagram(title);
 
         ModulesHierarchyGenerator modulesHierarchyGenerator = new ModulesHierarchyGenerator(managedModules);
@@ -111,6 +115,7 @@ public class ComponentDiagramGenerator {
         }
 
         plantUmlWriter.endDiagram();
+        LOG.info("Ending to generate component diagram: " + title);
     }
 
 
@@ -126,6 +131,8 @@ public class ComponentDiagramGenerator {
 
     private void printModuleDependencies(Module module) {
         String moduleName = module.getName();
+
+        LOG.info("Adding module dependencies: " + moduleName);
 
         for (String dependentModulesName : getNamesOfDependentModules(module)) {
             if (!excluded(dependentModulesName)) {

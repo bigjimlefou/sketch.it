@@ -36,9 +36,9 @@ class UmlComponentDiagram extends UmlDiagram {
         String title = project.getName().toUpperCase() + "'s Component Diagram";
 
         return ComponentDiagramGenerator.newBuilder(plantUmlWriter, project)
-                .title(title)
-                .exclude("test")
-                .exclude("feature");
+                                        .title(title)
+                                        .exclude("test")
+                                        .exclude("feature");
     }
 
 }
