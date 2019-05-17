@@ -97,6 +97,7 @@ public class PlantUmlWriter {
 
 
     public void addComponentDependency(String moduleName, String dependentModulesName) {
+        LOG.info("* generating dependency from module " + moduleName + " to module " + dependentModulesName);
         write(formatComponentName(moduleName) + " --> " + formatComponentName(dependentModulesName));
     }
 
