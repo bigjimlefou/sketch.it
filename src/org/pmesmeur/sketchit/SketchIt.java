@@ -5,6 +5,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import org.pmesmeur.sketchit.diagram.UmlDiagramsGenerator;
+import org.pmesmeur.sketchit.ui.ExceptionDialog;
 import org.pmesmeur.sketchit.ui.Notifyer;
 
 
@@ -49,10 +50,18 @@ public class SketchIt extends AnAction {
 
     private void generatePlantUmlModel(Project project) {
         LOG.info("Starting generation of PlantUML model for project " + project.getName());
-        generatePlantUmlDiagram(project);
+        generatePlantUmlDiagramWithExceptionHandling(project);
         LOG.info("Ending generation of PlantUML model for project " + project.getName());
+    }
 
-        Notifyer.info("PlantUML model generated successfully");
+
+
+    private void generatePlantUmlDiagramWithExceptionHandling(Project project) {
+        try {
+            generatePlantUmlDiagram(project);
+        } catch (Throwable e) {
+            ExceptionDialog.show(project, e);
+        }
     }
 
 
@@ -64,6 +73,8 @@ public class SketchIt extends AnAction {
 
         umlDiagramsGenerator.generateComponentDiagram();
         umlDiagramsGenerator.generateClassDiagrams();
+
+        Notifyer.info("PlantUML model generated successfully");
     }
 
 }
