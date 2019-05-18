@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>org.pmesmeur.sketchit</id>
   <name>Sketch It!</name>
-  <version>0.06-Dev</version>
+  <version>0.05.01</version>
   <vendor email="philippe.mesmeur@gmail.com" url="https://bitbucket.org/pmesmeur/sketch.it">Sketch.It!</vendor>
 
   <description><![CDATA[
@@ -50,6 +50,10 @@
   </description>
 
   <change-notes><![CDATA[
+      <p><u>v0.05.01</u></p>
+      <ul>
+       <li>add log for debugging</li>
+      </ul>
       <p><u>v0.05</u></p>
       <ul>
        <li><a href="https://bitbucket.org/pmesmeur/sketch.it/issues/26/main-menu-is-sometimes-named-text-boxes">Issue-26</a>: Main menu is sometimes named "Text Boxes"</li>
