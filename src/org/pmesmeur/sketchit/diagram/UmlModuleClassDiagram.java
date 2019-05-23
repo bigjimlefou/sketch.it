@@ -53,7 +53,6 @@ class UmlModuleClassDiagram extends UmlDiagram {
 
         return ClassDiagramGenerator.newBuilder(plantUmlWriter, project, module)
                 .title(title)
-                .exclude("test")
                 .hideMethods(true)
                 .hideAttributes(true)
                 .hideInnerClasses(true);
