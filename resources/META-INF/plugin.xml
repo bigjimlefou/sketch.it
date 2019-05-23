@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>org.pmesmeur.sketchit</id>
   <name>Sketch It!</name>
-  <version>0.06-Dev</version>
+    <version>0.05.02</version>
   <vendor email="philippe.mesmeur@gmail.com" url="https://bitbucket.org/pmesmeur/sketch.it">Sketch.It!</vendor>
 
   <description><![CDATA[
@@ -50,6 +50,10 @@
   </description>
 
   <change-notes><![CDATA[
+      <p><u>v0.05.02</u></p>
+      <ul>
+       <li><a href="https://bitbucket.org/pmesmeur/sketch.it/issues/29/facing-nullpointer-on-clicking-tools">Issue-29</a>: Facing Nullpointer on clicking Tools -> Sketchit(generate uml)</li>
+      </ul>
       <p><u>v0.05.01</u></p>
       <ul>
        <li>add log for debugging</li>
