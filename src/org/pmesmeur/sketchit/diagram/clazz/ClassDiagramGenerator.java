@@ -20,7 +20,6 @@ public class ClassDiagramGenerator {
     private final Project project;
     private final Module module;
     private final Set<PsiClass> managedClasses;
-    private final List<String> patternsToExclude;
     private final List<String> packages;
     private final VirtualFile sourceDirectory;
     private final String title;
@@ -41,7 +40,6 @@ public class ClassDiagramGenerator {
         private final PlantUmlWriter plantUmlWriter;
         private final Project project;
         private final Module module;
-        private final List<String> patternsToExclude;
         private VirtualFile sourceDirectory;
         private String title;
         private boolean hideMethods = false;
@@ -53,14 +51,8 @@ public class ClassDiagramGenerator {
             this.plantUmlWriter = plantUmlWriter;
             this.project = project;
             this.module = module;
-            this.patternsToExclude = new ArrayList<String>();
         }
 
-
-        public Builder exclude(String patternToExclude) {
-            patternsToExclude.add(patternToExclude);
-            return this;
-        }
 
 
         public Builder sourceDirectory(VirtualFile sourceDirectory) {
@@ -104,7 +96,6 @@ public class ClassDiagramGenerator {
         this.plantUmlWriter = builder.plantUmlWriter;
         this.project = builder.project;
         this.module = builder.module;
-        this.patternsToExclude = builder.patternsToExclude;
         this.sourceDirectory = builder.sourceDirectory;
         this.title = builder.title;
         this.hideMethods = builder.hideMethods;
@@ -117,7 +108,7 @@ public class ClassDiagramGenerator {
 
 
     private Set<PsiClass> createListOfClassesToManage() {
-        Finder finder = new Finder(project, module, patternsToExclude);
+        Finder finder = new Finder(project, module);
 
         Set<PsiClass> classes = finder.getClasses();
         if (classes.isEmpty()) {

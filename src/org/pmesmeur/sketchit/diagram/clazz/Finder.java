@@ -2,7 +2,9 @@ package org.pmesmeur.sketchit.diagram.clazz;
 
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.psi.*;
+import org.jetbrains.jps.model.java.JavaModuleSourceRootTypes;
 import org.pmesmeur.sketchit.diagram.JavaFileFinder;
 
 import java.util.HashSet;
@@ -16,13 +18,11 @@ public class Finder {
     private final Module module;
     private Set<PsiClass> classes;
     private Set<String> packages;
-    private final List<String> patternsToExclude;
 
 
-    public Finder(Project project, Module module, List<String> patternsToExclude) {
+    public Finder(Project project, Module module) {
         this.project = project;
         this.module = module;
-        this.patternsToExclude = patternsToExclude;
         this.packages = new HashSet<String>();
         this.classes = findClasses();
     }
@@ -76,24 +76,10 @@ public class Finder {
 
 
     private boolean isTestFile(PsiFile file) {
-        String fileDirectory = file.getParent().toString();
-        String moduleDirectory = module.getModuleFile().getParent().toString();
-
-        String dir = fileDirectory.replace(moduleDirectory, "");
-
-        return excluded(dir);
-    }
-
-
-
-    private boolean excluded(String dirName) {
-        for (String patternToExclude : this.patternsToExclude) {
-            if (dirName.contains(patternToExclude)) {
-                return true;
-            }
-        }
-
-        return false;
+        return ModuleRootManager.getInstance(module)
+                                .getFileIndex()
+                                .isUnderSourceRootOfType(file.getVirtualFile(),
+                                                         JavaModuleSourceRootTypes.TESTS);
     }
 
 }
