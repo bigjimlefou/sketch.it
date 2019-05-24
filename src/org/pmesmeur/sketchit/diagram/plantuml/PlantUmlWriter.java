@@ -197,6 +197,12 @@ public class PlantUmlWriter {
 
 
 
+    public void addInterfaceRealization(String inheritedClass, String parentClass) {
+        write(inheritedClass + " .up.|> " + parentClass);
+    }
+
+
+
     public void addClassesAssociation(String fromClass, String toClass, String associationName) {
         write(fromClass + " o-- " + toClass + " : " + associationName);
     }
@@ -233,13 +239,13 @@ public class PlantUmlWriter {
 
 
     private String computeVisibility(String visibility) {
-        if (visibility == "public") {
+        if ("public".equals(visibility)) {
             visibility = "+";
-        } else if (visibility == "protected") {
+        } else if ("protected".equals(visibility)) {
             visibility = "#";
-        } else if (visibility == "private") {
+        } else if ("private".equals(visibility)) {
             visibility = "-";
-        } else if (visibility == "packageLocal") {
+        } else if ("packageLocal".equals(visibility)) {
             visibility = "~";
         }
 

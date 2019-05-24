@@ -278,13 +278,13 @@ public class ClassDiagramGenerator {
 
     private class ClassGenerator extends BaseGenerator {
 
-        public ClassGenerator(PsiClass clazz) {
+        ClassGenerator(PsiClass clazz) {
             super(clazz);
         }
 
 
 
-        public void generate() {
+        void generate() {
             String packageName = ((PsiJavaFile) clazz.getContainingFile()).getPackageName();
             List<String> packageStack = computePackageStack(packageName);
 
@@ -440,14 +440,14 @@ public class ClassDiagramGenerator {
     private class RelationshipsGenerator extends BaseGenerator {
 
 
-        public RelationshipsGenerator(PsiClass clazz) {
+        RelationshipsGenerator(PsiClass clazz) {
             super(clazz);
         }
 
 
 
         public void generate() {
-            generateInterfaceImplementation();
+            generateInterfaceRealization();
             generateClassInheritence();
             generateClassAssociations();
 
@@ -458,11 +458,11 @@ public class ClassDiagramGenerator {
 
 
 
-        private void generateInterfaceImplementation() {
+        private void generateInterfaceRealization() {
             PsiReferenceList implementsList = clazz.getImplementsList();
             for (PsiClassType implementedInterface : implementsList.getReferencedTypes()) {
                 LOG.info("  - generating implementation interface " + implementedInterface.getName() + " of class " + clazz.getQualifiedName());
-                plantUmlWriter.addClassesInheritence(clazz.getName(), implementedInterface.getName());
+                plantUmlWriter.addInterfaceRealization(clazz.getName(), implementedInterface.getName());
             }
         }
 
