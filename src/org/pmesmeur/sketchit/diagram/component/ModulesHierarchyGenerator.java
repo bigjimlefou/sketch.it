@@ -1,16 +1,19 @@
 package org.pmesmeur.sketchit.diagram.component;
 
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import org.pmesmeur.sketchit.diagram.plantuml.PlantUmlWriter;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.*;
 
+
 public class ModulesHierarchyGenerator {
+    private static final Logger LOG = Logger.getInstance(ModulesHierarchyGenerator.class);
+
+
     private final List<ModulePath> modulePaths = new ArrayList<ModulePath>();
-    Set<ModulePath> modulePathsDone = new HashSet<ModulePath>();
+    private Set<ModulePath> modulePathsDone = new HashSet<ModulePath>();
 
 
     public ModulesHierarchyGenerator(Set<Module> managedModules) {
@@ -24,8 +27,13 @@ public class ModulesHierarchyGenerator {
             modulePaths.add(new ModulePath(module));
         }
         Collections.sort(modulePaths, new ModulePathComparator());
-        modulePaths.remove(modulePaths.size() - 1); /// remove last element, i.e. project-root
-        buildModulePathsDependencies();
+
+        if (modulePaths.size() == 0) {
+            LOG.warn("no modules found!");
+        } else {
+            modulePaths.remove(modulePaths.size() - 1); /// remove last element, i.e. project-root
+            buildModulePathsDependencies();
+        }
     }
 
 
@@ -80,7 +88,7 @@ public class ModulesHierarchyGenerator {
     private static class ModulePath {
         private final Module module;
         private final String path;
-        public ArrayList<ModulePath> subModules = new ArrayList<ModulePath>();
+        ArrayList<ModulePath> subModules = new ArrayList<ModulePath>();
 
 
         private ModulePath(Module module) {
