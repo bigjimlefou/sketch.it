@@ -139,7 +139,7 @@ public class PlantUmlWriter {
 
     private void startPackageStack(List<String> packageStack) {
         for (String pkg : packageStack) {
-            write("package " + pkg + " {");
+            write("namespace " + pkg + " {");
             indentation++;
         }
     }
