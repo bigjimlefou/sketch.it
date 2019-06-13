@@ -138,9 +138,11 @@ public class PlantUmlWriter {
 
 
     private void startPackageStack(List<String> packageStack) {
+        int nbCharsToRemove = 0;
         for (String pkg : packageStack) {
-            write("namespace " + pkg + " {");
-            indentation++;
+            write("namespace " + pkg.substring(nbCharsToRemove) + " {");
+            nbCharsToRemove = pkg.length() + 1;
+        indentation++;
         }
     }
 
