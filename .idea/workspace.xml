@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b3c0f9ae-fc8b-41c1-bd15-c5607f7f9889" name="Default" comment="Add logs">
-      <change afterPath="$PROJECT_DIR$/src/org/pmesmeur/sketchit/ui/ExceptionDialog.java" afterDir="false" />
+    <list default="true" id="b3c0f9ae-fc8b-41c1-bd15-c5607f7f9889" name="Default" comment="Issue-32: generate associations using qualified names">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/pmesmeur/sketchit/SketchIt.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pmesmeur/sketchit/SketchIt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/pmesmeur/sketchit/diagram/clazz/ClassDiagramGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/pmesmeur/sketchit/diagram/clazz/ClassDiagramGenerator.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,75 +17,33 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/pmesmeur/sketchit/SketchIt.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="17">
-              <caret line="28" column="19" lean-forward="true" selection-start-line="28" selection-start-column="19" selection-end-line="28" selection-end-column="19" />
+              <caret line="28" column="19" selection-start-line="28" selection-start-column="19" selection-end-line="28" selection-end-column="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/org/pmesmeur/sketchit/diagram/clazz/ClassDiagramGenerator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="101">
+              <caret line="448" column="8" selection-start-line="448" selection-start-column="8" selection-end-line="448" selection-end-column="8" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/pmesmeur/sketchit/ui/Notifyer.java">
+        <entry file="file://$PROJECT_DIR$/src/org/pmesmeur/sketchit/diagram/plantuml/PlantUmlWriter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-222">
-              <caret line="10" column="19" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/org/pmesmeur/sketchit/ui/ExceptionDialog.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="115">
-              <caret line="41" column="52" selection-start-line="41" selection-start-column="52" selection-end-line="41" selection-end-column="52" />
+            <state relative-caret-position="100">
+              <caret line="211" column="16" selection-start-line="211" selection-start-column="16" selection-end-line="211" selection-end-column="16" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#4993#4994#0" expanded="true" />
+                <element signature="e#5048#5049#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/jre/lib/rt.jar!/java/lang/Exception.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="40" selection-start-line="7" selection-start-column="31" selection-end-line="7" selection-end-column="40" />
-              <folding>
-                <element signature="e#0#613#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/lang/Throwable.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="97">
-              <caret line="113" column="13" selection-start-line="113" selection-start-column="13" selection-end-line="113" selection-end-column="13" />
-              <folding>
-                <element signature="e#33047#33048#0" expanded="true" />
-                <element signature="e#33096#33097#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://$APPLICATION_HOME_DIR$/lib/platform-api.jar!/com/intellij/openapi/ui/Messages.class">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="94" column="52" selection-start-line="94" selection-start-column="34" selection-end-line="94" selection-end-column="52" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/lang/StackOverflowError.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="114">
-              <caret line="35" column="47" selection-start-line="35" selection-start-column="47" selection-end-line="35" selection-end-column="47" />
             </state>
           </provider>
         </entry>
@@ -94,7 +51,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/org/pmesmeur/sketchit/diagram/component/ComponentDiagramGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="292">
+            <state relative-caret-position="2312">
               <caret line="148" selection-start-line="148" selection-end-line="148" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -106,8 +63,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/lang/VirtualMachineError.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="97">
-              <caret line="35" column="51" lean-forward="true" selection-start-line="35" selection-start-column="51" selection-end-line="35" selection-end-column="51" />
+            <state relative-caret-position="204">
+              <caret line="35" column="51" selection-start-line="35" selection-start-column="51" selection-end-line="35" selection-end-column="51" />
             </state>
           </provider>
         </entry>
@@ -115,7 +72,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/lang/Error.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="97">
+            <state relative-caret-position="425">
               <caret line="48" column="30" selection-start-line="48" selection-start-column="30" selection-end-line="48" selection-end-column="30" />
             </state>
           </provider>
@@ -132,7 +89,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>class</find>
       <find>outputFile</find>
       <find>child</find>
       <find>outputStrem</find>
@@ -161,6 +117,8 @@
       <find>gene</find>
       <find>generating relationship</find>
       <find>setTestInputDialog</find>
+      <find>generateClassAssociations</find>
+      <find>+-down-</find>
     </findStrings>
     <replaceStrings>
       <replace>outputStream</replace>
@@ -193,11 +151,11 @@
         <option value="$PROJECT_DIR$/resources/META-INF/plugin.xml" />
         <option value="$PROJECT_DIR$/src/org/pmesmeur/sketchit/diagram/UmlDiagramsGenerator.java" />
         <option value="$PROJECT_DIR$/src/org/pmesmeur/sketchit/diagram/UmlComponentDiagram.java" />
-        <option value="$PROJECT_DIR$/src/org/pmesmeur/sketchit/diagram/plantuml/PlantUmlWriter.java" />
-        <option value="$PROJECT_DIR$/src/org/pmesmeur/sketchit/diagram/clazz/ClassDiagramGenerator.java" />
         <option value="$PROJECT_DIR$/src/org/pmesmeur/sketchit/ui/ExceptionDialog.java" />
         <option value="$PROJECT_DIR$/src/org/pmesmeur/sketchit/diagram/component/ComponentDiagramGenerator.java" />
         <option value="$PROJECT_DIR$/src/org/pmesmeur/sketchit/SketchIt.java" />
+        <option value="$PROJECT_DIR$/src/org/pmesmeur/sketchit/diagram/plantuml/PlantUmlWriter.java" />
+        <option value="$PROJECT_DIR$/src/org/pmesmeur/sketchit/diagram/clazz/ClassDiagramGenerator.java" />
       </list>
     </option>
   </component>
@@ -215,9 +173,9 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-11" />
+    <option name="x" value="-12" />
     <option name="width" value="1932" />
-    <option name="height" value="1031" />
+    <option name="height" value="1032" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -226,169 +184,82 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
-              <item name="add.logs.to.ease.debugging" type="462c0819:PsiDirectoryNode" />
+              <item name="Issue-32.packages.layout" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Issue-32.packages.layout" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
-              <item name="add.logs.to.ease.debugging" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
-              <item name="add.logs.to.ease.debugging" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="META-INF" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
-              <item name="add.logs.to.ease.debugging" type="462c0819:PsiDirectoryNode" />
+              <item name="Issue-32.packages.layout" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Issue-32.packages.layout" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
-              <item name="add.logs.to.ease.debugging" type="462c0819:PsiDirectoryNode" />
+              <item name="Issue-32.packages.layout" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Issue-32.packages.layout" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="sketchit" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
-              <item name="add.logs.to.ease.debugging" type="462c0819:PsiDirectoryNode" />
+              <item name="Issue-32.packages.layout" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Issue-32.packages.layout" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="sketchit" type="462c0819:PsiDirectoryNode" />
               <item name="diagram" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
-              <item name="add.logs.to.ease.debugging" type="462c0819:PsiDirectoryNode" />
+              <item name="Issue-32.packages.layout" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Issue-32.packages.layout" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="sketchit" type="462c0819:PsiDirectoryNode" />
               <item name="diagram" type="462c0819:PsiDirectoryNode" />
-              <item name="component" type="462c0819:PsiDirectoryNode" />
+              <item name="clazz" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
-              <item name="add.logs.to.ease.debugging" type="462c0819:PsiDirectoryNode" />
+              <item name="Issue-32.packages.layout" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Issue-32.packages.layout" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="sketchit" type="462c0819:PsiDirectoryNode" />
-              <item name="ui" type="462c0819:PsiDirectoryNode" />
+              <item name="diagram" type="462c0819:PsiDirectoryNode" />
+              <item name="plantuml" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Issue-32.packages.layout" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
             </path>
             <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; IntelliJ IDEA Community Edition IC-191.6707.61 &gt;" type="70bed36:NamedLibraryElementNode" />
-            </path>
-            <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Issue-32.packages.layout" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
               <item name="&lt; IntelliJ IDEA Community Edition IC-191.6707.61 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="platform-api.jar" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; IntelliJ IDEA Community Edition IC-191.6707.61 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="platform-api.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="intellij" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; IntelliJ IDEA Community Edition IC-191.6707.61 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="platform-api.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="intellij" type="462c0819:PsiDirectoryNode" />
-              <item name="notification" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; IntelliJ IDEA Community Edition IC-191.6707.61 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="platform-api.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="intellij" type="462c0819:PsiDirectoryNode" />
-              <item name="openapi" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; IntelliJ IDEA Community Edition IC-191.6707.61 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="platform-api.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="intellij" type="462c0819:PsiDirectoryNode" />
-              <item name="openapi" type="462c0819:PsiDirectoryNode" />
-              <item name="project" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; IntelliJ IDEA Community Edition IC-191.6707.61 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="platform-api.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="intellij" type="462c0819:PsiDirectoryNode" />
-              <item name="openapi" type="462c0819:PsiDirectoryNode" />
-              <item name="ui" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Issue-32.packages.layout" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
               <item name="&lt; IntelliJ IDEA Community Edition IC-191.6707.61 &gt;" type="70bed36:NamedLibraryElementNode" />
               <item name="rt.jar" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Issue-32.packages.layout" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
               <item name="&lt; IntelliJ IDEA Community Edition IC-191.6707.61 &gt;" type="70bed36:NamedLibraryElementNode" />
               <item name="rt.jar" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Issue-32.packages.layout" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
               <item name="&lt; IntelliJ IDEA Community Edition IC-191.6707.61 &gt;" type="70bed36:NamedLibraryElementNode" />
               <item name="rt.jar" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="lang" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; IntelliJ IDEA Community Edition IC-191.6707.61 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="util.jar" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; IntelliJ IDEA Community Edition IC-191.6707.61 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="util.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="intellij" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; IntelliJ IDEA Community Edition IC-191.6707.61 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="util.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="intellij" type="462c0819:PsiDirectoryNode" />
-              <item name="openapi" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="add.logs.to.ease.debugging" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
-              <item name="&lt; IntelliJ IDEA Community Edition IC-191.6707.61 &gt;" type="70bed36:NamedLibraryElementNode" />
-              <item name="util.jar" type="462c0819:PsiDirectoryNode" />
-              <item name="intellij" type="462c0819:PsiDirectoryNode" />
-              <item name="openapi" type="462c0819:PsiDirectoryNode" />
-              <item name="diagnostic" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -398,11 +269,17 @@
     <property name="extract.method.default.visibility" value="private" />
     <property name="ignore_missing_gitignore" value="true" />
     <property name="jdk.selected.PLUGIN_MODULE" value="IntelliJ IDEA Community Edition IC-183.4284.148" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../RTMD/develop" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.pmesmeur.sketchit.diagram.plantuml" />
+      <recent name="org.pmesmeur.sketchit.diagram.clazz" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -576,13 +453,21 @@
       <option name="project" value="LOCAL" />
       <updated>1557979674268</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Issue-32: use plantuml keyword &quot;namespace&quot; instead of &quot;package&quot;">
+      <created>1560401902418</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1560401902418</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" order="0" visible="true" weight="0.35708502" />
+      <window_info id="Project" order="0" visible="true" weight="0.36356276" />
       <window_info id="Structure" order="1" weight="0.2752443" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -591,15 +476,15 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3250444" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.33570158" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3339254" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4186851" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="7" visible="true" weight="0.38721138" />
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.38721138" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.31616342" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.32072073" />
+      <window_info active="true" anchor="bottom" id="Messages" order="10" visible="true" weight="0.3197158" />
       <window_info anchor="bottom" id="Extract Method" order="11" weight="0.3285968" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -638,7 +523,9 @@
     <MESSAGE value="Update plugin.xml for next development iteration" />
     <MESSAGE value="Update plugin.xml for version 0.04.01" />
     <MESSAGE value="Add logs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add logs" />
+    <MESSAGE value="Issue-32: use plantuml keyword &quot;namespace&quot; instead of &quot;package&quot;" />
+    <MESSAGE value="Issue-32: generate associations using qualified names" />
+    <option name="LAST_COMMIT_MESSAGE" value="Issue-32: generate associations using qualified names" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -957,13 +844,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/pmesmeur/sketchit/diagram/plantuml/PlantUmlWriter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="106">
-          <caret line="113" column="22" selection-start-line="113" selection-start-column="22" selection-end-line="113" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$APPLICATION_HOME_DIR$/lib/util.jar!/com/intellij/openapi/diagnostic/Logger.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2159">
@@ -1017,24 +897,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/pmesmeur/sketchit/diagram/clazz/ClassDiagramGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2533">
-          <caret line="161" column="40" selection-start-line="161" selection-start-column="40" selection-end-line="161" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/lang/NullPointerException.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="114">
           <caret line="52" column="6" selection-start-line="52" selection-start-column="6" selection-end-line="52" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/lang/Exception.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="44" column="13" selection-start-line="44" selection-start-column="13" selection-end-line="44" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -1056,44 +922,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/platform-api.jar!/com/intellij/openapi/ui/Messages.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="94" column="52" selection-start-line="94" selection-start-column="34" selection-end-line="94" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/pmesmeur/sketchit/ui/Notifyer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-222">
+        <state relative-caret-position="68">
           <caret line="10" column="19" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/lang/StackOverflowError.java">
+    <entry file="file://$PROJECT_DIR$/src/org/pmesmeur/sketchit/ui/ExceptionDialog.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="35" column="47" selection-start-line="35" selection-start-column="47" selection-end-line="35" selection-end-column="47" />
+        <state relative-caret-position="680">
+          <caret line="41" column="52" selection-start-line="41" selection-start-column="52" selection-end-line="41" selection-end-column="52" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/lang/VirtualMachineError.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/jre/lib/rt.jar!/java/lang/Exception.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="97">
-          <caret line="35" column="51" lean-forward="true" selection-start-line="35" selection-start-column="51" selection-end-line="35" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/lang/Error.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="97">
-          <caret line="48" column="30" selection-start-line="48" selection-start-column="30" selection-end-line="48" selection-end-column="30" />
+        <state relative-caret-position="68">
+          <caret line="7" column="40" selection-start-line="7" selection-start-column="31" selection-end-line="7" selection-end-column="40" />
         </state>
       </provider>
     </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/lang/Throwable.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="97">
+        <state relative-caret-position="1513">
           <caret line="113" column="13" selection-start-line="113" selection-start-column="13" selection-end-line="113" selection-end-column="13" />
           <folding>
             <element signature="e#33047#33048#0" expanded="true" />
@@ -1102,29 +957,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/jre/lib/rt.jar!/java/lang/Exception.class">
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/platform-api.jar!/com/intellij/openapi/ui/Messages.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="40" selection-start-line="7" selection-start-column="31" selection-end-line="7" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#613#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="646">
+          <caret line="94" column="52" selection-start-line="94" selection-start-column="34" selection-end-line="94" selection-end-column="52" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/pmesmeur/sketchit/ui/ExceptionDialog.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/lang/StackOverflowError.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="41" column="52" selection-start-line="41" selection-start-column="52" selection-end-line="41" selection-end-column="52" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="204">
+          <caret line="35" column="47" selection-start-line="35" selection-start-column="47" selection-end-line="35" selection-end-column="47" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/pmesmeur/sketchit/diagram/component/ComponentDiagramGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="292">
+        <state relative-caret-position="2312">
           <caret line="148" selection-start-line="148" selection-end-line="148" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1132,10 +981,49 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/lang/VirtualMachineError.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="35" column="51" selection-start-line="35" selection-start-column="51" selection-end-line="35" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/lang/Error.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="425">
+          <caret line="48" column="30" selection-start-line="48" selection-start-column="30" selection-end-line="48" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/pmesmeur/sketchit/SketchIt.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
-          <caret line="28" column="19" lean-forward="true" selection-start-line="28" selection-start-column="19" selection-end-line="28" selection-end-column="19" />
+          <caret line="28" column="19" selection-start-line="28" selection-start-column="19" selection-end-line="28" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_191/src.zip!/java/lang/Exception.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="44" column="13" selection-start-line="44" selection-start-column="13" selection-end-line="44" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pmesmeur/sketchit/diagram/plantuml/PlantUmlWriter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="211" column="16" selection-start-line="211" selection-start-column="16" selection-end-line="211" selection-end-column="16" />
+          <folding>
+            <element signature="e#4993#4994#0" expanded="true" />
+            <element signature="e#5048#5049#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/pmesmeur/sketchit/diagram/clazz/ClassDiagramGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="101">
+          <caret line="448" column="8" selection-start-line="448" selection-start-column="8" selection-end-line="448" selection-end-column="8" />
         </state>
       </provider>
     </entry>
