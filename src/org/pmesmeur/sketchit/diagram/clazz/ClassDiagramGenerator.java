@@ -499,14 +499,14 @@ public class ClassDiagramGenerator {
 
 
         private void generateInnerClassesAssociations() {
-            for (PsiClass innerClass : clazz.getAllInnerClasses()) {
+            for (PsiClass innerClass : clazz.getInnerClasses()) {
                 if (innerClass.getParent() == clazz) {
                     LOG.info("  - generating association from class " + clazz.getQualifiedName() + " to inner class " + innerClass.getQualifiedName());
                     plantUmlWriter.addInnerClassesAssociation(clazz.getQualifiedName(), innerClass.getQualifiedName());
                 }
             }
 
-            for (PsiClass innerClass : clazz.getAllInnerClasses()) {
+            for (PsiClass innerClass : clazz.getInnerClasses()) {
                 LOG.info("  - generating relationships for inner class " + innerClass.getQualifiedName() + " of class " + clazz.getQualifiedName());
                 generateInnerClassesRelationships(innerClass);
             }
