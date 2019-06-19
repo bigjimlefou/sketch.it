@@ -316,13 +316,14 @@ public class ClassDiagramGenerator {
                 plantUmlWriter.startEnumDeclaration(packageStack, clazz.getName());
                 generateEnumValues();
             } else {
+                String qualifiedName = clazz.getQualifiedName();
 
                 if (clazz.isInterface()) {
-                    plantUmlWriter.startInterfaceDeclaration(packageStack, clazz.getName());
+                    plantUmlWriter.startInterfaceDeclaration(packageStack, qualifiedName);
                 } else if (clazz.hasModifierProperty(PsiModifier.ABSTRACT)) {
-                    plantUmlWriter.startAbstractClassDeclaration(packageStack, clazz.getName());
+                    plantUmlWriter.startAbstractClassDeclaration(packageStack, qualifiedName);
                 } else {
-                    plantUmlWriter.startClassDeclaration(packageStack, clazz.getName());
+                    plantUmlWriter.startClassDeclaration(packageStack, qualifiedName);
                 }
 
                 generateClassMembers();
