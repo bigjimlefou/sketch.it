@@ -50,6 +50,10 @@
   </description>
 
   <change-notes><![CDATA[
+      <p><u>v0.06.01</u></p>
+      <ul>
+       <li><a href="https://bitbucket.org/pmesmeur/sketch.it/issues/35/stackoverflow-error">Issue-35</a>: StackOverflow error</li>
+      </ul>
       <p><u>v0.06.00</u></p>
       <ul>
        <li><a href="https://bitbucket.org/pmesmeur/sketch.it/issues/32/packages-layout">Issue-32</a>: Packages layout</li>
