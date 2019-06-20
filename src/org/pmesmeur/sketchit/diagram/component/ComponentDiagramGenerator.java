@@ -7,6 +7,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
 import org.jetbrains.annotations.NotNull;
 import org.pmesmeur.sketchit.diagram.plantuml.PlantUmlWriter;
+import org.pmesmeur.sketchit.diagram.sorters.ModuleSorter;
 
 import java.util.*;
 
@@ -74,7 +75,9 @@ public class ComponentDiagramGenerator {
         Set<Module> managedModules = new HashSet<Module>();
 
         ModuleManager moduleManager = ModuleManager.getInstance(project);
-        for (Module module : moduleManager.getModules()) {
+        Module[] modules = moduleManager.getModules();
+
+        for (Module module : ModuleSorter.sort(modules)) {
             if (!excluded(module))
                 managedModules.add(module);
         }
@@ -110,7 +113,7 @@ public class ComponentDiagramGenerator {
         modulesHierarchyGenerator.generate(plantUmlWriter);
 
         List<Module> modules = getListOfManagedModulesOrderedAlphabetically();
-        for (Module module : modules) {
+        for (Module module : ModuleSorter.sort(modules)) {
             printModuleDependencies(module);
         }
 
@@ -134,7 +137,8 @@ public class ComponentDiagramGenerator {
 
         LOG.info("Adding module dependencies: " + moduleName);
 
-        for (String dependentModulesName : getNamesOfDependentModules(module)) {
+        String[] namesOfDependentModules = getNamesOfDependentModules(module);
+        for (String dependentModulesName : ModuleSorter.sort(namesOfDependentModules)) {
             if (!excluded(dependentModulesName)) {
                 plantUmlWriter.addComponentDependency(moduleName, dependentModulesName);
             }

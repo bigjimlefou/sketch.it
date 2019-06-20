@@ -3,6 +3,7 @@ package org.pmesmeur.sketchit.diagram.component;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import org.pmesmeur.sketchit.diagram.plantuml.PlantUmlWriter;
+import org.pmesmeur.sketchit.diagram.sorters.ModuleSorter;
 
 import java.io.File;
 import java.util.*;
@@ -23,7 +24,7 @@ public class ModulesHierarchyGenerator {
 
 
     private void buildModulePaths(Set<Module> managedModules) {
-        for (Module module : managedModules) {
+        for (Module module : ModuleSorter.sort(managedModules)) {
             modulePaths.add(new ModulePath(module));
         }
         Collections.sort(modulePaths, new ModulePathComparator());
