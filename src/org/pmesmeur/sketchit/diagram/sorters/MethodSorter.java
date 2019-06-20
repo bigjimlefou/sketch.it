@@ -24,10 +24,16 @@ public class MethodSorter {
 
         @Override
         public int compare(PsiMethod method1, PsiMethod method2) {
-            String name1 = method1.getName();
-            String name2 = method2.getName();
+            int result = ModifierListComparator.compare(method1.getModifierList(), method2.getModifierList());
 
-            return name1.compareTo(name2);
+            if (result == 0) {
+                String name1 = method1.getName();
+                String name2 = method2.getName();
+
+                result = name1.compareTo(name2);
+            }
+
+            return result;
         }
 
     }

@@ -21,10 +21,16 @@ public class FieldSorter {
 
         @Override
         public int compare(PsiField field1, PsiField field2) {
-            String name1 = field1.getName();
-            String name2 = field2.getName();
+            int result = ModifierListComparator.compare(field1.getModifierList(), field2.getModifierList());
 
-            return name1.compareTo(name2) ;
+            if (result == 0) {
+                String name1 = field1.getName();
+                String name2 = field2.getName();
+
+                result = name1.compareTo(name2);
+            }
+
+            return result;
         }
 
     }
