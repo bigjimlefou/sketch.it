@@ -9,6 +9,10 @@ import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.util.VisibilityUtil;
 import org.jetbrains.annotations.NotNull;
 import org.pmesmeur.sketchit.diagram.plantuml.PlantUmlWriter;
+import org.pmesmeur.sketchit.diagram.sorters.ClassSorter;
+import org.pmesmeur.sketchit.diagram.sorters.FieldSorter;
+import org.pmesmeur.sketchit.diagram.sorters.JavaCodeReferenceElementSorter;
+import org.pmesmeur.sketchit.diagram.sorters.MethodSorter;
 
 import java.util.*;
 
@@ -149,7 +153,7 @@ public class ClassDiagramGenerator {
         LOG.info("Starting to generate class diagram: " + title);
         plantUmlWriter.startDiagram(title);
 
-        List<PsiClass> classes = getListOfManagedClassesOrderedAlphabetically();
+        List<PsiClass> classes = ClassSorter.sort(managedClasses);
         for (PsiClass clazz : classes) {
             LOG.info("* generating class: " + clazz.getQualifiedName());
             new ClassGenerator(clazz).generate();
@@ -166,34 +170,12 @@ public class ClassDiagramGenerator {
     }
 
 
-    private List<PsiClass> getListOfManagedClassesOrderedAlphabetically() {
-        List<PsiClass> classes = new ArrayList<PsiClass>(managedClasses);
-        Collections.sort(classes, new PsiClassComparator());
-
-        return classes;
-    }
-
-
 
     private static class StringLengthComparator implements Comparator<String> {
 
         @Override
         public int compare(String o1, String o2) {
             return o1.length() - o2.length();
-        }
-
-    }
-
-
-
-    private static class PsiClassComparator implements Comparator<PsiClass> {
-
-        @Override
-        public int compare(PsiClass class1, PsiClass class2) {
-            String name1 = class1.getName();
-            String name2 = class2.getName();
-
-            return name1.compareTo(name2) ;
         }
 
     }
@@ -335,7 +317,9 @@ public class ClassDiagramGenerator {
 
 
         private void generateEnumValues() {
-            for (PsiField enumValue : clazz.getAllFields()) {
+            PsiField[] allFields = clazz.getAllFields();
+
+            for (PsiField enumValue : FieldSorter.sort(allFields)) {
                 if (!isInheritedMember(enumValue, clazz)) {
                     generateEnumValue(enumValue);
                 }
@@ -365,7 +349,9 @@ public class ClassDiagramGenerator {
 
 
         private void generateClassAttributes() {
-            for (PsiField field : clazz.getAllFields()) {
+            PsiField[] allFields = clazz.getAllFields();
+
+            for (PsiField field : FieldSorter.sort(allFields)) {
                 if (getFieldDisplayType(clazz, field) == FieldDisplayType.ATTRIBUTE) {
                     generateClassField(field);
                 }
@@ -395,7 +381,9 @@ public class ClassDiagramGenerator {
 
 
         private void generateClassMethods() {
-            for (PsiMethod method : clazz.getAllMethods()) {
+            PsiMethod[] allMethods = clazz.getAllMethods();
+
+            for (PsiMethod method : MethodSorter.sort(allMethods)) {
                 if (!isInheritedMember(method, clazz)) {
                     generateClassMethod(method);
                 }
@@ -419,7 +407,9 @@ public class ClassDiagramGenerator {
 
 
         private void generateInnerClasses() {
-            for (PsiClass innerClass : clazz.getAllInnerClasses()) {
+            PsiClass[] allInnerClasses = clazz.getAllInnerClasses();
+
+            for (PsiClass innerClass : ClassSorter.sort(allInnerClasses)) {
                 generateInnerClass(innerClass);
             }
         }
@@ -461,7 +451,9 @@ public class ClassDiagramGenerator {
 
         private void generateInterfaceRealization() {
             PsiReferenceList implementsList = clazz.getImplementsList();
-            for (PsiJavaCodeReferenceElement referenceElement : implementsList.getReferenceElements()) {
+            PsiJavaCodeReferenceElement[] referenceElements = implementsList.getReferenceElements();
+
+            for (PsiJavaCodeReferenceElement referenceElement : JavaCodeReferenceElementSorter.sort(referenceElements)) {
                 LOG.info("  - generating implementation interface " + referenceElement.getQualifiedName() + " of class " + clazz.getQualifiedName());
                 plantUmlWriter.addInterfaceRealization(clazz.getQualifiedName(), referenceElement.getQualifiedName());
             }
@@ -487,7 +479,9 @@ public class ClassDiagramGenerator {
 
 
         private void generateClassAssociations() {
-            for (PsiField field : clazz.getAllFields()) {
+            PsiField[] allFields = clazz.getAllFields();
+
+            for (PsiField field : FieldSorter.sort(allFields)) {
                 if (getFieldDisplayType(clazz, field) == FieldDisplayType.AGGREGATION) {
                     LOG.info("  - generating association from class " + clazz.getQualifiedName() + " to class " + field.getType().getCanonicalText());
                     plantUmlWriter.addClassesAssociation(clazz.getQualifiedName(),
@@ -500,14 +494,17 @@ public class ClassDiagramGenerator {
 
 
         private void generateInnerClassesAssociations() {
-            for (PsiClass innerClass : clazz.getInnerClasses()) {
+            PsiClass[] innerClasses = clazz.getInnerClasses();
+            List<PsiClass> sortedInnerClasses = ClassSorter.sort(innerClasses);
+
+            for (PsiClass innerClass : sortedInnerClasses) {
                 if (innerClass.getParent() == clazz) {
                     LOG.info("  - generating association from class " + clazz.getQualifiedName() + " to inner class " + innerClass.getQualifiedName());
                     plantUmlWriter.addInnerClassesAssociation(clazz.getQualifiedName(), innerClass.getQualifiedName());
                 }
             }
 
-            for (PsiClass innerClass : clazz.getInnerClasses()) {
+            for (PsiClass innerClass : sortedInnerClasses) {
                 LOG.info("  - generating relationships for inner class " + innerClass.getQualifiedName() + " of class " + clazz.getQualifiedName());
                 generateInnerClassesRelationships(innerClass);
             }

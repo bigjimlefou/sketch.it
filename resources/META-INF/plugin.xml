@@ -50,6 +50,10 @@
   </description>
 
   <change-notes><![CDATA[
+      <p><u>0.07-Dev</u></p>
+      <ul>
+       <li><a href="https://bitbucket.org/pmesmeur/sketch.it/issues/36/uml-diagrams-are-not-repeatable">Issue-36</a>: UML diagrams are not repeatable</li>
+      </ul>
       <p><u>v0.06.01</u></p>
       <ul>
        <li><a href="https://bitbucket.org/pmesmeur/sketch.it/issues/35/stackoverflow-error">Issue-35</a>: StackOverflow error</li>
