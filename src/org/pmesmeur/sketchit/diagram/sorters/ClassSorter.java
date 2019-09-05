@@ -1,5 +1,6 @@
 package org.pmesmeur.sketchit.diagram.sorters;
 
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiClass;
 
 import java.util.*;
@@ -32,7 +33,7 @@ public class ClassSorter {
             String name1 = class1.getQualifiedName();
             String name2 = class2.getQualifiedName();
 
-            return name1.compareTo(name2) ;
+            return StringUtil.compare(name1, name2, false);
         }
 
     }
