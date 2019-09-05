@@ -65,8 +65,7 @@ public class JavaFileFinder {
         PsiFile[] locals = directory.getFiles();
         for (PsiFile local : locals)
         {
-            if (psiFileBelongsToCurrentModule(local) &&
-                local instanceof PsiJavaFile) {
+            if (psiFileBelongsToCurrentModule(local) && local instanceof PsiJavaFile) {
                 javaFiles.add((PsiJavaFile) local);
                 directories.add(local.getParent().getVirtualFile());
             }
