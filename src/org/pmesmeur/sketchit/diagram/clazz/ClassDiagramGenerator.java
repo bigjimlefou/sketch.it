@@ -134,6 +134,10 @@ public class ClassDiagramGenerator {
         Set<PsiClass> newSet = new HashSet<PsiClass>();
 
         for (PsiClass clazz : classes) {
+            if (clazz.getQualifiedName() == null) {
+                continue;
+            }
+
             PsiElement parentElement = clazz.getParent();
             PsiElement owningDirectory = parentElement.getParent();
             if (sourceDirectory == null ||
