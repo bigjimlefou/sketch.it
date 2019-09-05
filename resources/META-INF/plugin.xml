@@ -53,6 +53,7 @@
       <p><u>0.07-Dev</u></p>
       <ul>
        <li><a href="https://bitbucket.org/pmesmeur/sketch.it/issues/42/nullpointerexception">Issue-42</a>: NullPointerException</li>
+       <li><a href="https://bitbucket.org/pmesmeur/sketch.it/issues/45/unexpected-exception-received-while">Issue-45</a>: Unexpected exception received while running Sketch It!: java.lang.ClassCastException</li>
       </ul>
       <p><u>0.06.02</u></p>
       <ul>
