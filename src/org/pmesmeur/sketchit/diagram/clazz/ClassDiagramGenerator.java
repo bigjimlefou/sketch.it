@@ -5,6 +5,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
+import com.intellij.psi.util.ClassUtil;
 import com.intellij.psi.util.PsiTypesUtil;
 import com.intellij.util.VisibilityUtil;
 import org.jetbrains.annotations.NotNull;
@@ -271,7 +272,7 @@ public class ClassDiagramGenerator {
 
 
         void generate() {
-            String packageName = ((PsiJavaFile) clazz.getContainingFile()).getPackageName();
+            String packageName = getPackageName(clazz);
             List<String> packageStack = computePackageStack(packageName);
 
             generateClassIntoPackage(packageStack);
@@ -432,6 +433,13 @@ public class ClassDiagramGenerator {
 
 
 
+    private String getPackageName(PsiClass clazz) {
+        String qualifiedName = clazz.getQualifiedName();
+        return ClassUtil.extractPackageName(qualifiedName);
+    }
+
+
+
     private class RelationshipsGenerator extends BaseGenerator {
 
 
@@ -476,7 +484,7 @@ public class ClassDiagramGenerator {
 
 
         private boolean classIsFromJavaLangPackage(PsiClass clazz) {
-            String classPackage = ((PsiJavaFile) clazz.getContainingFile()).getPackageName();
+            String classPackage = getPackageName(clazz);
             return classPackage.equals("java.lang");
         }
 
